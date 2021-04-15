@@ -1,4 +1,4 @@
-const scriptName = "Aurora.js";
+const scriptName = "Purora.js";
 
 /**
  * (string) room // 메시지를 받은 방 이름
@@ -15,7 +15,6 @@ function response (room, msg, sender, isGroupChat, replier, imageDB, packageName
     const resourceUrl = "http://zoz0312.com:8822"; // test port: 8000
     const myRoom = [
         '롤키웨이(LoLky Way)',
-        '오로라개발방'
     ];
 
     if (!myRoom.includes(room)) {
@@ -45,15 +44,7 @@ function response (room, msg, sender, isGroupChat, replier, imageDB, packageName
     }
 }
 
-/**
- * 아래 4개의 메소드는 액티비티 화면을 수정할때 사용됩니다.
- */
-function onCreate(savedInstanceState, activity) {
-    var textView = new android.widget.TextView(activity);
-    textView.setText("Hello, World!");
-    textView.setTextColor(android.graphics.Color.DKGRAY);
-    activity.setContentView(textView);
-}
+function onCreate(savedInstanceState, activity) {}
 
 function onStart(activity) {}
 
