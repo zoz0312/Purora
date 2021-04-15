@@ -1,6 +1,6 @@
 # Purora
 
-> Chat Bot Project "오로라"  
+> Chat Bot Project "포로라"  
 
 ## Purora Client
 
