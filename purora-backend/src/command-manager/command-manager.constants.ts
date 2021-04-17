@@ -8,6 +8,8 @@ export const PARTY_MANAGER_SERVICE = 'partyManagerService';
 export const FIND_PARTY = 'findParty';
 export const PARTY_PRINT_JSON = 'partyPrintJson';
 export const CREATE_PARTY = 'createParty';
+export const MODIFY_PARTY_NAME = 'modifyPartyName';
+export const MODIFY_PARTY_TIME = 'modifyPartyTime';
 export const DELETE_PARTY = 'deleteParty';
 
 // party-user-manager.service

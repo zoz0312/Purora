@@ -1,5 +1,6 @@
 
-import { FIND_PARTY, PARTY_PRINT_JSON, CREATE_PARTY, DELETE_PARTY, PARTY_MANAGER_SERVICE } from '../../command-manager.constants';
+import { FIND_PARTY, PARTY_PRINT_JSON, CREATE_PARTY, DELETE_PARTY, PARTY_MANAGER_SERVICE, MODIFY_PARTY_TIME } from '../../command-manager.constants';
+import { MODIFY_PARTY_NAME } from './../../command-manager.constants';
 
 /*
   @author AJu (zoz0312)
@@ -26,6 +27,20 @@ export const commandPartyManager: commandDTO[] = [
     command: ['파티생성', '파티생', '파생'],
     desc: '파티 생성',
     argumentDesc: ['파티이름', '시간 (1500, 15:00, 15시 00분)'],
+  },
+  {
+    service,
+    name: MODIFY_PARTY_NAME,
+    command: ['파티이름수정', '파이수'],
+    desc: '파티 이름 수정',
+    argumentDesc: ['파티이름::변경할 파티이름'],
+  },
+  {
+    service,
+    name: MODIFY_PARTY_TIME,
+    command: ['파티시간수정', '파시수'],
+    desc: '파티 시간 수정',
+    argumentDesc: ['파티이름::변경할시간 (1500, 15:00, 15시 00분)'],
   },
   {
     service,
