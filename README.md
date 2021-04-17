@@ -1,6 +1,9 @@
 # Purora
 
-> Chat Bot Project "포로라"  
+> Chat Bot Project "포로라"
+
+## Purora Versions
+[업데이트 버전 관리](./version-doc)
 
 ## Purora Client
 
