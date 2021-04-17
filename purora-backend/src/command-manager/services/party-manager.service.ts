@@ -4,7 +4,8 @@ import { translateParty2String } from '../command-manager.controller';
 import { trimInput } from '../../common/trimInput';
 import { ChatBotInput, ChatBotOutput } from 'src/common/dtos/chatBot.dto';
 import { Injectable } from '@nestjs/common';
-import { CREATE_PARTY, DELETE_PARTY, FIND_PARTY, PARTY_PRINT_JSON } from '../command-manager.constants';
+import { CREATE_PARTY, DELETE_PARTY, FIND_PARTY, MODIFY_PARTY_TIME, PARTY_PRINT_JSON } from '../command-manager.constants';
+import { MODIFY_PARTY_NAME } from './../command-manager.constants';
 
 /*
   @author AJu (zoz0312)
@@ -28,6 +29,10 @@ export class PartyManager {
         return this.printPartyJson();
       case CREATE_PARTY:
         return this.createParty(chatBotInput);
+      case MODIFY_PARTY_NAME:
+        return this.modifyPartyName(chatBotInput);
+      case MODIFY_PARTY_TIME:
+        return this.modifyPartyTime(chatBotInput);
       case DELETE_PARTY:
         return this.deleteParty(chatBotInput);
       default:
@@ -59,6 +64,47 @@ export class PartyManager {
     }
   }
 
+  partyTimeValidation(partyTime) {
+    const times = partyTime.replace(/[^0-9]/g, '');
+
+    if (!times) {
+      return {
+        success: false,
+        message: '시간 입력 오류!',
+      }
+    }
+
+    let hours = 0;
+    let minutes = 0;
+    if (times.length === 3) {
+      hours = +times[0];
+      minutes = +times.slice(1);
+    } else if (times.length === 4) {
+      hours = +times.slice(0, 2);
+      minutes = +times.slice(2, 4);
+    }
+
+    if (hours < 0 && hours > 24) {
+      return {
+        success: false,
+        message: '시간 입력이 잘못되었습니다.',
+      }
+    }
+
+    if (minutes < 0 && minutes > 59) {
+      return {
+        success: false,
+        message: '분 입력이 잘못되었습니다.',
+      }
+    }
+
+    return {
+      success: true,
+      hours,
+      minutes
+    }
+  }
+
   createParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
@@ -66,19 +112,12 @@ export class PartyManager {
     const [_, arguement] = trimInput(chatBotInput);
     const args = arguement.split(' ');
     const partyName = args[0];
-    const times = args.slice(1).join('').replace(/[^0-9]/g, '');
 
     /* command 정상 입력 유효성 검사 */
     if (!partyName) {
       return {
         success: false,
         message: '파티 이름 오류!',
-      }
-    }
-    if (!times) {
-      return {
-        success: false,
-        message: '시간 입력 오류!',
       }
     }
 
@@ -97,28 +136,10 @@ export class PartyManager {
       }
     }
 
-    /* 시간 입력 범위 유효성 검사 */
-    let hours = 0;
-    let minutes = 0;
-    if (times.length === 3) {
-      hours = +times[0];
-      minutes = +times.slice(1);
-    } else if (times.length === 4) {
-      hours = +times.slice(0, 2);
-      minutes = +times.slice(2, 4);
-    }
+    const times = this.partyTimeValidation(args.slice(1).join(''));
 
-    if (hours < 0 && hours > 24) {
-      return {
-        success: false,
-        message: '시간 입력이 잘못되었습니다.',
-      }
-    }
-    if (minutes < 0 && minutes > 59) {
-      return {
-        success: false,
-        message: '분 입력이 잘못되었습니다.',
-      }
+    if (!times.success) {
+      return times;
     }
 
     const curDate = new Date();
@@ -126,8 +147,8 @@ export class PartyManager {
       curDate.getFullYear(),
       curDate.getMonth(),
       curDate.getDate(),
-      hours,
-      minutes,
+      times.hours,
+      times.minutes,
       10
     );
 
@@ -139,6 +160,108 @@ export class PartyManager {
     return {
       success: true,
       message: `${partyName} 파티가 생성되었습니다!`,
+    }
+  }
+
+  modifyPartyName(
+    chatBotInput :ChatBotInput
+  ): ChatBotOutput {
+    const { room } = chatBotInput;
+    const [_, partyName] = trimInput(chatBotInput);
+    const [origParty, changeParty] = partyName.split('::');
+
+    if (!origParty) {
+      return {
+        success: false,
+        message: '수정할 파티를 입력해주세요!',
+      }
+    }
+
+    if (!changeParty) {
+      return {
+        success: false,
+        message: '변경할 파티이름을 입력해주세요!',
+      }
+    }
+
+    if (!party[room]) {
+      party[room] = {};
+    }
+
+    const parties = Object.keys(party[room]);
+    const trimPartyName = changeParty.trim();
+
+    for (let i=0; i<parties.length; i++) {
+      if (parties[i] === origParty) {
+        const temp = {
+          ...party[room][origParty]
+        };
+        delete party[room][origParty];
+        party[room][trimPartyName] = {
+          ...temp
+        }
+        return {
+          success: true,
+          message: `${trimPartyName} 파티로 변경되었습니다!`,
+        }
+      }
+    }
+    return {
+      success: false,
+      message: '존재하지 않는 파티입니다.',
+    }
+  }
+
+  modifyPartyTime(
+    chatBotInput :ChatBotInput
+  ): ChatBotOutput {
+    const { room } = chatBotInput;
+    const [_, partyName] = trimInput(chatBotInput);
+    const [origParty, changeTime] = partyName.split('::');
+
+    if (!origParty) {
+      return {
+        success: false,
+        message: '수정할 파티를 입력해주세요!',
+      }
+    }
+
+    const times = this.partyTimeValidation(changeTime);
+
+    if (!times.success) {
+      return times;
+    }
+
+    const curDate = new Date();
+    const partyDate = new Date(
+      curDate.getFullYear(),
+      curDate.getMonth(),
+      curDate.getDate(),
+      times.hours,
+      times.minutes,
+      10
+    );
+
+    if (!party[room]) {
+      party[room] = {};
+    }
+
+    const parties = Object.keys(party[room]);
+    for (let i=0; i<parties.length; i++) {
+      if (parties[i] === origParty) {
+        party[room][origParty] = {
+          ...party[room][origParty],
+          time: partyDate,
+        }
+        return {
+          success: true,
+          message: `${times.hours}시 ${times.minutes}분으로 시간이 변경되었습니다!`,
+        }
+      }
+    }
+    return {
+      success: false,
+      message: '존재하지 않는 파티입니다.',
     }
   }
 
