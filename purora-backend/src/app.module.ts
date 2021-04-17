@@ -10,6 +10,8 @@ import { Keyword } from './user-custom-command/entities/keyword.entitiy';
 import { Commands } from './user-custom-command/entities/commands.entitiy';
 import { Working } from './user-custom-command/entities/working.entity';
 import { Rooms } from './user-custom-command/entities/rooms.entitiy';
+import { Users } from './admin/users/entities/users.entitiy';
+import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
 
 /*
   @author AJu (zoz0312)
@@ -45,6 +47,8 @@ import { Rooms } from './user-custom-command/entities/rooms.entitiy';
         Keyword,
         Working,
         Rooms,
+        Users,
+        UsersGameInfo,
       ],
     }),
     ScheduleModule.forRoot()
