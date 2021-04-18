@@ -21,5 +21,5 @@ export class UsersGameInfo extends CoreEntity {
 
   @Column()
   @IsString()
-  gameName: string;
+  summonerName: string;
 }

@@ -10,15 +10,16 @@ import { Keyword } from './user-custom-command/entities/keyword.entitiy';
 import { Commands } from './user-custom-command/entities/commands.entitiy';
 import { Working } from './user-custom-command/entities/working.entity';
 import { Rooms } from './user-custom-command/entities/rooms.entitiy';
-import { Users } from './admin/users/entities/users.entitiy';
-import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
+import { Users } from './poro/users/entities/users.entitiy';
+import { UsersGameInfo } from './poro/users/entities/users-game-info.entitiy';
+import { PoroModule } from './poro/poro.module';
 
 /*
   @author AJu (zoz0312)
 */
 @Module({
   imports: [
-  ConfigModule.forRoot({
+    ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
@@ -51,7 +52,8 @@ import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
         UsersGameInfo,
       ],
     }),
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
+    PoroModule,
   ],
   controllers: [],
   providers: [],

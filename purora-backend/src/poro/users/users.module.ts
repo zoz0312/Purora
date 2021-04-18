@@ -2,13 +2,13 @@ import { Module } from '@nestjs/common';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UsersGameInfo } from './entities/users-lol.entitiy';
-import { Users } from './entities/users.entitiy';
+import { UsersRepository } from './repositories/users.repository';
+import { UsersGameInfoRepository } from './repositories/users-game-info.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
-    UsersGameInfo,
-    Users,
+    UsersGameInfoRepository,
+    UsersRepository,
   ])],
   controllers: [UsersController],
   providers: [UsersService]
