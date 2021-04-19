@@ -3,12 +3,14 @@ import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
 import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.repository';
 import { UsersRepository } from './repositories/users.repository';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
+import { JwtService } from './../jwt/jwt.service';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly users: UsersRepository,
     private readonly usersSummonerInfoInfo: UsersSummonerInfoRepository,
+    private readonly jwtService: JwtService,
   ) {
   }
 
@@ -80,8 +82,10 @@ export class UsersService {
         }
       }
 
+      const token = this.jwtService.sign({ id: user.id });
       return {
         success: true,
+        token,
       }
     } catch (error) {
       return {
