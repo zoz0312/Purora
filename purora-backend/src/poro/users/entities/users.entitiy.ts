@@ -1,7 +1,7 @@
 import { CoreEntity } from "src/common/entities/core.entities";
 import { BeforeInsert, BeforeUpdate, Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { IsEnum, IsString, Min } from 'class-validator';
-import { UsersGameInfo } from './users-game-info.entitiy';
+import { UsersSummonerInfo } from './users-summoner-info.entitiy';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from "@nestjs/common";
 
@@ -50,14 +50,14 @@ export class Users extends CoreEntity {
   status: UserStatus;
 
   @OneToMany(
-    type => UsersGameInfo,
-    usersGameInfo => usersGameInfo.users,
+    type => UsersSummonerInfo,
+    usersSummonerInfo => usersSummonerInfo.users,
     {
       cascade: true,
       onDelete: 'CASCADE',
     }
   )
-  userGameInfo: UsersGameInfo[];
+  userGameInfo: UsersSummonerInfo[];
 
   @BeforeInsert()
   @BeforeUpdate()

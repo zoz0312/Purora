@@ -8,14 +8,14 @@ import { Users } from "./users.entitiy";
   Commands: User lol
 */
 @Entity()
-export class UsersGameInfo extends CoreEntity {
+export class UsersSummonerInfo extends CoreEntity {
   @ManyToOne(
     type => Users
   )
   users: Users;
 
   @RelationId(
-    (usersGameInfo: UsersGameInfo) => usersGameInfo.users
+    (usersSummonerInfo: UsersSummonerInfo) => usersSummonerInfo.users
   )
   userId: number;
 

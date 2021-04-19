@@ -1,13 +1,13 @@
 import { Injectable } from '@nestjs/common';
 import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
-import { UsersGameInfoRepository } from './repositories/users-game-info.repository';
+import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.repository';
 import { UsersRepository } from './repositories/users.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly users: UsersRepository,
-    private readonly usersGameInfo: UsersGameInfoRepository,
+    private readonly usersSummonerInfoInfo: UsersSummonerInfoRepository,
   ) {
   }
 
@@ -35,8 +35,8 @@ export class UsersService {
         })
       );
 
-      await this.usersGameInfo.save(
-        this.usersGameInfo.create({
+      await this.usersSummonerInfoInfo.save(
+        this.usersSummonerInfoInfo.create({
           users: createdUser,
           summonerName
         })

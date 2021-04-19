@@ -3,11 +3,11 @@ import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from './repositories/users.repository';
-import { UsersGameInfoRepository } from './repositories/users-game-info.repository';
+import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.repository';
 
 @Module({
   imports: [TypeOrmModule.forFeature([
-    UsersGameInfoRepository,
+    UsersSummonerInfoRepository,
     UsersRepository,
   ])],
   controllers: [UsersController],
