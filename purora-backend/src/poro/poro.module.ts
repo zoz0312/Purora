@@ -1,12 +1,17 @@
 import { Module } from '@nestjs/common';
-import { UserModule } from './users/users.module';
+import { UsersModule } from './users/users.module';
 import { PoroController } from './poro.controller';
 import { PoroService } from './poro.service';
 import { JwtModule } from './jwt/jwt.module';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
-  imports: [UserModule, JwtModule],
+  imports: [
+    UsersModule,
+    JwtModule,
+    AuthModule,
+  ],
   controllers: [PoroController],
-  providers: [PoroService]
+  providers: [PoroService],
 })
 export class PoroModule {}

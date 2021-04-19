@@ -11,6 +11,7 @@ import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.
     UsersRepository,
   ])],
   controllers: [UsersController],
-  providers: [UsersService]
+  providers: [UsersService],
+  exports: [UsersService],
 })
-export class UserModule {}
+export class UsersModule {}

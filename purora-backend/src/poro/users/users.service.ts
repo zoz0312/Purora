@@ -4,6 +4,7 @@ import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.
 import { UsersRepository } from './repositories/users.repository';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { JwtService } from './../jwt/jwt.service';
+import { UserInfoOutput } from './dtos/user-info.dto';
 
 @Injectable()
 export class UsersService {
@@ -93,5 +94,9 @@ export class UsersService {
         error,
       }
     }
+  }
+
+  async findById(id: number): Promise<UserInfoOutput> {
+    return this.users.findById(id);
   }
 }

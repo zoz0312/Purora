@@ -14,6 +14,7 @@ import { Users } from './poro/users/entities/users.entitiy';
 import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entitiy';
 import { PoroModule } from './poro/poro.module';
 import { JwtModule } from './poro/jwt/jwt.module';
+import { AuthModule } from './poro/auth/auth.module';
 
 /*
   @author AJu (zoz0312)
