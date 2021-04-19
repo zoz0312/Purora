@@ -26,11 +26,9 @@ export enum UserStatus {
 @Entity()
 export class Users extends CoreEntity {
   @Column()
-  @IsString()
   userId: string;
 
   @Column()
-  @IsString()
   userPw: string;
 
   @Column({
@@ -69,15 +67,6 @@ export class Users extends CoreEntity {
         console.log('hashPassword Error', e)
         throw new InternalServerErrorException();
       }
-    }
-  }
-
-  async checkPassword(aPassword: string): Promise<boolean> {
-    try {
-      return await bcrypt.compare(aPassword, this.userPw);
-    } catch (e) {
-      console.log(e);
-      throw new InternalServerErrorException();
     }
   }
 }
