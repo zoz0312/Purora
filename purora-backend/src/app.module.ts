@@ -13,6 +13,7 @@ import { Rooms } from './user-custom-command/entities/rooms.entitiy';
 import { Users } from './poro/users/entities/users.entitiy';
 import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entitiy';
 import { PoroModule } from './poro/poro.module';
+import { JwtModule } from './poro/jwt/jwt.module';
 
 /*
   @author AJu (zoz0312)
@@ -30,6 +31,7 @@ import { PoroModule } from './poro/poro.module';
         DB_DATABASE: Joi.string(),
         DB_USER: Joi.string(),
         DB_PASSSWORD: Joi.string(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     CommandManagerModule,
@@ -53,6 +55,9 @@ import { PoroModule } from './poro/poro.module';
       ],
     }),
     ScheduleModule.forRoot(),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY
+    }),
     PoroModule,
   ],
   controllers: [],
