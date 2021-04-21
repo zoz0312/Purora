@@ -75,7 +75,7 @@ export class UsersService {
         }
       }
 
-      const passwordCorrect = await this.users.checkPassword(userPw);
+      const passwordCorrect = await user.checkPassword(userPw);
       if (!passwordCorrect) {
         return {
           success: false,

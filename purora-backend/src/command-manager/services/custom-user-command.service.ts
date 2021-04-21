@@ -109,7 +109,6 @@ export class CustomUserCommand {
       });
 
       const commands = await this.commands.find({ where });
-      console.log('commands', commands)
 
       if (commands.length > 0) {
         if (commands.length === 1) {

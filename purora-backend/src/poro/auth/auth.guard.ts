@@ -15,19 +15,30 @@ export class AuthGuard implements CanActivate {
   async canActivate(
     context: ExecutionContext
   ): Promise<boolean> {
-    console.log('CAN ACTIVATE')
     const roles = this.reflector.get<AllowedRoles>(
       'roles',
       context.getHandler()
     );
 
-    console.log('roles', roles)
-    console.log('context', context);
-
     if (!roles) {
       return true;
     }
 
-    return false;
+    const [req, res, next] = context.getArgs();
+    const token = req.headers['x-jwt'];
+    const decoded = this.jwtService.verify(token);
+
+    if (typeof decoded !== 'object' || !decoded.hasOwnProperty('id')) {
+      return false;
+    }
+
+    const { user } = await this.usersService.findById(decoded.id);
+
+    if (!user) {
+      return false;
+    }
+
+    req['user'] = user;
+    return roles.includes('ANY') ? true : roles.includes(user.role);
   }
 }

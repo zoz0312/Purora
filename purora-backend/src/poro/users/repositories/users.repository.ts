@@ -4,10 +4,6 @@ import { UserInfoOutput } from './../dtos/user-info.dto';
 
 @EntityRepository(Users)
 export class UsersRepository extends Repository<Users> {
-  async checkPassword(aPassword: string): Promise<boolean> {
-    return this.checkPassword(aPassword);
-  }
-
   async findById(id: number): Promise<UserInfoOutput> {
     try {
       const user = await this.findOne({ id });

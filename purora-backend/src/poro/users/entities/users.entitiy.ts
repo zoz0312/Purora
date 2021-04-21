@@ -6,10 +6,10 @@ import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from "@nestjs/common";
 
 export enum UserRole {
-  SUPER_ADMIN = 'Super Admin',
-  ADMIN = 'Admin',
-  USER = 'User',
-  GUEST = 'Guest',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  GUEST = 'GUEST',
 };
 
 export enum UserStatus {
@@ -28,7 +28,7 @@ export class Users extends CoreEntity {
   @Column()
   userId: string;
 
-  @Column()
+  @Column({ select: false })
   userPw: string;
 
   @Column({
@@ -67,6 +67,15 @@ export class Users extends CoreEntity {
         console.log('hashPassword Error', e)
         throw new InternalServerErrorException();
       }
+    }
+  }
+
+  async checkPassword(aPassword: string): Promise<boolean> {
+    try {
+      return await bcrypt.compare(aPassword, this.userPw);
+    } catch (e) {
+      console.log(e);
+      throw new InternalServerErrorException();
     }
   }
 }
