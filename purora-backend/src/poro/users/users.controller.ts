@@ -12,13 +12,12 @@ export class UsersController {
     private readonly usersService: UsersService,
   ) {}
 
-  @Role(['USER'])
+  // @Role(['USER'])
   @Post('create-user')
   async createUser(
-    @AuthUser() user: Users,
+    // @AuthUser() user: Users,
     @Body() createUserInput: CreateUserInput,
   ): Promise<CreateUserOutput> {
-    console.log('user', user)
     return this.usersService.createUser(createUserInput);
   }
 

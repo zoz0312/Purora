@@ -1,4 +1,4 @@
-import { IsString, Min } from "class-validator";
+import { IsString, MinLength } from "class-validator";
 import { CoreOutput } from "src/common/dtos/output.dto";
 
 export class LoginInput {

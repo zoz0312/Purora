@@ -1,10 +1,11 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateUserInput, CreateUserOutput } from './dtos/create-user.dto';
 import { UsersSummonerInfoRepository } from './repositories/users-summoner-info.repository';
 import { UsersRepository } from './repositories/users.repository';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { JwtService } from './../jwt/jwt.service';
 import { UserInfoOutput } from './dtos/user-info.dto';
+import { regexId, regexPw } from './../../common/regex';
 
 @Injectable()
 export class UsersService {
@@ -19,6 +20,19 @@ export class UsersService {
     { userId, userPw, summonerName }: CreateUserInput,
   ): Promise<CreateUserOutput> {
     try {
+      const matchId = userId.match(regexId);
+      const matchPw = userPw.match(regexPw);
+
+      if (matchId === null || matchId[0].length === 0) {
+        throw new HttpException(`아이디는 영어와 숫자로만 가능합니다.`,
+          HttpStatus.FORBIDDEN);
+      }
+
+      if (matchPw === null || matchPw[0].length === 0) {
+        throw new HttpException(`비밀번호는 영문과 숫자가 반드시 포함되어야 하고,\n특수문자까지 입력가능합니다.`,
+          HttpStatus.FORBIDDEN)
+      }
+
       const findUser = await this.users.findOne({
         where: {
           userId
