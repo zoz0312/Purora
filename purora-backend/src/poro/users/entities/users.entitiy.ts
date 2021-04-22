@@ -55,7 +55,7 @@ export class Users extends CoreEntity {
       onDelete: 'CASCADE',
     }
   )
-  userGameInfo: UsersSummonerInfo[];
+  usersSummonerInfo: UsersSummonerInfo[];
 
   @BeforeInsert()
   @BeforeUpdate()

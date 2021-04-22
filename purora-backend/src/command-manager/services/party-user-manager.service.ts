@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { party } from '../../cache-party';
 import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
-import { trimInput } from '../../common/trimInput';
+import { trimInput } from '../../common/utils';
 import { ENTER_PARTY, EXIT_PARTY } from '../command-manager.constants';
 import { translateParty2String } from '../command-manager.controller';
 

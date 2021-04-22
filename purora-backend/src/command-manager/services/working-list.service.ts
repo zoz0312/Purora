@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
-import { trimInput } from '../../common/trimInput';
+import { trimInput } from '../../common/utils';
 import { Status } from '../../user-custom-command/entities/working.entity';
 import { WorkingRepository } from '../../user-custom-command/repositories/working.repository';
 import { CREATE_WORKING, DELETE_WORKING, UPDATE_WORKING } from '../command-manager.constants';

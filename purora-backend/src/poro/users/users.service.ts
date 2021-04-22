@@ -6,6 +6,10 @@ import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { JwtService } from './../jwt/jwt.service';
 import { UserInfoOutput } from './dtos/user-info.dto';
 import { regexId, regexPw } from './../../common/regex';
+import { Users } from './entities/users.entitiy';
+import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
+import { regexMatch } from 'src/common/utils';
+import { removeWhiteSpace } from './../../common/utils';
 
 @Injectable()
 export class UsersService {
@@ -20,15 +24,15 @@ export class UsersService {
     { userId, userPw, summonerName }: CreateUserInput,
   ): Promise<CreateUserOutput> {
     try {
-      const matchId = userId.match(regexId);
-      const matchPw = userPw.match(regexPw);
+      const matchId = regexMatch(userId, regexId);
+      const matchPw = regexMatch(userPw, regexPw);
 
-      if (matchId === null || matchId[0].length === 0) {
+      if (!matchId) {
         throw new HttpException(`아이디는 영어와 숫자로만 가능합니다.`,
           HttpStatus.FORBIDDEN);
       }
 
-      if (matchPw === null || matchPw[0].length === 0) {
+      if (!matchPw) {
         throw new HttpException(`비밀번호는 영문과 숫자가 반드시 포함되어야 하고,\n특수문자까지 입력가능합니다.`,
           HttpStatus.FORBIDDEN)
       }
@@ -56,7 +60,7 @@ export class UsersService {
       await this.usersSummonerInfoInfo.save(
         this.usersSummonerInfoInfo.create({
           users: createdUser,
-          summonerName
+          summonerName: removeWhiteSpace(summonerName),
         })
       );
 
@@ -110,6 +114,57 @@ export class UsersService {
     }
   }
 
+  async createSummoner(
+    authUser: Users,
+    createSummonerInput: CreateSummonerInput
+  ): Promise<CreateSummonerOutput> {
+    try {
+      const user = await this.users.findOne(authUser.id, {
+        relations: ['usersSummonerInfo']
+      });
+
+      if (!user) {
+        return {
+          success: false,
+          message: `존재하지 않는 유저입니다! +_+`,
+        }
+      }
+
+      const { summonerName: inputSummonerName } = createSummonerInput;
+      const createSummonerName = removeWhiteSpace(inputSummonerName);
+
+      for (let i=0; i<user.usersSummonerInfo.length; i++) {
+        const {
+          summonerName
+        } = user.usersSummonerInfo[i];
+
+        if (summonerName === createSummonerName) {
+          return {
+            success: false,
+            message: `이미 존재하는 유저입니다 &_&`,
+          }
+        }
+      }
+
+      await this.usersSummonerInfoInfo.save(
+        this.usersSummonerInfoInfo.create({
+          users: user,
+          summonerName: createSummonerName,
+        })
+      );
+      return {
+        success: true,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+
+  /* util functions */
   async findById(id: number): Promise<UserInfoOutput> {
     return this.users.findById(id);
   }
