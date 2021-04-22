@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Patch } from '@nestjs/common';
+import { Controller, Post, Get, Body, Patch, Param, HttpException, HttpStatus } from '@nestjs/common';
 import { CreateUserOutput, CreateUserInput } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
@@ -7,7 +7,7 @@ import { AuthUser } from './../auth/auth-user.decorator';
 import { Users } from './entities/users.entitiy';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
-import { ReadAllSummonerOutput } from './dtos/read-summoner.dto';
+import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';
 
 @Controller('users')
 export class UsersController {
@@ -45,6 +45,19 @@ export class UsersController {
   async readAllSummoner(
   ): Promise<ReadAllSummonerOutput> {
     return this.usersService.readAllSummoner();
+  }
+
+  @Role(['ANY'])
+  @Get('read-summoner/:id')
+  async readOneSummoner(
+    @Param() params,
+  ): Promise<ReadOneSummonerOutput> {
+    const id = +params.id;
+    if (isNaN(id)) {
+      throw new HttpException(``,
+          HttpStatus.FORBIDDEN);
+    }
+    return this.usersService.readOneSummoner(id);
   }
 
   @Role(['ANY'])

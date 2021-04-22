@@ -12,10 +12,10 @@ export class UsersSummonerInfo extends CoreEntity {
   @ManyToOne(
     type => Users
   )
-  users: Users;
+  user: Users;
 
   @RelationId(
-    (usersSummonerInfo: UsersSummonerInfo) => usersSummonerInfo.users
+    (usersSummonerInfo: UsersSummonerInfo) => usersSummonerInfo.user
   )
   userId: number;
 

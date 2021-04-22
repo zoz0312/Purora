@@ -11,13 +11,13 @@ import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summone
 import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
-import { ReadAllSummonerOutput } from './dtos/read-summoner.dto';
+import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';
 
 @Injectable()
 export class UsersService {
   constructor(
     private readonly users: UsersRepository,
-    private readonly usersSummonerInfoInfo: UsersSummonerInfoRepository,
+    private readonly usersSummonerInfo: UsersSummonerInfoRepository,
     private readonly jwtService: JwtService,
   ) {
   }
@@ -65,9 +65,9 @@ export class UsersService {
         })
       );
 
-      await this.usersSummonerInfoInfo.save(
-        this.usersSummonerInfoInfo.create({
-          users: createdUser,
+      await this.usersSummonerInfo.save(
+        this.usersSummonerInfo.create({
+          user: createdUser,
           summonerName: removeWhiteSpace(summonerName),
         })
       );
@@ -146,12 +146,38 @@ export class UsersService {
   async readAllSummoner(
   ): Promise<ReadAllSummonerOutput> {
     try {
-      const usersSummonerInfo = await this.usersSummonerInfoInfo.find();
+      const usersSummonerInfo = await this.usersSummonerInfo.find({
+        select: ['id', 'user']
+      });
       return {
         success: true,
         usersSummonerInfo,
       }
     } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async readOneSummoner(
+    id: number
+  ): Promise<ReadOneSummonerOutput> {
+    try {
+      const usersSummonerInfo = await this.usersSummonerInfo.findOne({
+        id
+      }, {
+        select: ['createdAt', 'updatedAt', 'id', 'summonerName'],
+        relations: ['user']
+      });
+
+      return {
+        success: true,
+        usersSummonerInfo,
+      }
+    } catch (error) {
+      console.log('error', error)
       return {
         success: false,
         error,
@@ -191,9 +217,9 @@ export class UsersService {
         }
       }
 
-      await this.usersSummonerInfoInfo.save(
-        this.usersSummonerInfoInfo.create({
-          users: user,
+      await this.usersSummonerInfo.save(
+        this.usersSummonerInfo.create({
+          user,
           summonerName: createSummonerName,
         })
       );

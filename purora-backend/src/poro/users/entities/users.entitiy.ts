@@ -52,7 +52,7 @@ export class Users extends CoreEntity {
 
   @OneToMany(
     type => UsersSummonerInfo,
-    usersSummonerInfo => usersSummonerInfo.users,
+    usersSummonerInfo => usersSummonerInfo.user,
     {
       cascade: true,
       onDelete: 'CASCADE',
