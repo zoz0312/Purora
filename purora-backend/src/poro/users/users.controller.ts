@@ -7,6 +7,7 @@ import { AuthUser } from './../auth/auth-user.decorator';
 import { Users } from './entities/users.entitiy';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
+import { ReadAllSummonerOutput } from './dtos/read-summoner.dto';
 
 @Controller('users')
 export class UsersController {
@@ -37,6 +38,13 @@ export class UsersController {
     @Body() loginInput: LoginInput,
   ): Promise<LoginOutput> {
     return this.usersService.login(loginInput);
+  }
+
+  @Role(['ANY'])
+  @Get('read-all-summoner')
+  async readAllSummoner(
+  ): Promise<ReadAllSummonerOutput> {
+    return this.usersService.readAllSummoner();
   }
 
   @Role(['ANY'])

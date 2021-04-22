@@ -11,6 +11,7 @@ import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summone
 import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
+import { ReadAllSummonerOutput } from './dtos/read-summoner.dto';
 
 @Injectable()
 export class UsersService {
@@ -133,6 +134,22 @@ export class UsersService {
       return {
         success: true,
         token,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async readAllSummoner(
+  ): Promise<ReadAllSummonerOutput> {
+    try {
+      const usersSummonerInfo = await this.usersSummonerInfoInfo.find();
+      return {
+        success: true,
+        usersSummonerInfo,
       }
     } catch (error) {
       return {
