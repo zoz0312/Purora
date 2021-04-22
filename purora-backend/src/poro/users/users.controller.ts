@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body } from '@nestjs/common';
+import { Controller, Post, Get, Body, Patch } from '@nestjs/common';
 import { CreateUserOutput, CreateUserInput } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
@@ -6,6 +6,7 @@ import { Role } from '../auth/role.decorator';
 import { AuthUser } from './../auth/auth-user.decorator';
 import { Users } from './entities/users.entitiy';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
+import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -20,6 +21,15 @@ export class UsersController {
     @Body() createUserInput: CreateUserInput,
   ): Promise<CreateUserOutput> {
     return this.usersService.createUser(createUserInput);
+  }
+
+  @Role(['USER'])
+  @Patch('modify-user')
+  async modifyUser(
+    @AuthUser() user: Users,
+    @Body() modifyUserInput: ModifyUserInput,
+  ): Promise<ModifyUserOutput> {
+    return this.usersService.modifyUser(user, modifyUserInput);
   }
 
   @Post('login')

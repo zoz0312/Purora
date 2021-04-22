@@ -10,6 +10,7 @@ import { Users } from './entities/users.entitiy';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
+import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -21,7 +22,12 @@ export class UsersService {
   }
 
   async createUser (
-    { userId, userPw, summonerName }: CreateUserInput,
+    {
+      userId,
+      userPw,
+      summonerName,
+      nickName,
+    }: CreateUserInput,
   ): Promise<CreateUserOutput> {
     try {
       const matchId = regexMatch(userId, regexId);
@@ -54,6 +60,7 @@ export class UsersService {
         this.users.create({
           userId,
           userPw,
+          nickName,
         })
       );
 
@@ -67,6 +74,27 @@ export class UsersService {
       return {
         success: true,
         message: `성공적으로 생성되었습니다.`,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async modifyUser(
+    authUser: Users,
+    {
+      nickName
+    }: ModifyUserInput
+  ): Promise<ModifyUserOutput> {
+    try {
+      authUser.nickName = nickName;
+      await this.users.save(authUser);
+
+      return {
+        success: true,
       }
     } catch (error) {
       return {

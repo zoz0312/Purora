@@ -31,6 +31,9 @@ export class Users extends CoreEntity {
   @Column({ select: false })
   userPw: string;
 
+  @Column()
+  nickName: string;
+
   @Column({
     type: 'enum',
     enum: UserRole,
