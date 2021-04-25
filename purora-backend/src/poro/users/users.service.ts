@@ -147,8 +147,9 @@ export class UsersService {
   ): Promise<ReadAllSummonerOutput> {
     try {
       const usersSummonerInfo = await this.usersSummonerInfo.find({
-        select: ['id', 'user']
+        select: ['id', 'summonerName', 'createdAt']
       });
+
       return {
         success: true,
         usersSummonerInfo,

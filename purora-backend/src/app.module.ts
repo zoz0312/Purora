@@ -46,6 +46,7 @@ import { AuthModule } from './poro/auth/auth.module';
       password: process.env.DB_PASSSWORD,
       synchronize: true,
       logging: process.env.NODE_ENV === 'dev',
+      timezone: '+09:00',
       entities: [
         Commands,
         Keyword,
