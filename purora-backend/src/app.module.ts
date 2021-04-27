@@ -10,15 +10,18 @@ import { Keyword } from './user-custom-command/entities/keyword.entitiy';
 import { Commands } from './user-custom-command/entities/commands.entitiy';
 import { Working } from './user-custom-command/entities/working.entity';
 import { Rooms } from './user-custom-command/entities/rooms.entitiy';
-import { Users } from './admin/users/entities/users.entitiy';
-import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
+import { Users } from './poro/users/entities/users.entitiy';
+import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entitiy';
+import { PoroModule } from './poro/poro.module';
+import { JwtModule } from './poro/jwt/jwt.module';
+import { AuthModule } from './poro/auth/auth.module';
 
 /*
   @author AJu (zoz0312)
 */
 @Module({
   imports: [
-  ConfigModule.forRoot({
+    ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
@@ -29,6 +32,7 @@ import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
         DB_DATABASE: Joi.string(),
         DB_USER: Joi.string(),
         DB_PASSSWORD: Joi.string(),
+        PRIVATE_KEY: Joi.string().required(),
       }),
     }),
     CommandManagerModule,
@@ -42,16 +46,21 @@ import { UsersGameInfo } from './admin/users/entities/users-lol.entitiy';
       password: process.env.DB_PASSSWORD,
       synchronize: true,
       logging: process.env.NODE_ENV === 'dev',
+      timezone: '+09:00',
       entities: [
         Commands,
         Keyword,
         Working,
         Rooms,
         Users,
-        UsersGameInfo,
+        UsersSummonerInfo,
       ],
     }),
-    ScheduleModule.forRoot()
+    ScheduleModule.forRoot(),
+    JwtModule.forRoot({
+      privateKey: process.env.PRIVATE_KEY
+    }),
+    PoroModule,
   ],
   controllers: [],
   providers: [],

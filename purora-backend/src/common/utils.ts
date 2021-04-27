@@ -20,3 +20,12 @@ export const trimInput = ({
 
   return [command, argument];
 }
+
+export const regexMatch = (str: string, regex: RegExp) => {
+  const matched = str.match(regex);
+  return (matched !== null && matched[0].length !== 0);
+}
+
+export const removeWhiteSpace = (str: string) => {
+  return str.replace(/\s/g, '');
+}

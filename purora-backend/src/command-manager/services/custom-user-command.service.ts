@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common";
 import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
-import { trimInput } from '../../common/trimInput';
+import { trimInput } from '../../common/utils';
 import { CommandsRepository } from '../../user-custom-command/repositories/commands.repository';
 import { KeywordRepository } from '../../user-custom-command/repositories/keyword.repository';
 import { Rooms } from '../../user-custom-command/entities/rooms.entitiy';
@@ -109,7 +109,6 @@ export class CustomUserCommand {
       });
 
       const commands = await this.commands.find({ where });
-      console.log('commands', commands)
 
       if (commands.length > 0) {
         if (commands.length === 1) {
