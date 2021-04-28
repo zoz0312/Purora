@@ -78,7 +78,7 @@ export class RiotCrawlerService {
   }: GetUserCustomMatchInput): Promise<GetUserCustomMatchOutput> {
     try {
       const { data } = await axios.get(
-        `https://acs.leagueoflegends.com/v1/stats/player_history/KR/${PVPNET_ID_KR}?begIndex=0&endIndex=1`,
+        `https://acs.leagueoflegends.com/v1/stats/player_history/KR/${PVPNET_ID_KR}?begIndex=0&endIndex=10&queue=0`,
         {
           headers: {
             Cookie: `id_token=${id_token}; PVPNET_ID_KR=${PVPNET_ID_KR};`

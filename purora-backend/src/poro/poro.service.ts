@@ -2,11 +2,13 @@ import { Injectable } from '@nestjs/common';
 import { RiotCrawlerService } from './riot-crawler/riot-crawler.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
 import { GetMatchOutput } from './dtos/get-match.dto';
+import { UsersRepository } from './users/repositories/users.repository';
 
 @Injectable()
 export class PoroService {
   constructor (
     private readonly riotCrawlerService: RiotCrawlerService,
+    private readonly users: UsersRepository,
   ) {}
 
   async getRiotToken (
