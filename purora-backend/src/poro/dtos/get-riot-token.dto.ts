@@ -1,5 +1,5 @@
 
-import { GetTokenInput, GetTokenOutput } from './../poro/riot-crawler/dtos/get-token.dto';
+import { GetTokenInput, GetTokenOutput } from './../riot-crawler/dtos/get-token.dto';
 
 export class GetRiotTokenInput extends GetTokenInput {
 }

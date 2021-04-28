@@ -1,5 +1,7 @@
 import { Injectable } from '@nestjs/common';
+import axios from 'axios';
 import { Builder, By, Key, until } from 'selenium-webdriver';
+import { GetUserCustomMatchInput, GetUserCustomMatchOutput } from './dtos/get-match.dto';
 import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
 
 @Injectable()
@@ -67,6 +69,25 @@ export class RiotCrawlerService {
       }
     } finally {
       await driver.quit();
+    }
+  }
+
+  async getUserCustomMatch ({
+    id_token,
+    PVPNET_ID_KR,
+  }: GetUserCustomMatchInput): Promise<GetUserCustomMatchOutput> {
+    try {
+      const { data } = await axios.get(
+        `https://acs.leagueoflegends.com/v1/stats/player_history/KR/${PVPNET_ID_KR}?begIndex=0&endIndex=1`,
+        {
+          headers: {
+            Cookie: `id_token=${id_token}; PVPNET_ID_KR=${PVPNET_ID_KR};`
+          },
+        },
+      );
+      return { data };
+    } catch (error) {
+      return { error };
     }
   }
 }
