@@ -6,7 +6,6 @@ import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
 
 @Injectable()
 export class RiotCrawlerService {
-
   async getToken({
     userId,
     userPw,
@@ -31,7 +30,7 @@ export class RiotCrawlerService {
 
       let getKeyList = [
         'id_token',
-        'PVPNET_TOKEN_KR',
+        // 'PVPNET_TOKEN_KR',
         'PVPNET_ID_KR',
       ];
 
@@ -50,21 +49,17 @@ export class RiotCrawlerService {
         }
       });
 
-      console.log('userCookieInfo', userCookieInfo);
       if (userCookieInfo.length === 0) {
         return {
-          success: false,
           keyList: [],
         };
       }
 
       return {
-        success: true,
         keyList: userCookieInfo,
       };
     } catch (error) {
       return {
-        success: false,
         error
       }
     } finally {

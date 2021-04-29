@@ -9,11 +9,14 @@ export class GetTokenInput {
   userPw: string;
 }
 
-export class GetTokenOutput extends CoreOutput {
+export class GetTokenOutput {
   @IsString()
   keyList?: {
-    key: string;
+    name: string;
     value: string;
     domain: string;
   }[];
+
+  @IsString()
+  error?: string;
 }

@@ -3,18 +3,26 @@ import { RiotCrawlerService } from './riot-crawler/riot-crawler.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
 import { GetMatchOutput } from './dtos/get-match.dto';
 import { UsersRepository } from './users/repositories/users.repository';
+import { GameInfoRepotitory } from './users/repositories/game-info.repotitory';
+import { Users } from './users/entities/users.entitiy';
+import { UsersGameInfoRepotitory } from './users/repositories/users-game-info.repository';
+import { UsersSummonerInfoRepository } from './users/repositories/users-summoner-info.repository';
 
 @Injectable()
 export class PoroService {
   constructor (
     private readonly riotCrawlerService: RiotCrawlerService,
     private readonly users: UsersRepository,
+    private readonly gameInfo: GameInfoRepotitory,
+    private readonly usersGameInfo: UsersGameInfoRepotitory,
+    private readonly usersSummonerInfo: UsersSummonerInfoRepository,
   ) {}
 
   async getRiotToken (
+    user: Users,
     getRiotTokenInput: GetRiotTokenInput
   ): Promise<GetRiotTokenOutput> {
-    const { userId, userPw } = getRiotTokenInput;
+    const { userId, userPw, summonerId } = getRiotTokenInput;
     if (!userId || !userPw) {
       return {
         success: false,
@@ -22,7 +30,53 @@ export class PoroService {
       }
     }
 
-    return this.riotCrawlerService.getToken(getRiotTokenInput);
+    const summoner = await this.usersSummonerInfo.findOne({
+      where:{
+        id: summonerId,
+        user,
+      }
+    });
+
+    if (!summoner) {
+      return {
+        success: false,
+        message: `권한이 없는 소환사 이름입니다 O_o`,
+      }
+    }
+
+    const { error, keyList } = await this.riotCrawlerService.getToken({
+      userId,
+      userPw,
+    });
+
+    if (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+
+    if (keyList.length === 0) {
+      return {
+        success: false,
+        message: `아이디 또는 비밀번호가 잘못되어 정보를 가져올 수 없습니다 ㅠ.ㅠ`,
+      }
+    }
+
+    const cookie = {
+      'PVPNET_ID_KR': 'pvpId',
+      'id_token': 'token',
+    }
+
+    keyList.map(item => {
+      summoner[cookie[item.name]] = item.value;
+    });
+
+    await this.usersSummonerInfo.save(summoner);
+
+    return {
+      success: true,
+    }
   }
 
   async getMatch (): Promise<GetMatchOutput> {

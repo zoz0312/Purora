@@ -7,15 +7,21 @@ import { AuthModule } from './auth/auth.module';
 import { RiotCrawlerModule } from './riot-crawler/riot-crawler.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { UsersRepository } from './users/repositories/users.repository';
+import { GameInfoRepotitory } from './users/repositories/game-info.repotitory';
+import { UsersGameInfoRepotitory } from './users/repositories/users-game-info.repository';
+import { UsersSummonerInfoRepository } from './users/repositories/users-summoner-info.repository';
 
 @Module({
   imports: [
-  UsersModule,
+    UsersModule,
     JwtModule,
     AuthModule,
     RiotCrawlerModule,
     TypeOrmModule.forFeature([
-      UsersRepository
+      UsersRepository,
+      GameInfoRepotitory,
+      UsersGameInfoRepotitory,
+      UsersSummonerInfoRepository,
     ]),
   ],
   controllers: [PoroController],

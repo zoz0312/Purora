@@ -178,7 +178,6 @@ export class UsersService {
         usersSummonerInfo,
       }
     } catch (error) {
-      console.log('error', error)
       return {
         success: false,
         error,

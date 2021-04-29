@@ -4,6 +4,7 @@ import { IsEnum, IsString, Min } from 'class-validator';
 import { UsersSummonerInfo } from './users-summoner-info.entitiy';
 import * as bcrypt from 'bcrypt';
 import { InternalServerErrorException } from "@nestjs/common";
+import { UsersGameInfo } from "./user-game-info.entitiy";
 
 export enum UserRole {
   SUPER_ADMIN = 'SUPER_ADMIN',
@@ -31,7 +32,7 @@ export class Users extends CoreEntity {
   @Column({ select: false })
   userPw: string;
 
-  @Column()
+  @Column({ length: 16 })
   nickName: string;
 
   @Column({
@@ -59,6 +60,16 @@ export class Users extends CoreEntity {
     }
   )
   usersSummonerInfo: UsersSummonerInfo[];
+
+  @OneToMany(
+    type => UsersGameInfo,
+    UsersGameInfo => UsersGameInfo.users,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    }
+  )
+  UsersGameInfo: UsersGameInfo[];
 
   @BeforeInsert()
   @BeforeUpdate()

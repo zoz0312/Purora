@@ -14,7 +14,8 @@ import { Users } from './poro/users/entities/users.entitiy';
 import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entitiy';
 import { PoroModule } from './poro/poro.module';
 import { JwtModule } from './poro/jwt/jwt.module';
-import { AuthModule } from './poro/auth/auth.module';
+import { GameInfo } from './poro/users/entities/game-info.entitiy';
+import { UsersGameInfo } from './poro/users/entities/user-game-info.entitiy';
 
 /*
   @author AJu (zoz0312)
@@ -54,6 +55,8 @@ import { AuthModule } from './poro/auth/auth.module';
         Rooms,
         Users,
         UsersSummonerInfo,
+        GameInfo,
+        UsersGameInfo,
       ],
     }),
     ScheduleModule.forRoot(),
