@@ -10,12 +10,12 @@ import { Keyword } from './user-custom-command/entities/keyword.entitiy';
 import { Commands } from './user-custom-command/entities/commands.entitiy';
 import { Working } from './user-custom-command/entities/working.entity';
 import { Rooms } from './user-custom-command/entities/rooms.entitiy';
-import { Users } from './poro/users/entities/users.entitiy';
-import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entitiy';
+import { Users } from './poro/users/entities/users.entity';
+import { UsersSummonerInfo } from './poro/users/entities/users-summoner-info.entity';
 import { PoroModule } from './poro/poro.module';
 import { JwtModule } from './poro/jwt/jwt.module';
-import { GameInfo } from './poro/users/entities/game-info.entitiy';
-import { UsersGameInfo } from './poro/users/entities/user-game-info.entitiy';
+import { GameInfo } from './poro/users/entities/game-info.entity';
+import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
 
 /*
   @author AJu (zoz0312)

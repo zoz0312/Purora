@@ -1,6 +1,6 @@
 import { CoreEntity } from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { Users } from "./users.entitiy";
+import { Users } from "./users.entity";
 
 /*
   @author AJu (zoz0312)

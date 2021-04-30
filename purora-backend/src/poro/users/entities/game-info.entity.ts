@@ -1,13 +1,17 @@
 import { Column, Entity, OneToMany } from "typeorm";
 import { CoreEntity } from 'src/common/entities/core.entities';
-import { UsersGameInfo } from "./user-game-info.entitiy";
+import { UsersGameInfo } from "./user-game-info.entity";
 
 @Entity()
 export class GameInfo extends CoreEntity {
-  @Column()
+  @Column({
+    type: 'bigint',
+  })
   gameId: number;
 
-  @Column()
+  @Column({
+    type: 'bigint',
+  })
   creation: number;
 
   @Column()

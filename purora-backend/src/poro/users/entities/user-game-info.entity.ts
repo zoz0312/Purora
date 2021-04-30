@@ -1,7 +1,7 @@
 import { Column, Entity, ManyToOne, RelationId } from "typeorm";
 import { CoreEntity } from 'src/common/entities/core.entities';
-import { GameInfo } from "./game-info.entitiy";
-import { Users } from "./users.entitiy";
+import { GameInfo } from "./game-info.entity";
+import { Users } from "./users.entity";
 
 @Entity()
 export class UsersGameInfo extends CoreEntity {
@@ -11,7 +11,7 @@ export class UsersGameInfo extends CoreEntity {
   gameInfo: GameInfo;
 
   @RelationId(
-    (UsersGameInfo: UsersGameInfo) => UsersGameInfo.gameInfo
+    (UsersGameInfo: UsersGameInfo) => UsersGameInfo.gameInfo,
   )
   gameId: number;
 

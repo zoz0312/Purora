@@ -1,5 +1,5 @@
 import { EntityRepository, Repository } from "typeorm";
-import { Users } from "../entities/users.entitiy";
+import { Users } from "../entities/users.entity";
 import { UserInfoOutput } from './../dtos/user-info.dto';
 
 @EntityRepository(Users)
