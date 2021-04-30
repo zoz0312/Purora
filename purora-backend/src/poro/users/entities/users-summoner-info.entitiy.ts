@@ -21,9 +21,14 @@ export class UsersSummonerInfo extends CoreEntity {
   @Column({ length: 16 })
   summonerName: string;
 
-  @Column('text')
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
   token: string;
 
-  @Column()
+  @Column({
+    nullable: true,
+  })
   pvpId: number;
 }
