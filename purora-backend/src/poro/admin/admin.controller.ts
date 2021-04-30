@@ -8,6 +8,7 @@ import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
 import { AdminReadUsersOutput } from './dtos/admin-read-users.dto';
+import { AdminModifyKeywordsInput, AdminModifyKeywordsOutput } from './dtos/admin-modify-keywords.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -36,9 +37,9 @@ export class AdminController {
   @Patch('users')
   async modifyUsers(
     @AuthUser() user: Users,
-    @Body() users: AdminModifyUsersInput,
+    @Body() adminModifyUsersInput: AdminModifyUsersInput,
   ): Promise<AdminModifyUsersOutput> {
-    return this.adminService.modifyUsers(user, users);
+    return this.adminService.modifyUsers(user, adminModifyUsersInput);
   }
 
   @Role(['SUPER_ADMIN','ADMIN'])
@@ -56,5 +57,14 @@ export class AdminController {
     @Param('keywordId') keywordId: number,
   ): Promise<AdminReadKeywordOutput> {
     return this.adminService.readUserKeyword(user, keywordId);
+  }
+
+  @Role(['SUPER_ADMIN','ADMIN'])
+  @Patch('keywords')
+  async modifyUserKeywords(
+    @AuthUser() user: Users,
+    @Body() adminModifyKeywordsInput: AdminModifyKeywordsInput,
+  ): Promise<AdminModifyKeywordsOutput> {
+    return this.adminService.modifyKeywords(user, adminModifyKeywordsInput);
   }
 }

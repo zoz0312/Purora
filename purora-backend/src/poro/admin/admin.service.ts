@@ -3,6 +3,7 @@ import { KeywordRepository } from 'src/user-custom-command/repositories/keyword.
 import { Users } from '../users/entities/users.entity';
 import { UsersSummonerInfoRepository } from '../users/repositories/users-summoner-info.repository';
 import { UsersRepository } from '../users/repositories/users.repository';
+import { AdminModifyKeywordsInput, AdminModifyKeywordsOutput } from './dtos/admin-modify-keywords.dto';
 import { AdminModifyUsersInput, AdminModifyUsersOutput } from './dtos/admin-modify-users.dto';
 import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
@@ -14,7 +15,7 @@ export class AdminService {
   constructor (
     private readonly users: UsersRepository,
     private readonly usersSummonerInfo: UsersSummonerInfoRepository,
-    private readonly keywordRepository: KeywordRepository,
+    private readonly keyword: KeywordRepository,
   ) {}
 
   async readUsers(
@@ -126,7 +127,7 @@ export class AdminService {
     user: Users,
   ): Promise<AdminReadKeywordsOutput> {
     try {
-      const commands = await this.keywordRepository.find({
+      const commands = await this.keyword.find({
         relations: ['commands']
       });
 
@@ -147,7 +148,7 @@ export class AdminService {
     keywordId: number,
   ): Promise<AdminReadKeywordOutput> {
     try {
-      const command = await this.keywordRepository.findOne({
+      const command = await this.keyword.findOne({
         where: {
           id: keywordId,
         },
@@ -157,6 +158,49 @@ export class AdminService {
       return {
         success: true,
         data: command,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async modifyKeywords(
+    user: Users,
+    { keywords }: AdminModifyKeywordsInput,
+  ): Promise<AdminModifyKeywordsOutput> {
+    if (keywords.length === 0) {
+      return {
+        success: false,
+        message: `수정할 키워드의 정보가 없습니다. (｡•́︿•̀｡)`
+      }
+    }
+
+    try {
+      const currentKeywords = await this.keyword.find({
+        where: keywords.map(keyword => ({ id: keyword.id }))
+      });
+
+      const updateUsers = currentKeywords.map(currentKeyword => {
+        for (const modifyKeyword of keywords) {
+          if (currentKeyword.id === modifyKeyword.id) {
+            return {
+              ...currentKeyword,
+              ...modifyKeyword,
+            }
+          }
+        }
+        return {
+          ...currentKeyword
+        }
+      });
+
+      await this.keyword.save(updateUsers);
+
+      return {
+        success: true,
       }
     } catch (error) {
       return {
