@@ -31,4 +31,10 @@ export class UsersSummonerInfo extends CoreEntity {
     nullable: true,
   })
   pvpId: number;
+
+  @Column({
+    type: 'datetime',
+    nullable: true,
+  })
+  lastMatchUpdateAt: Date;
 }

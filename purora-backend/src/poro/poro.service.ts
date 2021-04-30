@@ -152,9 +152,19 @@ export class PoroService {
       }
     }
 
-    /*
-      TODO: 갱신 주기 컬럼 추가 및 갱신 딜레이 걸기
-    */
+    if (summoner.lastMatchUpdateAt) {
+      const updateCyle = 1 * 60 * 1000 // 1분
+      const lastTime = new Date(summoner.lastMatchUpdateAt).getTime() + updateCyle;
+      const currentTime = new Date().getTime();
+
+      if (lastTime > currentTime) {
+        const time = Math.floor((lastTime - currentTime) / 1000);
+        return {
+          success: false,
+          message: `${time}초 후에 갱신 가능합니다.. (｡•́︿•̀｡)`,
+        }
+      }
+    }
 
     let flag = false;
     const {
@@ -263,6 +273,9 @@ export class PoroService {
         this.usersGameInfo.create(insertUsersGameInfo)
       );
     }
+
+    summoner.lastMatchUpdateAt = new Date();
+    await this.usersSummonerInfo.save(summoner);
 
     if (!flag) {
       return {
