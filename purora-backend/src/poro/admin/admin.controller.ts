@@ -3,6 +3,7 @@ import { AuthUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
 import { Users } from '../users/entities/users.entity';
 import { AdminService } from './admin.service';
+import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
 import { AdminReadUsersOutput } from './dtos/admin-read-users.dto';
@@ -32,9 +33,18 @@ export class AdminController {
 
   @Role(['SUPER_ADMIN','ADMIN'])
   @Get('keywords')
-  async readUserCommand(
+  async readUserKeywords(
     @AuthUser() user: Users,
   ): Promise<AdminReadKeywordsOutput> {
-    return this.adminService.readUserCommand(user);
+    return this.adminService.readUserKeywords(user);
+  }
+
+  @Role(['SUPER_ADMIN','ADMIN'])
+  @Get('keyword/:keywordId')
+  async readUserKeyword(
+    @AuthUser() user: Users,
+    @Param('keywordId') keywordId: number,
+  ): Promise<AdminReadKeywordOutput> {
+    return this.adminService.readUserKeyword(user, keywordId);
   }
 }

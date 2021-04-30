@@ -3,6 +3,7 @@ import { KeywordRepository } from 'src/user-custom-command/repositories/keyword.
 import { Users } from '../users/entities/users.entity';
 import { UsersSummonerInfoRepository } from '../users/repositories/users-summoner-info.repository';
 import { UsersRepository } from '../users/repositories/users.repository';
+import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
 import { AdminReadUsersOutput } from './dtos/admin-read-users.dto';
@@ -77,7 +78,7 @@ export class AdminService {
     }
   }
 
-  async readUserCommand (
+  async readUserKeywords (
     user: Users,
   ): Promise<AdminReadKeywordsOutput> {
     try {
@@ -88,6 +89,30 @@ export class AdminService {
       return {
         success: true,
         data: commands,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async readUserKeyword (
+    user: Users,
+    keywordId: number,
+  ): Promise<AdminReadKeywordOutput> {
+    try {
+      const command = await this.keywordRepository.findOne({
+        where: {
+          id: keywordId,
+        },
+        relations: ['commands']
+      });
+
+      return {
+        success: true,
+        data: command,
       }
     } catch (error) {
       return {
