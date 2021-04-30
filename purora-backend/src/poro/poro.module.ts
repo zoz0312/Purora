@@ -10,19 +10,21 @@ import { UsersRepository } from './users/repositories/users.repository';
 import { GameInfoRepotitory } from './users/repositories/game-info.repotitory';
 import { UsersGameInfoRepotitory } from './users/repositories/users-game-info.repository';
 import { UsersSummonerInfoRepository } from './users/repositories/users-summoner-info.repository';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
-    UsersModule,
-    JwtModule,
-    AuthModule,
-    RiotCrawlerModule,
     TypeOrmModule.forFeature([
       UsersRepository,
       GameInfoRepotitory,
       UsersGameInfoRepotitory,
       UsersSummonerInfoRepository,
     ]),
+    UsersModule,
+    JwtModule,
+    AuthModule,
+    RiotCrawlerModule,
+    AdminModule,
   ],
   controllers: [PoroController],
   providers: [PoroService],
