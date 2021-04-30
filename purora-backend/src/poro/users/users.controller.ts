@@ -4,7 +4,7 @@ import { UsersService } from './users.service';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { Role } from '../auth/role.decorator';
 import { AuthUser } from './../auth/auth-user.decorator';
-import { Users } from './entities/users.entitiy';
+import { Users } from './entities/users.entity';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';

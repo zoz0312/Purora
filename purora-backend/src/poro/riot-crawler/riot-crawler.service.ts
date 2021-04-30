@@ -6,7 +6,6 @@ import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
 
 @Injectable()
 export class RiotCrawlerService {
-
   async getToken({
     userId,
     userPw,
@@ -31,7 +30,7 @@ export class RiotCrawlerService {
 
       let getKeyList = [
         'id_token',
-        'PVPNET_TOKEN_KR',
+        // 'PVPNET_TOKEN_KR',
         'PVPNET_ID_KR',
       ];
 
@@ -50,21 +49,17 @@ export class RiotCrawlerService {
         }
       });
 
-      console.log('userCookieInfo', userCookieInfo);
       if (userCookieInfo.length === 0) {
         return {
-          success: false,
           keyList: [],
         };
       }
 
       return {
-        success: true,
         keyList: userCookieInfo,
       };
     } catch (error) {
       return {
-        success: false,
         error
       }
     } finally {
@@ -75,10 +70,12 @@ export class RiotCrawlerService {
   async getUserCustomMatch ({
     id_token,
     PVPNET_ID_KR,
+    beginIndex,
+    endIndex,
   }: GetUserCustomMatchInput): Promise<GetUserCustomMatchOutput> {
     try {
       const { data } = await axios.get(
-        `https://acs.leagueoflegends.com/v1/stats/player_history/KR/${PVPNET_ID_KR}?begIndex=0&endIndex=10&queue=0`,
+        `https://acs.leagueoflegends.com/v1/stats/player_history/KR/${PVPNET_ID_KR}?begIndex=${beginIndex}&endIndex=${endIndex}&queue=0`,
         {
           headers: {
             Cookie: `id_token=${id_token}; PVPNET_ID_KR=${PVPNET_ID_KR};`

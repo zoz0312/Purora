@@ -1,7 +1,6 @@
 import { CoreEntity } from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
-import { IsEnum, IsString } from 'class-validator';
-import { Users } from "./users.entitiy";
+import { Users } from "./users.entity";
 
 /*
   @author AJu (zoz0312)
@@ -19,7 +18,23 @@ export class UsersSummonerInfo extends CoreEntity {
   )
   userId: number;
 
-  @Column()
-  @IsString()
+  @Column({ length: 16 })
   summonerName: string;
+
+  @Column({
+    type: 'text',
+    nullable: true,
+  })
+  token: string;
+
+  @Column({
+    nullable: true,
+  })
+  pvpId: number;
+
+  @Column({
+    type: 'datetime',
+    nullable: true,
+  })
+  lastMatchUpdateAt: Date;
 }

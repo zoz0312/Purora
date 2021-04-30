@@ -1,6 +1,6 @@
 import { CoreOutput } from "src/common/dtos/output.dto";
-import { Users } from "../entities/users.entitiy";
-import { UsersSummonerInfo } from './../entities/users-summoner-info.entitiy';
+import { Users } from "../entities/users.entity";
+import { UsersSummonerInfo } from '../entities/users-summoner-info.entity';
 
 // export class ReadAllSummonerInput {
 // }

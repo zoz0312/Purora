@@ -6,7 +6,7 @@ import { LoginInput, LoginOutput } from './dtos/login.dto';
 import { JwtService } from './../jwt/jwt.service';
 import { UserInfoOutput } from './dtos/user-info.dto';
 import { regexId, regexPw } from './../../common/regex';
-import { Users } from './entities/users.entitiy';
+import { Users } from './entities/users.entity';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
@@ -178,7 +178,6 @@ export class UsersService {
         usersSummonerInfo,
       }
     } catch (error) {
-      console.log('error', error)
       return {
         success: false,
         error,
