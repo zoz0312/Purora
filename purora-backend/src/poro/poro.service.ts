@@ -156,14 +156,15 @@ export class PoroService {
       TODO: 갱신 주기 컬럼 추가 및 갱신 딜레이 걸기
     */
 
+    let flag = false;
     const {
       data,
       error,
     } = await this.riotCrawlerService.getUserCustomMatch({
       id_token: summoner.token,
       PVPNET_ID_KR: summoner.pvpId,
-      beginIndex: 0,
-      endIndex: 5,
+      beginIndex,
+      endIndex,
     });
 
     if (!data) {
@@ -183,11 +184,13 @@ export class PoroService {
       where: gameInfoWhere
     });
 
+
     /* JSON과 GameInfo DB를 비교하여 없는 GameInfo Insert */
     if (dbGameInfo.length !== gameInfoWhere.length) {
+      flag = true;
       const insertGameInfo = games.filter(game => {
         for (let dbGame of dbGameInfo) {
-          if (dbGame.gameId === game.gameId) {
+          if (+dbGame.gameId === game.gameId) {
             return false;
           }
         }
@@ -199,36 +202,45 @@ export class PoroService {
         gameMode: mode,
         gameVersion: version,
       }) => ({
-        gameId: +gameId,
-        creation: +creation,
+        gameId: gameId,
+        creation: creation,
         duration,
         mode,
         version,
       }));
 
-      await this.gameInfo.save(
+      const newGameInfo = await this.gameInfo.save(
         this.gameInfo.create(insertGameInfo)
       );
 
-      dbGameInfo = await this.gameInfo.find({
-        where: gameInfoWhere
-      });
+      dbGameInfo = [
+        ...newGameInfo,
+        ...dbGameInfo
+      ];
     }
 
+    /* UsersGameInfo 조회를 위한 조건문 Update */
     gameInfoWhere = dbGameInfo.map(gameInfo => ({
       gameInfo,
       users: user
     }));
+
 
     /* UsersGameInfo DB 조회 */
     const dbUserGameInfo = await this.usersGameInfo.find({
       where: gameInfoWhere
     });
 
+
+    /*
+     * UsersGameData와 크롤링한 데이터의 길이가 다른 경우,
+     * DB에 없는 데이터 Insert
+     */
     if (gameInfoWhere.length !== dbUserGameInfo.length) {
+      flag = true;
       const insertUsersGameInfo = gameInfoWhere.filter(gameInfo => {
         for (let dbUserGame of dbUserGameInfo) {
-          if (dbUserGame.gameInfo === gameInfo) {
+          if (dbUserGame.gameId === gameInfo.gameInfo.id) {
             return false;
           }
         }
@@ -252,9 +264,16 @@ export class PoroService {
       );
     }
 
+    if (!flag) {
+      return {
+        success: true,
+        message: `이미 최신 상태입니다! ◝(・ω・)◟`,
+      }
+    }
+
     return {
       success: true,
-      message: `성공적으로 갱신되었습니다! ᕕ( ᐛ )ᕗ `,
+      message: `성공적으로 갱신되었습니다! ᕕ( ᐛ )ᕗ`,
     }
   }
 }
