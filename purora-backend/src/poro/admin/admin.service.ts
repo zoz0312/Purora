@@ -3,7 +3,7 @@ import { KeywordRepository } from 'src/user-custom-command/repositories/keyword.
 import { Users } from '../users/entities/users.entity';
 import { UsersSummonerInfoRepository } from '../users/repositories/users-summoner-info.repository';
 import { UsersRepository } from '../users/repositories/users.repository';
-import { AdminModifyUsersInput } from './dtos/admin-modify-users.dto';
+import { AdminModifyUsersInput, AdminModifyUsersOutput } from './dtos/admin-modify-users.dto';
 import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
@@ -82,7 +82,7 @@ export class AdminService {
   async modifyUsers(
     user: Users,
     { users }: AdminModifyUsersInput,
-  ): Promise<AdminReadUsersOutput> {
+  ): Promise<AdminModifyUsersOutput> {
     if (users.length === 0) {
       return {
         success: false,
@@ -115,7 +115,6 @@ export class AdminService {
         success: true,
       }
     } catch (error) {
-      console.log('error', error)
       return {
         success: false,
         error,

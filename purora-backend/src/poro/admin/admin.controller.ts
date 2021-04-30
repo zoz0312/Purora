@@ -3,7 +3,7 @@ import { AuthUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
 import { Users } from '../users/entities/users.entity';
 import { AdminService } from './admin.service';
-import { AdminModifyUsersInput } from './dtos/admin-modify-users.dto';
+import { AdminModifyUsersInput, AdminModifyUsersOutput } from './dtos/admin-modify-users.dto';
 import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
@@ -37,7 +37,7 @@ export class AdminController {
   async modifyUsers(
     @AuthUser() user: Users,
     @Body() users: AdminModifyUsersInput,
-  ): Promise<AdminReadUsersOutput> {
+  ): Promise<AdminModifyUsersOutput> {
     return this.adminService.modifyUsers(user, users);
   }
 
