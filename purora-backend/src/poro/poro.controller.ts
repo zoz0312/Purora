@@ -1,7 +1,7 @@
-import { Controller, Post, Body, Get, Param } from '@nestjs/common';
+import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { PoroService } from './poro.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
-import { GetMatchOutput } from './dtos/get-match.dto';
+import { GetMatchInput, GetMatchOutput } from './dtos/get-match.dto';
 import { Role } from './auth/role.decorator';
 import { Users } from './users/entities/users.entity';
 import { AuthUser } from './auth/auth-user.decorator';
@@ -23,12 +23,13 @@ export class PoroController {
   }
 
   @Role(['ANY'])
-  @Get('get-match/:id')
-  async getMatch(
+  @Get('get-match/:summonerId')
+  async getMatchData(
     @AuthUser() user: Users,
-    @Param('id') id: string,
+    @Param('summonerId') summonerId: number,
+    @Query() query: GetMatchInput,
   ): Promise<GetMatchOutput> {
-    return this.poroService.getMatch(user, +id);
+    return this.poroService.getMatchData(user, summonerId, query);
   }
 
   @Role(['ANY'])

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { RiotCrawlerService } from './riot-crawler/riot-crawler.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
-import { GetMatchOutput } from './dtos/get-match.dto';
+import { GetMatchInput, GetMatchOutput } from './dtos/get-match.dto';
 import { UsersRepository } from './users/repositories/users.repository';
 import { GameInfoRepotitory } from './users/repositories/game-info.repotitory';
 import { Users } from './users/entities/users.entity';
@@ -31,11 +31,9 @@ export class PoroService {
       }
     }
 
-    const summoner = await this.usersSummonerInfo.findOne({
-      where:{
-        id: summonerId,
-        user,
-      }
+    const summoner = await this.usersSummonerInfo.findById({
+      summonerId,
+      user,
     });
 
     if (!summoner) {
@@ -80,22 +78,15 @@ export class PoroService {
     }
   }
 
-  async getMatch (
+  async getMatchData (
     user: Users,
-    id: number,
+    summonerId: number,
+    query: GetMatchInput,
   ): Promise<GetMatchOutput> {
-    if (isNaN(id)) {
-      return {
-        success: false,
-        message: `잘못된 요청입니다.`,
-      }
-    }
 
-    const summoner = await this.usersSummonerInfo.findOne({
-      where:{
-        id,
-        user,
-      }
+    const summoner = await this.usersSummonerInfo.findById({
+      summonerId,
+      user,
     });
 
     if (!summoner) {
@@ -105,28 +96,35 @@ export class PoroService {
       }
     }
 
+    const skip = +query.beginIndex;
+    const take = (+query.endIndex) - skip;
 
-    // TODO: GET Match Data From DB
-    // if (!summoner.token || !summoner.pvpId) {
-    //   return {
-    //     success: false,
-    //     message: 
-    //   }
-    // }
+    if (isNaN(skip) || isNaN(take)) {
+      return {
+        success: false,
+        message: `잘못된 Query 요청입니다 ˃̣̣̣̣̣̣︿˂̣̣̣̣̣̣ `,
+      }
+    }
 
-    const {
-      data,
-      error,
-    } = await this.riotCrawlerService.getUserCustomMatch({
-      id_token: `eyJraWQiOiJzMSIsImFsZyI6IlJTMjU2In0.eyJzdWIiOiIyMDljMDUxOC1mMGZhLTU4YjItOWE4Zi1jNzJkOWJlMzliNDEiLCJjb3VudHJ5Ijoia29yIiwicGxheWVyX3Bsb2NhbGUiOiJlbi1VUyIsImFtciI6WyJwYXNzd29yZCJdLCJpc3MiOiJodHRwczpcL1wvYXV0aC5yaW90Z2FtZXMuY29tIiwibG9sIjpbeyJjdWlkIjoyMDAxNjgyOTAsImNwaWQiOiJLUiIsInVpZCI6MjAwMTY4MjkwLCJ1bmFtZSI6InpvejAzMTIiLCJwdHJpZCI6bnVsbCwicGlkIjoiS1IiLCJzdGF0ZSI6IkVOQUJMRUQifV0sImxvY2FsZSI6ImtvX0tSIiwiYXVkIjoicnNvLXdlYi1jbGllbnQtcHJvZCIsImFjciI6InVybjpyaW90OmJyb256ZSIsInBsYXllcl9sb2NhbGUiOiJlbi1VUyIsImV4cCI6MTYxOTYxNzcxMywiaWF0IjoxNjE5NTMxMzEzLCJhY2N0Ijp7ImdhbWVfbmFtZSI6IuyXiSDrlJQiLCJ0YWdfbGluZSI6IktSMSJ9LCJqdGkiOiJpS2toUENWYzh5MCIsImxvZ2luX2NvdW50cnkiOiJrb3IifQ.YbtF5mDYmjTb8XOHPbrKBRsbjg3fzcKNAhxyjeW3zzcfl6apNtYwjkEydSPaefxDfk-_-sqsOHl_h32gM14_D1o2VYaFYbDLDos6iQn-3RWy4HH4BafUTwjfWspKFwdcxkOUKrgvSaZ9v4_HgJWJEhqdJ1BM2uONJCQffpoRwV4`,
-      PVPNET_ID_KR: 200168290,
-      beginIndex: 0,
-      endIndex: 5,
-    });
-    return {
-      success: true,
-      data,
-      error,
+    try {
+      const data = await this.usersGameInfo.find({
+        select: ['gameData'],
+        where: {
+          users: user
+        },
+        skip,
+        take
+      });
+
+      return {
+        success: true,
+        data,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
     }
   }
 
