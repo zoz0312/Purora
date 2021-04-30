@@ -1,8 +1,9 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Body, Controller, Get, Param, Patch } from '@nestjs/common';
 import { AuthUser } from '../auth/auth-user.decorator';
 import { Role } from '../auth/role.decorator';
 import { Users } from '../users/entities/users.entity';
 import { AdminService } from './admin.service';
+import { AdminModifyUsersInput } from './dtos/admin-modify-users.dto';
 import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
@@ -29,6 +30,15 @@ export class AdminController {
     @Param('userId') userId: number,
   ): Promise<AdminReadUserOutput> {
     return this.adminService.readUser(user, userId);
+  }
+
+  @Role(['SUPER_ADMIN','ADMIN'])
+  @Patch('users')
+  async modifyUsers(
+    @AuthUser() user: Users,
+    @Body() users: AdminModifyUsersInput,
+  ): Promise<AdminReadUsersOutput> {
+    return this.adminService.modifyUsers(user, users);
   }
 
   @Role(['SUPER_ADMIN','ADMIN'])

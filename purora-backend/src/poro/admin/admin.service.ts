@@ -3,6 +3,7 @@ import { KeywordRepository } from 'src/user-custom-command/repositories/keyword.
 import { Users } from '../users/entities/users.entity';
 import { UsersSummonerInfoRepository } from '../users/repositories/users-summoner-info.repository';
 import { UsersRepository } from '../users/repositories/users.repository';
+import { AdminModifyUsersInput } from './dtos/admin-modify-users.dto';
 import { AdminReadKeywordOutput } from './dtos/admin-read-keyword.dto';
 import { AdminReadKeywordsOutput } from './dtos/admin-read-keywords.dto';
 import { AdminReadUserOutput } from './dtos/admin-read-user.dto';
@@ -71,6 +72,50 @@ export class AdminService {
         data: user,
       }
     } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async modifyUsers(
+    user: Users,
+    { users }: AdminModifyUsersInput,
+  ): Promise<AdminReadUsersOutput> {
+    if (users.length === 0) {
+      return {
+        success: false,
+        message: `수정할 유저의 정보가 없습니다. (｡•́︿•̀｡)`
+      }
+    }
+
+    try {
+      const currentUsers = await this.users.find({
+        where: users.map(user => ({ id: user.id }))
+      });
+
+      const updateUsers = currentUsers.map(currentUser => {
+        for (const modifyUser of users) {
+          if (currentUser.id === modifyUser.id) {
+            return {
+              ...currentUser,
+              ...modifyUser
+            }
+          }
+        }
+        return {
+          ...currentUser
+        }
+      })
+
+      await this.users.save(updateUsers);
+
+      return {
+        success: true,
+      }
+    } catch (error) {
+      console.log('error', error)
       return {
         success: false,
         error,
