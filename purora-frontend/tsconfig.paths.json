@@ -3,9 +3,9 @@
     "baseUrl": "./",
     "paths": {
       "@pages/*": ["src/pages/*"],
-			"@routers/*": ["src/routers/*"],
-			"@end-point/*": ["src/end-point/*"],
-			"@store/*": ["src/store/*"]
+      "@routers/*": ["src/routers/*"],
+      "@end-point/*": ["src/end-point/*"],
+      "@store/*": ["src/store/*"]
     }
   }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from "@pages/Home";
-import Login from "@pages/Login";
+import Home from '@pages/Home';
+import Login from '@pages/Login';
+import NotFound from "../components/NotFound";
 
 const logoutRouters = [
   { path: '/', component: Login },
@@ -32,7 +33,7 @@ const Routers: React.FC<RoutersProps> = ({
           { logoutRouters.map(route => (
             <Route exact path={route.path} key={route.path} component={route.component} />
           ))}
-          {/*<Route component={NotFound}/>*/}
+          <Route component={NotFound}/>
         </Switch>
       </Router>
     )
