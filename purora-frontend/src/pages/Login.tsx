@@ -1,14 +1,8 @@
 import React from 'react';
 import { Helmet } from 'react-helmet-async';
 import './Login.scss';
-import { authMapDispatchToProps, AuthDispatchType } from '@store/auth';
-import { connect } from 'react-redux';
 
-interface LoginPageProps extends AuthDispatchType {};
-
-const Login: React.FC<LoginPageProps> = ({
-   setLoginInfo,
- }) => {
+const Login: React.FC = () => {
   return (
     <div className={'flex flex-col items-center justify-center article-login login-box'}>
       <Helmet>
@@ -22,4 +16,4 @@ const Login: React.FC<LoginPageProps> = ({
   );
 }
 
-export default connect(null, authMapDispatchToProps)(Login);
+export default Login;
