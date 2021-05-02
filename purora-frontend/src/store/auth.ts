@@ -1,8 +1,9 @@
 import { bindActionCreators, createSlice, PayloadAction } from '@reduxjs/toolkit';
-import {LOCALSTORAGE_TOKEN} from "../utils/constants";
+import {LOCALSTORAGE_TOKEN, LOCALSTORAGE_USER} from "../utils/constants";
 
 export interface AuthStateType {
-  userId: string;
+  user: object;
+  token: string;
 };
 
 export interface AuthDispatchType {
@@ -12,10 +13,14 @@ export interface AuthDispatchType {
 
 export const authMapStateToProps = ({
   authInfo: {
-    userId,
+    user,
+    token,
   }
 }: { authInfo: AuthStateType }, ownProps: {}) => {
-  return { userId };
+  return {
+    user,
+    token
+  };
 };
 
 export const authMapDispatchToProps = (dispatch: any) => {
@@ -25,27 +30,36 @@ export const authMapDispatchToProps = (dispatch: any) => {
   }, dispatch);
 };
 
-const userId = localStorage.getItem(LOCALSTORAGE_TOKEN) || '';
+const user = JSON.parse(localStorage.getItem(LOCALSTORAGE_USER) || '{}');
+const token = localStorage.getItem(LOCALSTORAGE_TOKEN) || '';
 
 const auth = createSlice({
   name: 'auth',
   initialState: {
-    userId,
+    user,
+    token,
   },
   reducers: {
     setLoginInfo: (state, action: PayloadAction) => {
-      const { userId = '' }: any = action.payload;
-      localStorage.setItem(LOCALSTORAGE_TOKEN, userId);
+      const {
+        user = {},
+        token = '',
+      }: any = action.payload;
+
+      localStorage.setItem(LOCALSTORAGE_USER, JSON.stringify(user));
+      localStorage.setItem(LOCALSTORAGE_TOKEN, token);
+
       return {
         ...state,
-        userId,
-      };;
+        token,
+      };
     },
     setLogout: (state) => {
+      localStorage.setItem(LOCALSTORAGE_USER, '{}');
       localStorage.setItem(LOCALSTORAGE_TOKEN, '');
       return {
         ...state,
-        userId: '',
+        token: '',
       };
     }
   }

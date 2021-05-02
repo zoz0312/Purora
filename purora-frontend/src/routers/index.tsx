@@ -1,14 +1,21 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {AuthDispatchType, AuthStateType} from "@store/auth";
 
 const commonRoutes = [
   { path: '/confirm', /* component: ConfirmEmail */ },
   // { path: '/edit-profile', component: EditProfile },
 ];
 
-const Routers: React.FC = (
+interface RoutersProps {
+  user: object,
+  token: string,
+};
 
-): JSX.Element => {
+const Routers: React.FC<RoutersProps> = ({
+  user,
+  token,
+}): JSX.Element => {
   return (
     <Router>
       <Switch>
