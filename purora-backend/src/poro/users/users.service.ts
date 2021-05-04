@@ -26,7 +26,7 @@ export class UsersService {
     {
       userId,
       userPw,
-      summonerName,
+      // summonerName,
       nickName,
     }: CreateUserInput,
   ): Promise<CreateUserOutput> {
@@ -65,12 +65,12 @@ export class UsersService {
         })
       );
 
-      await this.usersSummonerInfo.save(
-        this.usersSummonerInfo.create({
-          user: createdUser,
-          summonerName: removeWhiteSpace(summonerName),
-        })
-      );
+      // await this.usersSummonerInfo.save(
+      //   this.usersSummonerInfo.create({
+      //     user: createdUser,
+      //     summonerName: removeWhiteSpace(summonerName),
+      //   })
+      // );
 
       return {
         success: true,

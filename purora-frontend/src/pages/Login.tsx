@@ -71,7 +71,6 @@ const Login: React.FC<LoginProps> = (
       <Helmet>
         <title>로그인 | 포로라</title>
       </Helmet>
-      {/*<h1 className={'text-5xl mb-5'}>포로라</h1>*/}
       <div className={'p-10 w-2/4 max-w-xl border border-gray-300 border-solid rounded'}>
         <div className={'flex items-center flex-col p-5'}>
           <img className={'w-40 h-40 rounded-full'} src={poro}/>
@@ -82,7 +81,7 @@ const Login: React.FC<LoginProps> = (
           className={'flex flex-col justify-center'}
         >
           <input
-            className="p-3 mb-2 outline-none border border-personal border-solid rounded"
+            className="p-3 mt-2 outline-none border border-personal border-solid rounded"
             ref={register({
               required: '아이디를 입력해주세요',
             })}
@@ -95,22 +94,18 @@ const Login: React.FC<LoginProps> = (
             <>{ errors.id?.message }</>
           )}
           <input
-            className="p-3 mb-2 outline-none border border-personal border-solid rounded"
+            className="p-3 mt-2 outline-none border border-personal border-solid rounded"
             ref={register({
               required: '비밀번호를 입력해주세요',
-              // pattern: /^(?=.*\d)(?=.*[a-z])[\w~@#$%^&*+=`|{}:;!.?\"()\[\]-]*$/g
             })}
             type="password"
             name="password"
             placeholder="Password"
             required
           />
-          {/*{ errors.password?.type === 'pattern' && (*/}
-          {/*  <>비밀번호는 최소 8자 이상이어야 합니다.</>*/}
-          {/*)}*/}
           <button
             type="submit"
-            className={'w-full h-12 btn-personal rounded'}
+            className={'w-full h-12 mt-2 btn-personal rounded'}
           >Login</button>
           <Link
             to={'/create-account'}
