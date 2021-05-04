@@ -6,6 +6,7 @@ import './Login.scss';
 import {$axios} from "../utils/axios";
 import {AuthDispatchType, authMapDispatchToProps, authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
+import poro from '../image/poro.jpg';
 
 type FormInputs = {
   id: string;
@@ -70,9 +71,12 @@ const Login: React.FC<LoginProps> = (
       <Helmet>
         <title>로그인 | 포로라</title>
       </Helmet>
-      <h1 className={'text-5xl mb-5'}>포로라</h1>
+      {/*<h1 className={'text-5xl mb-5'}>포로라</h1>*/}
       <div className={'p-10 w-2/4 max-w-xl border border-gray-300 border-solid rounded'}>
-        <h3 className={'text-2xl mb-2'}>Login</h3>
+        <div className={'flex items-center flex-col p-5'}>
+          <img className={'w-40 h-40 rounded-full'} src={poro}/>
+          <h3 className={'text-3xl mb-2 pt-5'}>포로라 로그인</h3>
+        </div>
         <form
           onSubmit={handleSubmit(onSubmit)}
           className={'flex flex-col justify-center'}
