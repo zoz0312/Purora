@@ -20,8 +20,8 @@ export class CreateUserInput {
   @IsString()
   nickName: string;
 
-  @IsString()
-  summonerName: string;
+  // @IsString()
+  // summonerName: string;
 }
 
 export class CreateUserOutput extends CoreOutput {

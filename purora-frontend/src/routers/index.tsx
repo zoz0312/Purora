@@ -5,9 +5,11 @@ import Login from '@pages/Login';
 import NotFound from "../components/NotFound";
 import { authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
+import CreateAccount from "@pages/create-account";
 
 const logoutRouters = [
   { path: '/', component: Login },
+  { path: '/create-account', component: CreateAccount },
 ];
 
 const commonRoutes = [
