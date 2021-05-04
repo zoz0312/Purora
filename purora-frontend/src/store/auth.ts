@@ -7,7 +7,7 @@ export interface AuthStateType {
 };
 
 export interface AuthDispatchType {
-  setLoginInfo: Function;
+  setLogin: Function;
   setLogout: Function;
 }
 
@@ -25,7 +25,7 @@ export const authMapStateToProps = ({
 
 export const authMapDispatchToProps = (dispatch: any) => {
   return bindActionCreators({
-    setLoginInfo,
+    setLogin,
     setLogout,
   }, dispatch);
 };
@@ -40,7 +40,7 @@ const auth = createSlice({
     token,
   },
   reducers: {
-    setLoginInfo: (state, action: PayloadAction) => {
+    setLogin: (state, action: PayloadAction) => {
       const {
         user = {},
         token = '',
@@ -66,7 +66,7 @@ const auth = createSlice({
 });
 
 export const {
-  setLoginInfo,
+  setLogin,
   setLogout,
 } = auth.actions;
 
