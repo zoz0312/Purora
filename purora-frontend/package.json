@@ -5,6 +5,7 @@
   "dependencies": {
     "@craco/craco": "^6.1.2",
     "@reduxjs/toolkit": "^1.5.1",
+    "@tailwindcss/postcss7-compat": "^2.1.2",
     "@testing-library/jest-dom": "^5.12.0",
     "@testing-library/react": "^11.2.6",
     "@testing-library/user-event": "^12.8.3",
@@ -14,13 +15,16 @@
     "@types/react-dom": "^17.0.3",
     "@types/react-redux": "^7.1.16",
     "@types/react-router-dom": "^5.1.7",
+    "axios": "^0.21.1",
     "craco": "0.0.3",
     "craco-alias": "^2.2.0",
+    "cross-env": "^7.0.3",
     "node-sass": "^5.0.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-helmet": "^6.1.0",
     "react-helmet-async": "^1.0.9",
+    "react-hook-form": "^6.15.7",
     "react-redux": "^7.2.4",
     "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.3",
@@ -29,10 +33,14 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "craco start",
-    "build": "craco build",
+    "start": "npm run tailwind:build && craco start",
+    "build": "npm run tailwind:devbuild && CI=false craco build",
+    "build:prod": "npm run tailwind:prodbuild && craco build",
     "test": "craco test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "tailwind:prodbuild": "cross-env NODE_ENV=production npm run tailwind:build",
+    "tailwind:devbuild": "cross-env NODE_ENV=dev npm run tailwind:build",
+    "tailwind:build": "tailwind build ./src/style/tailwind.css -o ./src/style/styles.css"
   },
   "eslintConfig": {
     "extends": [

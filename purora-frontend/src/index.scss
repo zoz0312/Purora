@@ -1,3 +1,6 @@
+@import url(//fonts.googleapis.com/earlyaccess/notosanskr.css);
+@import './style/mixin';
+
 html, body, div, span, applet,
 object, iframe, h1, h2, h3, h4, h5, h6,
 p, blockquote, pre, a, abbr, acronym, address,
@@ -33,4 +36,31 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
+}
+
+$personal-1: #59b3cb;
+$personal-2: #2487a6;
+
+@mixin transition-colors() {
+  transition-property: background-color, border-color, color, fill, stroke;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+.btn-personal {
+  background-color: $personal-2;
+  color: white;
+  &:hover {
+    background-color: $personal-1;
+    outline: none;
+  }
+  @include transition-colors();
+}
+
+.border-personal {
+  border-color: $personal-1;
+  &:focus {
+    border-color: $personal-2;
+  }
+  @include transition-colors();
 }
