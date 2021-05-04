@@ -1,10 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
-import Home from '@pages/Home';
-import Login from '@pages/Login';
 import NotFound from "../components/NotFound";
 import { authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
+import Home from '@pages/home';
+import Login from '@pages/login';
 import CreateAccount from "@pages/create-account";
 
 const logoutRouters = [

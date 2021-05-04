@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
-import './Login.scss';
+import './login.scss';
 import {$axios} from "../utils/axios";
 import {AuthDispatchType, authMapDispatchToProps, authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
