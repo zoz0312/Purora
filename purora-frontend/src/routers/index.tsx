@@ -6,6 +6,7 @@ import {connect} from "react-redux";
 import Home from '@pages/home';
 import Login from '@pages/login';
 import CreateAccount from "@pages/create-account";
+import LoginLayout from "@components/layout/login-layout";
 
 const logoutRouters = [
   { path: '/', component: Login },
@@ -43,9 +44,11 @@ const Routers: React.FC<RoutersProps> = (
   return (
     <Router>
       <Switch>
-        { commonRoutes.map(route => (
-          <Route exact path={route.path} key={route.path} component={route.component} />
-        ))}
+        <LoginLayout user={user} token={token}>
+          { commonRoutes.map(route => (
+            <Route exact path={route.path} key={route.path} component={route.component} />
+          ))}
+        </LoginLayout>
       </Switch>
     </Router>
   )
