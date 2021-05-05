@@ -1,12 +1,13 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, Redirect, useHistory, useLocation} from 'react-router-dom';
 import NotFound from "../components/NotFound";
 import { authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
 import Home from '@pages/home';
 import Login from '@pages/login';
 import CreateAccount from "@pages/create-account";
-import LoginLayout from "@components/layout/login-layout";
+import MySummoner from "@pages/my/summoner";
+import MyProfile from "@pages/my/profile";
 
 const logoutRouters = [
   { path: '/', component: Login },
@@ -15,7 +16,8 @@ const logoutRouters = [
 
 const commonRoutes = [
   { path: '/', component: Home },
-  // { path: '/edit-profile', component: EditProfile },
+  { path: '/my/summoner', component: MySummoner },
+  { path: '/my/profile', component: MyProfile },
 ];
 
 interface RoutersProps extends AuthStateType {};
@@ -44,11 +46,10 @@ const Routers: React.FC<RoutersProps> = (
   return (
     <Router>
       <Switch>
-        <LoginLayout user={user} token={token}>
-          { commonRoutes.map(route => (
-            <Route exact path={route.path} key={route.path} component={route.component} />
-          ))}
-        </LoginLayout>
+        { commonRoutes.map(route => (
+          <Route exact path={route.path} key={route.path} component={route.component} />
+        ))}
+        <Route component={NotFound}/>
       </Switch>
     </Router>
   )

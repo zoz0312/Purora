@@ -2,7 +2,14 @@
 const NotFound: React.FC = () => {
   return (
     <>
-      Not Found
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
+      Not Found<br />
     </>
   )
 }
