@@ -61,6 +61,14 @@ export class UsersController {
   }
 
   @Role(['ANY'])
+  @Get('read-my-summoner')
+  async readMySummoner(
+    @AuthUser() user: Users,
+  ): Promise<ReadAllSummonerOutput> {
+    return this.usersService.readMySummoner(user);
+  }
+
+  @Role(['ANY'])
   @Post('create-summoner')
   async createSummoner(
     @AuthUser() user: Users,

@@ -6,8 +6,8 @@ import {connect} from "react-redux";
 import Home from '@pages/home';
 import Login from '@pages/login';
 import CreateAccount from "@pages/create-account";
-import MySummoner from "@pages/my/summoner";
-import MyProfile from "@pages/my/profile";
+import MySummoner from "@pages/my/my-summoner";
+import MyProfile from "@pages/my/my-profile";
 
 const logoutRouters = [
   { path: '/', component: Login },

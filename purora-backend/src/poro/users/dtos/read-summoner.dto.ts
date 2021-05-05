@@ -15,3 +15,7 @@ export class ReadAllSummonerOutput extends CoreOutput {
 export class ReadOneSummonerOutput extends CoreOutput {
   usersSummonerInfo?: UsersSummonerInfo;
 }
+
+export class ReadMySummonerOutput extends CoreOutput {
+  usersSummonerInfo?: UsersSummonerInfo[];
+}
