@@ -1,4 +1,5 @@
 import axios from 'axios';
+import {LOCALSTORAGE_TOKEN} from "@utils/constants";
 
 const hostURL = process.env.REACT_APP_HOST_URL;
 
@@ -14,9 +15,11 @@ interface axiosProps {
     | 'purge' | 'PURGE'
     | 'link' | 'LINK'
     | 'unlink' | 'UNLINK';
-  data: object;
+  data?: object;
   async?: boolean;
 }
+
+
 
 export const $axios = async ({
   url = '',
@@ -24,8 +27,13 @@ export const $axios = async ({
   data = {},
   async = true,
 }: axiosProps) => {
+  const headers = {
+    'x-jwt': localStorage.getItem(LOCALSTORAGE_TOKEN),
+  };
+
   if (async) {
     return axios({
+      headers,
       method,
       url: `${hostURL}${url}`,
       data,

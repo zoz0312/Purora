@@ -1,13 +1,11 @@
 import React, {useState} from 'react';
-import poro from "@image/poro.jpg";
 import { Link, useLocation } from "react-router-dom";
-import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { BellIcon, MenuIcon, XIcon } from '@heroicons/react/outline'
 import Navigation from "@components/layout/navigation";
 import NavigationMobile from "@components/layout/navigation-mobile";
 import {AuthDispatchType, authMapDispatchToProps, authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
+import './login-layout.scss';
 
 export interface NavigationMenu {
   name: string;
@@ -27,7 +25,11 @@ const navigation: NavigationMenu[] = [
     host: '/',
   },
   {
-    name: '내 소환사',
+    name: '전체 전적',
+    host: '/match',
+  },
+  {
+    name: '내 소환사 목록',
     host: '/my/summoner',
   },
 ];
@@ -50,12 +52,11 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
 ) => {
   let { pathname } = useLocation();
 
-  console.log('location', useLocation())
   const curHeader = navigation.find(({ host, name }) => host === pathname);
 
   return (
-    <div>
-      <Disclosure as="nav" className="bg-gray-800">
+    <>
+      <Disclosure as="nav" className="bg-personal-1">
         {({ open }) => (
           <>
             <Navigation
@@ -73,17 +74,22 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
           </>
         )}
       </Disclosure>
+      { curHeader && (
       <header className="bg-white shadow">
-        { curHeader && (
           <div className="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
             <h1 className="text-3xl font-bold text-gray-900">
               { curHeader.name }
             </h1>
           </div>
-        )}
       </header>
-      { children }
-    </div>
+      )}
+      <div className={`${curHeader ? 'main-container' : 'main-container-none-header'} max-w-7xl mx-auto p-5`}>
+        { children }
+      </div>
+      <footer>
+        footer
+      </footer>
+    </>
   )
 }
 

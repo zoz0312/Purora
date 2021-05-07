@@ -1,0 +1,20 @@
+
+$footerH: 80px;
+.main-container {
+  min-height: calc(100% - 64px - 84px);
+  padding-bottom: $footerH !important;
+}
+
+.main-container-none-header {
+  min-height: calc(100% - 64px);
+  padding-bottom: $footerH !important;;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: $footerH;
+  margin-top: -$footerH !important;
+}

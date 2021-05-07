@@ -37,14 +37,37 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
   monospace;
 }
+#root {
+  height: 100vh;
+  background-color: #eeeeee;
+}
 
+$personal-0: #a8e4ef;
 $personal-1: #59b3cb;
 $personal-2: #2487a6;
+$personal-3: #13597b;
 
 @mixin transition-colors() {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
+}
+
+.hover\:bg-personal-0:hover,
+.bg-personal-0 {
+  background-color: $personal-0;
+}
+.hover\:bg-personal-1:hover,
+.bg-personal-1 {
+  background-color: $personal-1;
+}
+.hover\:bg-personal-2:hover,
+.bg-personal-2 {
+  background-color: $personal-2;
+}
+.hover\:bg-personal-3:hover,
+.bg-personal-3 {
+  background-color: $personal-3;
 }
 
 .btn-personal {

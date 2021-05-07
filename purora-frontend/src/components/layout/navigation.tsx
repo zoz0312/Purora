@@ -31,7 +31,7 @@ const Navigation: React.FC<NavigationProps> = (
               {navigation.map(({host, name}, itemIdx) =>
                 host === pathname ? (
                   <Fragment key={itemIdx}>
-                    <Link to={'#'} href="#" className="bg-gray-900 text-white px-3 py-2 rounded-md text-sm font-medium">
+                    <Link to={'#'} href="#" className="bg-personal-3 text-white px-3 py-2 rounded-md text-sm font-medium">
                       {name}
                     </Link>
                   </Fragment>
@@ -39,7 +39,7 @@ const Navigation: React.FC<NavigationProps> = (
                   <Link
                     to={host}
                     key={itemIdx}
-                    className="text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
+                    className="text-gray-100 bg-personal-2 hover:text-white px-3 py-2 rounded-md text-sm font-medium"
                   >{name}</Link>
                 )
               )}
@@ -49,7 +49,7 @@ const Navigation: React.FC<NavigationProps> = (
         <div className="hidden md:block">
           <div className="ml-4 flex items-center md:ml-6">
             {/*
-              <button className="bg-gray-800 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+              <button className="bg-personal-2 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
                 <span className="sr-only">View notifications</span>
                 <BellIcon className="h-6 w-6" aria-hidden="true" />
               </button>
@@ -59,7 +59,7 @@ const Navigation: React.FC<NavigationProps> = (
               {({ open }) => (
                 <>
                   <div>
-                    <Menu.Button className="max-w-xs bg-gray-800 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+                    <Menu.Button className="max-w-xs bg-personal-2 rounded-full flex items-center text-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:bg-personal-3 focus:ring-white">
                       <span className="sr-only">Open user menu</span>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -109,7 +109,7 @@ const Navigation: React.FC<NavigationProps> = (
         </div>
         <div className="-mr-2 flex md:hidden">
           {/* Mobile menu button */}
-          <Disclosure.Button className="bg-gray-800 inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-white hover:bg-gray-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+          <Disclosure.Button className="bg-personal-2 inline-flex items-center justify-center p-2 rounded-md text-gray-100 hover:text-white hover:bg-personal-3 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:bg-personal-3 focus:ring-white">
             <span className="sr-only">Open main menu</span>
             {open ? (
               <XIcon className="block h-6 w-6" aria-hidden="true" />

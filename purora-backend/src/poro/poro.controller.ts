@@ -1,7 +1,12 @@
 import { Controller, Post, Body, Get, Param, Query } from '@nestjs/common';
 import { PoroService } from './poro.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
-import { GetMatchInput, GetMatchOutput } from './dtos/get-match.dto';
+import {
+  ReadMatchAllOutput,
+  ReadMatchInput,
+  ReadMatchSummonerOutput,
+  ReadMatchUsersOutput
+} from './dtos/read-match.dto';
 import { Role } from './auth/role.decorator';
 import { Users } from './users/entities/users.entity';
 import { AuthUser } from './auth/auth-user.decorator';
@@ -23,13 +28,31 @@ export class PoroController {
   }
 
   @Role(['ANY'])
-  @Get('get-match/:summonerId')
-  async getMatchData(
+  @Get('read-match-all')
+  async readMatchAllData(
+    @AuthUser() user: Users,
+    @Query() query: ReadMatchInput,
+  ): Promise<ReadMatchAllOutput> {
+    return this.poroService.readMatchAllData(user, query);
+  }
+
+  @Role(['ANY'])
+  @Get('read-match-user')
+  async readMatchUserData(
+    @AuthUser() user: Users,
+    @Query() query: ReadMatchInput,
+  ): Promise<ReadMatchUsersOutput> {
+    return this.poroService.readMatchUserData(user, query);
+  }
+
+  @Role(['ANY'])
+  @Get('read-match-summoner/:summonerId')
+  async readMatchSummonerData(
     @AuthUser() user: Users,
     @Param('summonerId') summonerId: number,
-    @Query() query: GetMatchInput,
-  ): Promise<GetMatchOutput> {
-    return this.poroService.getMatchData(user, summonerId, query);
+    @Query() query: ReadMatchInput,
+  ): Promise<ReadMatchSummonerOutput> {
+    return this.poroService.readMatchSummonerData(user, summonerId, query);
   }
 
   @Role(['ANY'])

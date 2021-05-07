@@ -1,7 +1,12 @@
 import { Injectable } from '@nestjs/common';
 import { RiotCrawlerService } from './riot-crawler/riot-crawler.service';
 import { GetRiotTokenInput, GetRiotTokenOutput } from './dtos/get-riot-token.dto';
-import { GetMatchInput, GetMatchOutput } from './dtos/get-match.dto';
+import {
+  ReadMatchAllOutput,
+  ReadMatchInput,
+  ReadMatchSummonerOutput,
+  ReadMatchUsersOutput
+} from './dtos/read-match.dto';
 import { UsersRepository } from './users/repositories/users.repository';
 import { GameInfoRepotitory } from './users/repositories/game-info.repotitory';
 import { Users } from './users/entities/users.entity';
@@ -78,11 +83,87 @@ export class PoroService {
     }
   }
 
-  async getMatchData (
+  async readMatchAllData (
+    user: Users,
+    query: ReadMatchInput,
+  ): Promise<ReadMatchAllOutput> {
+    const skip = +query.beginIndex;
+    const take = (+query.endIndex) - skip;
+
+    if (isNaN(skip) || isNaN(take)) {
+      return {
+        success: false,
+        message: `잘못된 Query 요청입니다 ˃̣̣̣̣̣̣︿˂̣̣̣̣̣̣`,
+      }
+    }
+
+    try {
+      const [data, totalLength] = await this.gameInfo.findAndCount({
+        relations: ['UsersGameInfo'],
+        skip,
+        take,
+        order: {
+          id: 'DESC',
+        }
+      });
+
+      return {
+        success: true,
+        data,
+        totalLength,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async readMatchUserData (
+    user: Users,
+    query: ReadMatchInput,
+  ): Promise<ReadMatchUsersOutput> {
+    const skip = +query.beginIndex;
+    const take = (+query.endIndex) - skip;
+
+    if (isNaN(skip) || isNaN(take)) {
+      return {
+        success: false,
+        message: `잘못된 Query 요청입니다 ˃̣̣̣̣̣̣︿˂̣̣̣̣̣`,
+      }
+    }
+
+    try {
+      const data = await this.usersGameInfo.find({
+        select: ['gameData'],
+        where: {
+          users: user
+        },
+        skip,
+        take,
+        order: {
+          id: 'DESC',
+        }
+      });
+
+      return {
+        success: true,
+        data,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
+  async readMatchSummonerData (
     user: Users,
     summonerId: number,
-    query: GetMatchInput,
-  ): Promise<GetMatchOutput> {
+    query: ReadMatchInput,
+  ): Promise<ReadMatchSummonerOutput> {
 
     const summoner = await this.usersSummonerInfo.findById({
       summonerId,
@@ -102,7 +183,7 @@ export class PoroService {
     if (isNaN(skip) || isNaN(take)) {
       return {
         success: false,
-        message: `잘못된 Query 요청입니다 ˃̣̣̣̣̣̣︿˂̣̣̣̣̣̣ `,
+        message: `잘못된 Query 요청입니다 ˃̣̣̣̣̣̣︿˂̣̣̣̣̣`,
       }
     }
 
@@ -113,7 +194,10 @@ export class PoroService {
           users: user
         },
         skip,
-        take
+        take,
+        order: {
+          id: 'DESC',
+        }
       });
 
       return {
@@ -197,7 +281,7 @@ export class PoroService {
     if (dbGameInfo.length !== gameInfoWhere.length) {
       flag = true;
       const insertGameInfo = games.filter(game => {
-        for (let dbGame of dbGameInfo) {
+        for (const dbGame of dbGameInfo) {
           if (+dbGame.gameId === game.gameId) {
             return false;
           }
@@ -247,7 +331,7 @@ export class PoroService {
     if (gameInfoWhere.length !== dbUserGameInfo.length) {
       flag = true;
       const insertUsersGameInfo = gameInfoWhere.filter(gameInfo => {
-        for (let dbUserGame of dbUserGameInfo) {
+        for (const dbUserGame of dbUserGameInfo) {
           if (dbUserGame.gameId === gameInfo.gameInfo.id) {
             return false;
           }

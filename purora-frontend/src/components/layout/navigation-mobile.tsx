@@ -20,14 +20,14 @@ const NavigationMobile: React.FC<NavigationProps> = (
               <Link
                 to={'#'}
                 href="#"
-                className="bg-gray-900 text-white block px-3 py-2 rounded-md text-base font-medium"
+                className="bg-personal-3 text-white block px-3 py-2 rounded-md text-base font-medium"
               >{name}</Link>
             </Fragment>
           ) : (
             <Link
               to={host}
               key={itemIdx}
-              className="text-gray-300 hover:bg-gray-700 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
+              className="text-gray-100 hover:bg-personal-2 hover:text-white block px-3 py-2 rounded-md text-base font-medium"
             >{name}</Link>
           )
         )}
@@ -48,10 +48,10 @@ const NavigationMobile: React.FC<NavigationProps> = (
           </div>
           <div className="ml-3">
             <div className="text-base font-medium leading-none text-white">Tom Cook</div>
-            <div className="text-sm font-medium leading-none text-gray-400">tom@example.com</div>
+            <div className="text-sm font-medium leading-none text-gray-100">tom@example.com</div>
           </div>
           {/*
-            <button className="ml-auto bg-gray-800 flex-shrink-0 p-1 rounded-full text-gray-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
+            <button className="ml-auto bg-personal-2 flex-shrink-0 p-1 rounded-full text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
               <span className="sr-only">View notifications</span>
               <BellIcon className="h-6 w-6" aria-hidden="true" />
             </button>
@@ -63,7 +63,7 @@ const NavigationMobile: React.FC<NavigationProps> = (
               to={host}
               key={idx}
               href="#"
-              className="block px-3 py-2 rounded-md text-base font-medium text-gray-400 hover:text-white hover:bg-gray-700"
+              className="block px-3 py-2 rounded-md text-base font-medium text-gray-100 hover:text-white hover:bg-personal-2"
             >{name}</Link>
           ))}
         </div>

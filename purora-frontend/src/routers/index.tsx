@@ -8,6 +8,7 @@ import Login from '@pages/login';
 import CreateAccount from "@pages/create-account";
 import MySummoner from "@pages/my/my-summoner";
 import MyProfile from "@pages/my/my-profile";
+import MatchPage from "@pages/match";
 
 const logoutRouters = [
   { path: '/', component: Login },
@@ -16,6 +17,7 @@ const logoutRouters = [
 
 const commonRoutes = [
   { path: '/', component: Home },
+  { path: '/match', component: MatchPage },
   { path: '/my/summoner', component: MySummoner },
   { path: '/my/profile', component: MyProfile },
 ];
