@@ -68,6 +68,6 @@ const MatchTeamDetailComponent: React.FC<MatchTeamDetailProps> = (
       maxDamage={maxDamage}
     />
   );
-}
+};
 
 export default MatchTeamDetailComponent;

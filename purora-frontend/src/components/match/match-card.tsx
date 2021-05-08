@@ -53,14 +53,15 @@ const MatchCardComponent: React.FC<MatchCardProps> = (
             <h2 className={'text-red-500'}>레드팀 승리!</h2>
           )}</div>
         <div className={'flex flex-row items-end mb-1'}>
-          <h3 className={'text-sm'}>{ durationParse(match.duration) }</h3>
-          <h3 className={'ml-2 text-sm'}>({ moment(match.creation).format(format) })</h3>
+          <h3 className={'text-2xs md:text-sm'}>{ durationParse(match.duration) }</h3>
+          <h3 className={'ml-2 text-2xs md:text-sm'}>({ moment(match.creation).format(format) })</h3>
         </div>
         { showDetail && (
           <div className={'flex flex-col'}>
             <div className={'flex flex-col'}>
-              { match.blue?.map((blueUser: any) => (
+              { match.blue?.map((blueUser: any, blueIdx: number) => (
                 <MatchTeamDetail
+                  key={blueIdx}
                   user={blueUser}
                   champData={champData}
                   itemData={itemData}
@@ -71,8 +72,9 @@ const MatchCardComponent: React.FC<MatchCardProps> = (
             </div>
             <div className={'w-full my-2 border-b border-gray-300 border-solid'} />
             <div className={'flex flex-col'}>
-              { match.red?.map((redUser: any) => (
+              { match.red?.map((redUser: any, redIdx: number) => (
                 <MatchTeamDetail
+                  key={redIdx}
                   user={redUser}
                   champData={champData}
                   itemData={itemData}

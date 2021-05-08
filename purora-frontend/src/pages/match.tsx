@@ -107,6 +107,7 @@ const MatchPage: React.FC = () => {
       </Helmet>
       { matchData.map((match, idx) => (
         <MatchCard
+          key={idx}
           match={match}
           gameType={gameType}
           champData={champData}
