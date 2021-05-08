@@ -11,19 +11,21 @@ const findDataById = (dataArray: any, id: number) => {
   return {};
 };
 
-interface MatchTeamProps {
+interface MatchTeamDetailProps {
   user: any;
   champData: any;
   itemData: any;
   spellData: any;
+  maxDamage: number;
 };
 
-const MatchTeamComponent: React.FC<MatchTeamProps> = (
+const MatchTeamDetailComponent: React.FC<MatchTeamDetailProps> = (
   {
     user,
     champData,
     itemData,
     spellData,
+    maxDamage,
   }
 ) => {
   if (user === null ||
@@ -31,7 +33,11 @@ const MatchTeamComponent: React.FC<MatchTeamProps> = (
     itemData.length === 0 ||
     spellData.length === 0
   ) {
-    return (<div>NULL</div>);
+    return (
+      <div className={'bg-gray-200 my-0.5 text-center rounded-md text-gray-400 text-xl'}>
+        ?
+      </div>
+    );
   }
 
   const {
@@ -59,8 +65,9 @@ const MatchTeamComponent: React.FC<MatchTeamProps> = (
       spell1={spell1}
       spell2={spell2}
       itemData={itemData}
+      maxDamage={maxDamage}
     />
   );
 }
 
-export default MatchTeamComponent;
+export default MatchTeamDetailComponent;

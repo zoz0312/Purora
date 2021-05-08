@@ -6,6 +6,7 @@ interface MatchPlayerProps {
   spell1: any;
   spell2: any;
   itemData: any;
+  maxDamage: number;
 };
 
 const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
@@ -15,6 +16,7 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
     spell1,
     spell2,
     itemData,
+    maxDamage,
   }
 ) => {
   const {
@@ -24,7 +26,7 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
         summonerName,
       },
       participants: {
-        stats
+        stats,
       },
     }
   } = userData;
@@ -42,19 +44,29 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
     stats.item6
   ];
 
-  const kda = stats.deaths === 0 ? 'Prefect' : `${((stats.kills + stats.assists) / stats.deaths).toFixed(2)}:1 평점`;
+  const {
+    deaths,
+    kills,
+    assists,
+    totalDamageDealtToChampions,
+    totalMinionsKilled,
+    champLevel,
+  } = stats
+
+  const kda = deaths === 0 ? 'Prefect' : `${((kills + assists) / deaths).toFixed(2)}:1 평점`;
+  const damagePercent = (totalDamageDealtToChampions / maxDamage) * 100;
 
   return (
     <div className={'flex flex-row justify-center items-center my-0.5'}>
-      <div className={'w-15 flex flex-col justify-center items-center'}>
-        <img className={'w-10 h-10 rounded-full'} src={champSrc} alt={champion.name} />
+      <div className={'w-10 flex flex-col justify-center items-center'}>
+        <img className={'w-8 h-8 rounded-full'} src={champSrc} alt={champion.name} />
         <div className={'text-sm'}>{champion.name}</div>
       </div>
-      <div className={'flex flex-col mx-1'}>
-        <img className={'w-6 h-6 rounded-md'} src={spell1Src} alt={spell1.name} />
-        <img className={'w-6 h-6 rounded-md'} src={spell2Src} alt={spell2.name} />
+      <div className={'flex flex-col mx-0.5'}>
+        <img className={'w-4 h-4 rounded-md'} src={spell1Src} alt={spell1.name} />
+        <img className={'w-4 h-4 rounded-md'} src={spell2Src} alt={spell2.name} />
       </div>
-      <div className={'w-20 mx-2'}>
+      <div className={'w-20 mx-1'}>
         { summonerName }
       </div>
       <div className={'flex flex-col items-center mx-2'}>
@@ -65,16 +77,31 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
           <div>/</div>
           <div>{ stats.assists }</div>
         </div>
-        <div className={'flex flex-row w-20'}>
+        <div className={'flex flex-row w-15'}>
           <div>{ kda }</div>
+        </div>
+      </div>
+      <div className="flex flex-col justify-center items-center py-3">
+        <span className="text-xs md:text-sm text-gray-500">레벨:{ champLevel }</span>
+        <span className="text-xs md:text-sm text-gray-500">{ totalMinionsKilled } CS</span>
+      </div>
+      <div className="w-24 md:w-28 mx-2">
+        <div className="w-full h-4 md:h-6 bg-gray-400 relative">
+          <span className="text-xs md:text-sm absolute t-0 w-full text-center text-white font-bold h-full">{ totalDamageDealtToChampions }</span>
+          <div
+            className="bg-red-500 h-4 md:h-6"
+            style={{
+              width: `${damagePercent}%`
+            }}>
+          </div>
         </div>
       </div>
       <div className={'flex flex-row'}>
         { itmes.map((item, itemIdx) => (
-          <div key={itemIdx} className={'w-8 h-8 bg-gray-300 rounded-lg mr-0.5'}>
+          <div key={itemIdx} className={'w-6 h-6 bg-gray-300 rounded-md mr-0.5'}>
             { item !== 0 && (
               <img
-                className={'rounded-lg'}
+                className={'rounded-md'}
                 src={`${CDN_HOST}/${champion.version}/img/item/${item}.png`} alt={itemData[item]} />
             )}
           </div>

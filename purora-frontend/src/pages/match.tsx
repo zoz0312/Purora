@@ -1,13 +1,14 @@
 import {$axios} from "@utils/axios";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import useScrollPage from "../hooks/useScrollPage";
 import LoginLayout from "@components/layout/login-layout";
 import { moment } from '@utils/moment';
 import useRiotData from "../hooks/useRiotData";
 import {CDN_HOST} from "@utils/constants";
 import MatchPlayerComponent from "@components/match/match-player";
-import MatchTeam from "@components/match/match-team";
+import MatchTeamDetail from "@components/match/match-team-detail";
 import {Helmet} from "react-helmet-async";
+import MatchCard from "@components/match/match-card";
 
 interface matchDataType {
   id: number;
@@ -34,8 +35,6 @@ const MatchPage: React.FC = () => {
     ARAM: '칼바람 나락',
     CLASSIC: '소환사의 협곡',
   };
-
-  const format = 'YY년 MM월 DD일 h:mm A';
 
   const readMatchData = async () => {
     const { data: {
@@ -101,48 +100,19 @@ const MatchPage: React.FC = () => {
     readMatchData();
   }, [offset]);
 
-  const durationParse = (duration: number) => {
-    const m = Math.floor(duration / 60);
-    const s = duration % 60;
-    return `${m}분 ${s}초`
-  }
-
   return (
     <LoginLayout>
       <Helmet>
         <title>전체 전적 | 포로라</title>
       </Helmet>
       { matchData.map((match, idx) => (
-        <div key={idx} className={`bg-blue-50 p-5 text-gray-700 flex flex-col shadow-lg mb-5 w-full border border-white rounded-xl`}>
-          <h1 className={'text-xl'}>{ gameType[match.mode] }</h1>
-          <div className={'flex flex-row items-end mb-1'}>
-            <h3 className={'text-sm'}>{ durationParse(match.duration) }</h3>
-            <h3 className={'ml-2 text-sm'}>({ moment(match.creation).format(format) })</h3>
-          </div>
-          <div className={'flex flex-col'}>
-            <div className={'flex flex-col'}>
-              { match.blue?.map((blueUser: any, blueIdx) => (
-                <MatchTeam
-                  user={blueUser}
-                  champData={champData}
-                  itemData={itemData}
-                  spellData={spellData}
-                />
-              ))}
-            </div>
-            <div className={'w-full my-2 border-b border-gray-300 border-solid'}></div>
-            <div className={'flex flex-col'}>
-              { match.red?.map((redUser: any, redIdx) => (
-                <MatchTeam
-                  user={redUser}
-                  champData={champData}
-                  itemData={itemData}
-                  spellData={spellData}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
+        <MatchCard
+          match={match}
+          gameType={gameType}
+          champData={champData}
+          itemData={itemData}
+          spellData={spellData}
+        />
       ))}
     </LoginLayout>
   )
