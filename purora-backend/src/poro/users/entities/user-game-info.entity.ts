@@ -27,4 +27,11 @@ export class UsersGameInfo extends CoreEntity {
 
   @Column('longtext')
   gameData: string;
+
+  @Column({
+    type: 'tinyint',
+    comment: '1: blueWin, 2: redWin',
+    default: 1,
+  })
+  winStatus: number;
 }

@@ -86,3 +86,10 @@ $personal-3: #13597b;
   }
   @include transition-colors();
 }
+
+@media (max-width: 767px) {
+  .text-2xs {
+    font-size: 0.6rem;
+    line-height: 0.75rem;
+  }
+}

@@ -276,7 +276,6 @@ export class PoroService {
       where: gameInfoWhere
     });
 
-
     /* JSON과 GameInfo DB를 비교하여 없는 GameInfo Insert */
     if (dbGameInfo.length !== gameInfoWhere.length) {
       flag = true;
@@ -293,13 +292,32 @@ export class PoroService {
         gameDuration: duration,
         gameMode: mode,
         gameVersion: version,
-      }) => ({
-        gameId: gameId,
-        creation: creation,
-        duration,
-        mode,
-        version,
-      }));
+        participants
+      }) => {
+        const [user] = participants;
+        const {
+          teamId,
+          stats: {
+            win,
+          }
+        } = user;
+
+        let winStatus;
+        if (win) {
+          winStatus = teamId === 100 ? 1 : 2;
+        } else {
+          winStatus = teamId === 100 ? 2 : 1;
+        }
+
+        return {
+          gameId,
+          creation,
+          duration,
+          mode,
+          version,
+          winStatus,
+        }
+      });
 
       const newGameInfo = await this.gameInfo.save(
         this.gameInfo.create(insertGameInfo)
@@ -317,12 +335,10 @@ export class PoroService {
       users: user
     }));
 
-
     /* UsersGameInfo DB 조회 */
     const dbUserGameInfo = await this.usersGameInfo.find({
       where: gameInfoWhere
     });
-
 
     /*
      * UsersGameData와 크롤링한 데이터의 길이가 다른 경우,
@@ -342,13 +358,29 @@ export class PoroService {
           return game.gameId === +gameInfo.gameId;
         });
 
+        const participants = userGame.participants[0];
+        const {
+          teamId,
+          stats : {
+            win
+          }
+        } = participants;
+
+        let winStatus;
+        if (win) {
+          winStatus = teamId === 100 ? 1 : 2;
+        } else {
+          winStatus = teamId === 100 ? 2 : 1;
+        }
+
         return {
           gameInfo,
           users,
           gameData: JSON.stringify({
-            participants: userGame.participants[0],
+            participants,
             player: userGame.participantIdentities[0].player,
-          })
+          }),
+          winStatus,
         }
       });
       await this.usersGameInfo.save(

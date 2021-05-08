@@ -10,7 +10,7 @@ export class RiotCrawlerService {
     userId,
     userPw,
   }: GetTokenInput): Promise<GetTokenOutput> {
-    let driver = await new Builder().forBrowser('chrome').build();
+    const driver = await new Builder().forBrowser('chrome').build();
     try {
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');
 
@@ -28,13 +28,13 @@ export class RiotCrawlerService {
       await sleep(4000);
       const cookies = await driver.manage().getCookies();
 
-      let getKeyList = [
+      const getKeyList = [
         'id_token',
         // 'PVPNET_TOKEN_KR',
         'PVPNET_ID_KR',
       ];
 
-      let userCookieInfo = [];
+      const userCookieInfo = [];
       cookies.map(({
         name,
         value,

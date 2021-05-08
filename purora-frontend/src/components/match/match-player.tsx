@@ -53,41 +53,45 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
     champLevel,
   } = stats
 
-  const kda = deaths === 0 ? 'Prefect' : `${((kills + assists) / deaths).toFixed(2)}:1 평점`;
+  const kda = deaths === 0 ? 'Prefect' : `${((kills + assists) / deaths).toFixed(2)}:1`;
   const damagePercent = (totalDamageDealtToChampions / maxDamage) * 100;
 
   return (
-    <div className={'flex flex-row justify-center items-center my-0.5'}>
-      <div className={'w-10 flex flex-col justify-center items-center'}>
-        <img className={'w-8 h-8 rounded-full'} src={champSrc} alt={champion.name} />
-        <div className={'text-sm'}>{champion.name}</div>
-      </div>
-      <div className={'flex flex-col mx-0.5'}>
-        <img className={'w-4 h-4 rounded-md'} src={spell1Src} alt={spell1.name} />
-        <img className={'w-4 h-4 rounded-md'} src={spell2Src} alt={spell2.name} />
-      </div>
-      <div className={'w-20 mx-1'}>
-        { summonerName }
-      </div>
-      <div className={'flex flex-col items-center mx-2'}>
+    <div className={'flex flex-row justify-center items-center md:my-0.5'}>
+      <div className={'flex flex-col items-center text-center'}>
         <div className={'flex flex-row'}>
-          <div>{ stats.kills }</div>
-          <div>/</div>
-          <div>{ stats.deaths }</div>
-          <div>/</div>
-          <div>{ stats.assists }</div>
+          <div className={'w-10 flex flex-col justify-center items-center'}>
+            <img className={'w-8 h-8 rounded-full'} src={champSrc} alt={champion.name} />
+            {/*<div className={'text-2xs md:text-sm'}>{champion.name}</div>*/}
+          </div>
+          <div className={'flex flex-col mx-0.5'}>
+            <img className={'w-4 h-4 rounded-sm md:rounded-md'} src={spell1Src} alt={spell1.name} />
+            <img className={'w-4 h-4 rounded-sm md:rounded-md'} src={spell2Src} alt={spell2.name} />
+          </div>
+        </div>
+        <div className={'w-10 md:w-20 mx-1 text-2xs md:text-base mt-0.5'}>
+          { summonerName }
+        </div>
+      </div>
+      <div className={'flex flex-col items-center mx-1 md:mx-2'}>
+        <div className={'flex flex-row'}>
+          <div className={'text-xs md:text-base'}>{ stats.kills }</div>
+          <div className={'text-xs md:text-base'}>/</div>
+          <div className={'text-xs md:text-base'}>{ stats.deaths }</div>
+          <div className={'text-xs md:text-base'}>/</div>
+          <div className={'text-xs md:text-base'}>{ stats.assists }</div>
         </div>
         <div className={'flex flex-row w-15'}>
-          <div>{ kda }</div>
+          <div className={'text-2xs md:text-base'}>{ kda }</div>
         </div>
       </div>
-      <div className="flex flex-col justify-center items-center py-3">
-        <span className="text-xs md:text-sm text-gray-500">레벨:{ champLevel }</span>
-        <span className="text-xs md:text-sm text-gray-500">{ totalMinionsKilled } CS</span>
+      <div className="flex flex-col justify-center items-center py-3 mr-1 md:mr-2">
+        <span className="text-2xs md:text-sm text-gray-500">레벨:{ champLevel }</span>
+        <span className="text-2xs md:text-sm text-gray-500">{ totalMinionsKilled } CS</span>
       </div>
-      <div className="w-24 md:w-28 mx-2">
+      <div className="hidden md:inline-block  w-12 md:w-28 mx-1 md:mx-2">
         <div className="w-full h-4 md:h-6 bg-gray-400 relative">
-          <span className="text-xs md:text-sm absolute t-0 w-full text-center text-white font-bold h-full">{ totalDamageDealtToChampions }</span>
+          <span className="text-xs md:text-base absolute t-0 w-full text-center text-white font-bold h-full">{ totalDamageDealtToChampions }</span>
           <div
             className="bg-red-500 h-4 md:h-6"
             style={{
@@ -96,22 +100,18 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
           </div>
         </div>
       </div>
-      <div className={'flex flex-row'}>
+      <div className={'flex flex-wrap w-28 md:w-auto'}>
         { itmes.map((item, itemIdx) => (
-          <div key={itemIdx} className={'w-6 h-6 bg-gray-300 rounded-md mr-0.5'}>
+          <div key={itemIdx} className={'w-6 h-6 md:w-8 md:h-8 bg-gray-300 rounded-md mr-0.5'}>
             { item !== 0 && (
               <img
                 className={'rounded-md'}
-                src={`${CDN_HOST}/${champion.version}/img/item/${item}.png`} alt={itemData[item]} />
+                src={`${CDN_HOST}/${champion.version}/img/item/${item}.png`} alt={itemData[item].name} />
             )}
           </div>
         ))}
       </div>
     </div>
-  )
-  return (
-    <>
-    </>
   )
 };
 

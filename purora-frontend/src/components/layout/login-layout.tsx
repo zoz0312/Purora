@@ -83,7 +83,7 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
           </div>
       </header>
       )}
-      <div className={`${curHeader ? 'main-container' : 'main-container-none-header'} max-w-7xl mx-auto p-5`}>
+      <div className={`${curHeader ? 'main-container' : 'main-container-none-header'} max-w-7xl mx-auto p-1 md:p-5`}>
         { children }
       </div>
       <footer>
