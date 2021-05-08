@@ -30,8 +30,8 @@ export class UsersGameInfo extends CoreEntity {
 
   @Column({
     type: 'tinyint',
-    comment: '1: blueWin, 2: redWin',
-    default: 1,
+    comment: '0: win, 1: lose',
+    default: 0,
   })
   winStatus: number;
 }

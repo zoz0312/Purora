@@ -360,17 +360,14 @@ export class PoroService {
 
         const participants = userGame.participants[0];
         const {
-          teamId,
           stats : {
-            win
+            win,
           }
         } = participants;
 
-        let winStatus;
-        if (win) {
-          winStatus = teamId === 100 ? 1 : 2;
-        } else {
-          winStatus = teamId === 100 ? 2 : 1;
+        let winStatus = 0;
+        if (!win) {
+          winStatus = 1;
         }
 
         return {
