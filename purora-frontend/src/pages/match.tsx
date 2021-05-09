@@ -19,10 +19,10 @@ interface matchDataType {
   red?: any[];
 }
 
-const menus: any = {
-  'ALL_MATCH': '전체 전적',
-  'MY_MATCH': '나의 전적'
-}
+// const menus: any = {
+//   ALL_MATCH: '전체 전적',
+//   MY_MATCH: '나의 전적'
+// }
 
 const gameType: any = {
   ARAM: '칼바람 나락',
@@ -31,7 +31,7 @@ const gameType: any = {
 
 const MatchPage: React.FC = () => {
   const [matchData, setMatchData] = useState<matchDataType[]>([]);
-  const [menu, setMenu] = useState(menus.ALL_MATCH);
+  // const [menu, setMenu] = useState(menus.ALL_MATCH);
   const { page, setTotalPages } = useScrollPage(1);
 
   const [champData, itemData, spellData]: any[] = useRiotData();
@@ -108,22 +108,24 @@ const MatchPage: React.FC = () => {
       <Helmet>
         <title>전적조회 | 포로라</title>
       </Helmet>
-      <MenuBar
-        className={'my-2'}
-        menus={menus}
-        menu={menu}
-        setMenu={setMenu}
-      />
+      {/*<MenuBar*/}
+      {/*  className={'my-2'}*/}
+      {/*  menus={menus}*/}
+      {/*  menu={menu}*/}
+      {/*  setMenu={setMenu}*/}
+      {/*/>*/}
       { matchData.map((match, idx) => (
-        <MatchCard
-          key={idx}
-          match={match}
-          gameType={gameType}
-          champData={champData}
-          itemData={itemData}
-          spellData={spellData}
-        />
-      ))}
+          <MatchCard
+            key={idx}
+            match={match}
+            gameType={gameType}
+            champData={champData}
+            itemData={itemData}
+            spellData={spellData}
+          />
+        ))
+      }
+
     </LoginLayout>
   )
 }
