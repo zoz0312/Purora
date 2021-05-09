@@ -25,7 +25,7 @@ const navigation: NavigationMenu[] = [
     host: '/',
   },
   {
-    name: '전체 전적',
+    name: '전적조회',
     host: '/match',
   },
   {

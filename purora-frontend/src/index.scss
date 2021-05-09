@@ -41,11 +41,6 @@ code {
   height: 100vh;
 }
 
-$personal-0: #a8e4ef;
-$personal-1: #59b3cb;
-$personal-2: #2487a6;
-$personal-3: #13597b;
-
 @mixin transition-colors() {
   transition-property: background-color, border-color, color, fill, stroke;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);

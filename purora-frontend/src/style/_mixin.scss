@@ -5,6 +5,11 @@ $S: 768px; // Tablet
 $M: 1024px; // Small Browser
 $L: 1280px; // Browser
 
+$personal-0: #a8e4ef;
+$personal-1: #59b3cb;
+$personal-2: #2487a6;
+$personal-3: #13597b;
+
 @mixin XS2 {
   @media (max-width: #{$XS2}) {
     @content;

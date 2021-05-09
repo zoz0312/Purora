@@ -1,0 +1,29 @@
+@import '../../style/mixin';
+
+.tab-menu {
+  display: flex;
+  flex-direction: row;
+  color: white;
+
+  li {
+    padding: 0.5rem;
+    background-color: $personal-1;
+
+    &:first-child {
+      border-top-left-radius: 0.75rem;
+      border-bottom-left-radius: 0.75rem;
+    }
+    &:last-child {
+      border-top-right-radius: 0.75rem;
+      border-bottom-right-radius: 0.75rem;
+    }
+    &:hover {
+      background-color: $personal-0;
+      cursor: pointer;
+      color: $personal-2;
+    }
+  }
+  .on {
+    background-color: $personal-2;
+  }
+}
