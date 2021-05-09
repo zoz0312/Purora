@@ -1,5 +1,6 @@
 import {CDN_HOST} from "@utils/constants";
 import ToolTip from "@components/tooltip/tooltip";
+import ItemBoxComponent from "@components/match-common/item-box";
 
 interface MatchPlayerProps {
   userData: any;
@@ -115,20 +116,13 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
       </div>
       <div className={'flex flex-wrap w-28 md:w-auto'}>
         { itmes.map((item, itemIdx) => (
-          <div key={itemIdx} className={'w-6 h-6 md:w-8 md:h-8 bg-gray-300 rounded-md mr-0.5'}>
-            { item !== 0 && (
-              <div className={'w-full h-full tooltip-box'}>
-                <img
-                  className={'rounded-md'}
-                  src={`${CDN_HOST}/${champion.version}/img/item/${item}.png`}
-                />
-                <ToolTip>
-                  <div className={'text-sm text-yellow-400'}>{ itemData[item].name } { itemData[item].gold.total }G</div>
-                  <div className={'text-xs'}>{ itemData[item].plaintext }</div>
-                </ToolTip>
-              </div>
-            )}
-          </div>
+          <ItemBoxComponent
+            key={itemIdx}
+            className={'w-6 h-6 md:w-8 md:h-8 mr-0.5'}
+            version={champion.version}
+            item={item}
+            itemData={itemData[item]}
+          />
         ))}
       </div>
     </div>

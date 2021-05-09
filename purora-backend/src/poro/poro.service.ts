@@ -135,8 +135,8 @@ export class PoroService {
     }
 
     try {
-      const data = await this.usersGameInfo.find({
-        select: ['gameData'],
+      const [data, totalLength] = await this.usersGameInfo.findAndCount({
+        relations: ['gameInfo'],
         where: {
           users: user
         },
@@ -150,8 +150,10 @@ export class PoroService {
       return {
         success: true,
         data,
+        totalLength,
       }
     } catch (error) {
+      console.log('error', error)
       return {
         success: false,
         error,

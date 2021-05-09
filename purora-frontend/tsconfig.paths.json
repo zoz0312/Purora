@@ -6,6 +6,7 @@
       "@components/*": ["src/components/*"],
       "@image/*": ["src/image/*"],
       "@routers/*": ["src/routers/*"],
+      "@hooks/*": ["src/hooks/*"],
       "@store/*": ["src/store/*"],
       "@utils/*": ["src/utils/*"]
     }

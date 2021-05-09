@@ -25,8 +25,12 @@ const navigation: NavigationMenu[] = [
     host: '/',
   },
   {
-    name: '전적조회',
+    name: '전체 전적조회',
     host: '/match',
+  },
+  {
+    name: '내 전적조회',
+    host: '/my/match',
   },
   {
     name: '내 소환사 목록',

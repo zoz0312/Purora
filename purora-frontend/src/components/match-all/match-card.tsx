@@ -1,32 +1,25 @@
 import {moment} from "@utils/moment";
-import MatchTeamDetail from "@components/match/match-team-detail";
+import MatchTeamDetail from "@components/match-all/match-team-detail";
 import React, {useState} from "react";
+import {durationParse} from "@utils/functions";
+import {gameType, gmaeTimeFormat} from "@utils/constants";
 
 interface MatchCardProps {
   match: any;
-  gameType: any;
   champData: any;
   itemData: any;
   spellData: any;
 }
 
-const durationParse = (duration: number) => {
-  const m = Math.floor(duration / 60);
-  const s = duration % 60;
-  return `${m}분 ${s}초`
-}
-
 const MatchCardComponent: React.FC<MatchCardProps> = (
   {
     match,
-    gameType,
     champData,
     itemData,
     spellData,
   }
 ) => {
   const [showDetail, setShowDetail] = useState<boolean>(false);
-  const format = 'YY년 MM월 DD일 h:mm A';
 
   let maxDamage = 0;
   if (match.blue && match.red) {
@@ -54,7 +47,7 @@ const MatchCardComponent: React.FC<MatchCardProps> = (
           )}</div>
         <div className={'flex flex-row items-end mb-1'}>
           <h3 className={'text-2xs md:text-sm'}>{ durationParse(match.duration) }</h3>
-          <h3 className={'ml-2 text-2xs md:text-sm'}>({ moment(match.creation).format(format) })</h3>
+          <h3 className={'ml-2 text-2xs md:text-sm'}>({ moment(match.creation).format(gmaeTimeFormat) })</h3>
         </div>
         { showDetail && (
           <div className={'flex flex-col'}>

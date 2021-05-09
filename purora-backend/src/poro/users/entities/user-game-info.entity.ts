@@ -6,7 +6,8 @@ import { Users } from "./users.entity";
 @Entity()
 export class UsersGameInfo extends CoreEntity {
   @ManyToOne(
-    type => GameInfo
+    type => GameInfo,
+    gameInfo => gameInfo.UsersGameInfo,
   )
   gameInfo: GameInfo;
 
@@ -16,7 +17,8 @@ export class UsersGameInfo extends CoreEntity {
   gameId: number;
 
   @ManyToOne(
-    type => Users
+    type => Users,
+    users => users.UsersGameInfo,
   )
   users: Users;
 

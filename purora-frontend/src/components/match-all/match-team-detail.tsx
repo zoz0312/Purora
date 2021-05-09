@@ -1,15 +1,5 @@
-import MatchPlayerComponent from "@components/match/match-player";
-
-const findDataById = (dataArray: any, id: number) => {
-  if (dataArray) {
-    for (const data in dataArray) {
-      if (+dataArray[data].key === id) {
-        return dataArray[data];
-      }
-    }
-  }
-  return {};
-};
+import MatchPlayerComponent from "@components/match-all/match-player";
+import {findDataById} from "@utils/functions";
 
 interface MatchTeamDetailProps {
   user: any;
@@ -53,7 +43,7 @@ const MatchTeamDetailComponent: React.FC<MatchTeamDetailProps> = (
     }
   } = user;
 
-  const champ = findDataById(champData, championId);
+  const champion = findDataById(champData, championId);
   const spell1 = findDataById(spellData, spell1Id);
   const spell2 = findDataById(spellData, spell2Id);
 
@@ -61,7 +51,7 @@ const MatchTeamDetailComponent: React.FC<MatchTeamDetailProps> = (
     <MatchPlayerComponent
       key={ accountId }
       userData={user}
-      champion={champ}
+      champion={champion}
       spell1={spell1}
       spell2={spell2}
       itemData={itemData}
