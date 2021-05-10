@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Body, Patch, Param, HttpException, HttpStatus } from '@nestjs/common';
+import {Controller, Post, Get, Body, Patch, Param, HttpException, HttpStatus, Delete} from '@nestjs/common';
 import { CreateUserOutput, CreateUserInput } from './dtos/create-user.dto';
 import { UsersService } from './users.service';
 import { LoginInput, LoginOutput } from './dtos/login.dto';
@@ -8,6 +8,7 @@ import { Users } from './entities/users.entity';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';
+import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
 
 @Controller('users')
 export class UsersController {
@@ -75,5 +76,14 @@ export class UsersController {
     @Body() createSummonerInput: CreateSummonerInput,
   ): Promise<CreateSummonerOutput> {
     return this.usersService.createSummoner(user, createSummonerInput);
+  }
+
+  @Role(['ANY'])
+  @Delete('delete-summoner')
+  async deleteSummoner(
+    @AuthUser() user: Users,
+    @Body() deleteSummonerInput: DeleteSummonerInput,
+  ): Promise<DeleteSummonerOutput> {
+    return this.usersService.deleteSummoner(user, deleteSummonerInput);
   }
 }

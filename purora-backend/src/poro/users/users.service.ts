@@ -12,6 +12,7 @@ import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 import {ReadAllSummonerOutput, ReadMySummonerOutput, ReadOneSummonerOutput} from './dtos/read-summoner.dto';
+import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
 
 @Injectable()
 export class UsersService {
@@ -259,6 +260,39 @@ export class UsersService {
     }
   }
 
+  async deleteSummoner(
+    authUser: Users,
+    deleteSummonerInput: DeleteSummonerInput,
+  ): Promise<DeleteSummonerOutput> {
+    try {
+      const summoner = await this.usersSummonerInfo.findOne({
+        where: {
+          id: deleteSummonerInput.summonerId,
+          user: authUser,
+        }
+      });
+
+      if (!summoner) {
+        return {
+          success: false,
+          message: `삭제 권한이 없거나 존재하지 않는 소환사 입니다 ㅠ.ㅠ`,
+        }
+      }
+
+      await this.usersSummonerInfo.softDelete({
+        id: summoner.id
+      });
+
+      return {
+        success: true,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
 
   /* util functions */
   async findById(id: number): Promise<UserInfoOutput> {
