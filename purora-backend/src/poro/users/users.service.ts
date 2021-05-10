@@ -13,6 +13,7 @@ import { removeWhiteSpace } from './../../common/utils';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 import {ReadAllSummonerOutput, ReadMySummonerOutput, ReadOneSummonerOutput} from './dtos/read-summoner.dto';
 import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
+import {ModifySummonerInput, ModifySummonerOutput} from "./dtos/modify-summoner.dto";
 
 @Injectable()
 export class UsersService {
@@ -164,19 +165,29 @@ export class UsersService {
   }
 
   async readOneSummoner(
+    authUser: Users,
     id: number
   ): Promise<ReadOneSummonerOutput> {
     try {
-      const usersSummonerInfo = await this.usersSummonerInfo.findOne({
+      const summoner = await this.usersSummonerInfo.findOne({
         id
       }, {
-        select: ['createdAt', 'updatedAt', 'id', 'summonerName'],
-        relations: ['user']
+        select: ['id', 'summonerName'],
+        where: {
+          user: authUser,
+        }
       });
+
+      if (!summoner) {
+        return {
+          success: false,
+          message: `조회 권한이 없거나 존재하지 않는 소환사 입니다 ㅠ.ㅠ`,
+        }
+      }
 
       return {
         success: true,
-        usersSummonerInfo,
+        usersSummonerInfo: summoner,
       }
     } catch (error) {
       return {
@@ -260,14 +271,51 @@ export class UsersService {
     }
   }
 
+    async modifySummoner(
+    authUser: Users,
+    { summonerId, summonerName }: ModifySummonerInput,
+  ): Promise<ModifySummonerOutput> {
+    try {
+      const summoner = await this.usersSummonerInfo.findOne({
+        where: {
+          id: summonerId,
+          user: authUser,
+        }
+      });
+
+      if (!summoner) {
+        return {
+          success: false,
+          message: `삭제 권한이 없거나 존재하지 않는 소환사 입니다 ㅠ.ㅠ`,
+        }
+      }
+
+      if (summonerName) {
+        summoner.summonerName = summonerName;
+      }
+
+      await this.usersSummonerInfo.save(summoner);
+
+      return {
+        success: true,
+        message: `정상적으로 수정되었습니다!`,
+      }
+    } catch (error) {
+      return {
+        success: false,
+        error,
+      }
+    }
+  }
+
   async deleteSummoner(
     authUser: Users,
-    deleteSummonerInput: DeleteSummonerInput,
+    { summonerId }: DeleteSummonerInput,
   ): Promise<DeleteSummonerOutput> {
     try {
       const summoner = await this.usersSummonerInfo.findOne({
         where: {
-          id: deleteSummonerInput.summonerId,
+          id: summonerId,
           user: authUser,
         }
       });

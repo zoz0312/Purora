@@ -11,6 +11,7 @@ import MyProfile from "@pages/my/my-profile";
 import MatchPage from "@pages/match";
 import MyMatchPage from "@pages/my/my-match";
 import CreateSummonerPage from "@pages/create/create-summoner";
+import ModifySummonerPage from "@pages/modify/modify-summoner";
 
 const logoutRouters = [
   { path: '/', component: Login },
@@ -24,6 +25,7 @@ const commonRoutes = [
   { path: '/my/summoner', component: MySummoner },
   { path: '/my/profile', component: MyProfile },
   { path: '/create/summoner', component: CreateSummonerPage },
+  { path: '/modify/summoner/:summonerId', component: ModifySummonerPage },
 ];
 
 interface RoutersProps extends AuthStateType {};

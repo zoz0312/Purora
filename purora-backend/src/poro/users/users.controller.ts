@@ -9,6 +9,7 @@ import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summone
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
 import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';
 import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
+import {ModifySummonerInput, ModifySummonerOutput} from "./dtos/modify-summoner.dto";
 
 @Controller('users')
 export class UsersController {
@@ -51,6 +52,7 @@ export class UsersController {
   @Role(['ANY'])
   @Get('read-summoner/:id')
   async readOneSummoner(
+    @AuthUser() user: Users,
     @Param() params,
   ): Promise<ReadOneSummonerOutput> {
     const id = +params.id;
@@ -58,7 +60,7 @@ export class UsersController {
       throw new HttpException(``,
           HttpStatus.FORBIDDEN);
     }
-    return this.usersService.readOneSummoner(id);
+    return this.usersService.readOneSummoner(user, id);
   }
 
   @Role(['ANY'])
@@ -76,6 +78,15 @@ export class UsersController {
     @Body() createSummonerInput: CreateSummonerInput,
   ): Promise<CreateSummonerOutput> {
     return this.usersService.createSummoner(user, createSummonerInput);
+  }
+
+  @Role(['ANY'])
+  @Patch('modify-summoner')
+  async modifySummoner(
+    @AuthUser() user: Users,
+    @Body() modifySummonerInput: ModifySummonerInput,
+  ): Promise<ModifySummonerOutput> {
+    return this.usersService.modifySummoner(user, modifySummonerInput);
   }
 
   @Role(['ANY'])

@@ -1,10 +1,8 @@
-import {Link, useHistory} from "react-router-dom";
-import React, {useState} from "react";
+import {Link, useHistory, useParams} from "react-router-dom";
+import React, {useEffect, useState} from "react";
 import {useForm} from "react-hook-form";
 import {$axios} from "@utils/axios";
 import {Helmet} from "react-helmet-async";
-import poro from "@image/poro.jpg";
-import {regexMatch, regexPw} from "@utils/regex";
 import LoginLayout from "@components/layout/login-layout";
 import SummonerForm, {SummonerFormTypes} from "@components/summoner/summoner-form";
 
@@ -12,15 +10,47 @@ type FormInputs = {
   summonerName: string;
 };
 
-const CreateSummonerPage: React.FC = () => {
+const ModifySummonerPage: React.FC = () => {
   const history = useHistory();
+  const params = useParams<{ summonerId: string; }>();
+  const summonerId = +params.summonerId;
+
+  const getMySummoner = async () => {
+    const { data: {
+      success,
+      error,
+      message,
+      usersSummonerInfo,
+    } }: any = await $axios({
+      method: 'get',
+      url: `/users/read-summoner/${summonerId}`,
+    });
+
+    if (success) {
+      reset({
+        summonerName: usersSummonerInfo.summonerName
+      })
+    } else {
+      if (error) {
+        alert(error);
+      }
+      if (message) {
+        alert(message);
+      }
+    }
+  }
+
+  useEffect(() => {
+    getMySummoner();
+  }, [])
 
   const {
     errors,
     register,
     handleSubmit,
+    reset,
   } = useForm<FormInputs>({
-    mode: 'onChange'
+    mode: 'onChange',
   });
 
   const onSubmit = async (data: FormInputs) => {
@@ -32,9 +62,10 @@ const CreateSummonerPage: React.FC = () => {
     }
 
     const result = await $axios({
-      method: 'post',
-      url: '/users/create-summoner',
+      method: 'patch',
+      url: '/users/modify-summoner',
       data: {
+        summonerId,
         summonerName,
       }
     });
@@ -58,10 +89,10 @@ const CreateSummonerPage: React.FC = () => {
   return (
     <LoginLayout>
       <Helmet>
-        <title>소환사 생성하기 | 포로라</title>
+        <title>소환사 수정하기 | 포로라</title>
       </Helmet>
       <SummonerForm
-        type={SummonerFormTypes.create}
+        type={SummonerFormTypes.modify}
         handleSubmit={handleSubmit}
         onSubmit={onSubmit}
         register={register}
@@ -71,4 +102,4 @@ const CreateSummonerPage: React.FC = () => {
   )
 }
 
-export default CreateSummonerPage;
+export default ModifySummonerPage;
