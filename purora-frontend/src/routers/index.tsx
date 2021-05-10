@@ -5,15 +5,16 @@ import { authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
 import Home from '@pages/home';
 import Login from '@pages/login';
-import CreateAccount from "@pages/create-account";
+import CreateAccount from "@pages/create/create-account";
 import MySummoner from "@pages/my/my-summoner";
 import MyProfile from "@pages/my/my-profile";
 import MatchPage from "@pages/match";
 import MyMatchPage from "@pages/my/my-match";
+import CreateSummonerPage from "@pages/create/create-summoner";
 
 const logoutRouters = [
   { path: '/', component: Login },
-  { path: '/create-account', component: CreateAccount },
+  { path: '/create/account', component: CreateAccount },
 ];
 
 const commonRoutes = [
@@ -22,6 +23,7 @@ const commonRoutes = [
   { path: '/my/match', component: MyMatchPage },
   { path: '/my/summoner', component: MySummoner },
   { path: '/my/profile', component: MyProfile },
+  { path: '/create/summoner', component: CreateSummonerPage },
 ];
 
 interface RoutersProps extends AuthStateType {};

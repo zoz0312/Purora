@@ -19,8 +19,6 @@ interface axiosProps {
   async?: boolean;
 }
 
-
-
 export const $axios = async ({
   url = '',
   method,
@@ -32,19 +30,25 @@ export const $axios = async ({
   };
 
   if (async) {
-    return axios({
-      headers,
-      method,
-      url: `${hostURL}${url}`,
-      data,
+    return new Promise((res, rej) => {
+      axios({
+        headers,
+        method,
+        url: `${hostURL}${url}`,
+        data,
+      }).then(response => {
+        res(response)
+      }).catch(error => {
+        console.log('error', error)
+        rej(error)
+      })
     });
   }
 
   axios({
     method,
-    url,
+    url: `${hostURL}${url}`,
     data,
   });
-
   return;
 }

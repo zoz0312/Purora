@@ -66,7 +66,7 @@ const TokenForm: React.FC<TokenFormProps> = (
         alert(message);
       }
       if (error) {
-        alert(error);
+        alert(error.name);
       }
     }
   }

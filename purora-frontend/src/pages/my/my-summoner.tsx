@@ -1,5 +1,6 @@
 import {Helmet} from "react-helmet-async";
 import React, {useEffect, useMemo, useState} from "react";
+import { Link } from 'react-router-dom';
 import LoginLayout from "@components/layout/login-layout";
 import {$axios} from "@utils/axios";
 import MySummonerDetail from "@components/modal/my-summoner-detail";
@@ -8,7 +9,7 @@ const MySummoner: React.FC = () => {
   const [summonerInfo, setSummonerInfo] = useState([]);
   const hasData = useMemo(() => summonerInfo.length !== 0, [summonerInfo]);
   const [detailModal, setDetailModal] = useState(false);
-  const [detailData, setDetaildata] = useState({});
+  const [detailData, setDetaildata] = useState({ id: 0});
 
   const getMySummoner = async () => {
     const { data: {
@@ -25,7 +26,7 @@ const MySummoner: React.FC = () => {
       setSummonerInfo(usersSummonerInfo);
     } else {
       if (error) {
-        alert(message);
+        alert(error);
       }
       if (message) {
         alert(message);
@@ -52,7 +53,7 @@ const MySummoner: React.FC = () => {
         summonerInfo.map((summoner: any, index) => (
           <div
             key={summoner.id}
-            className={`flex flex-row shadow-md mb-5 p-5 w-full border border-white rounded bg-white cursor-pointer hover:bg-personal-1 hover:text-white transition`}
+            className={`flex flex-row shadow-md mt-3 p-5 w-full rounded-xl bg-white cursor-pointer hover:bg-personal-1 hover:text-white transition`}
             onClick={() => detailButton(index)}
           >
             <div className={'flex-grow flex flex-row'}>
@@ -76,10 +77,19 @@ const MySummoner: React.FC = () => {
           </div>
         ))
       )}
+      <Link
+        to={'/create/summoner'}
+        className={`flex flex-col items-center justify-center mt-3 p-5 w-full text-gray-500 border-4 border-dashed border-gray-400 rounded-xl bg-gray-200 cursor-pointer hover:bg-gray-300 transition`}
+        // onClick={() => detailButton(index)}
+      >
+        <span className={'text-5xl'}>+</span>
+        <span>소환사 추가하기</span>
+      </Link>
       <MySummonerDetail
         show={detailModal}
         setShow={setDetailModal}
         detailData={detailData}
+        getMySummoner={getMySummoner}
       />
     </LoginLayout>
   )

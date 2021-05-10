@@ -108,7 +108,7 @@ const Login: React.FC<LoginProps> = (
             className={'w-full h-12 mt-2 btn-personal rounded'}
           >Login</button>
           <Link
-            to={'/create-account'}
+            to={'/create/account'}
             className={'text-blue-700 underline cursor-pointer'}
           >회원가입</Link>
         </form>

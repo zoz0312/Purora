@@ -2,16 +2,18 @@ import { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { ExclamationIcon } from '@heroicons/react/outline'
 import TokenForm from "@components/modal/token-form";
+import {$axios} from "@utils/axios";
 
 interface MySummonerDetailProps {
   show: boolean;
   setShow: (value: boolean) => void;
   detailData: {
-    id?: number;
+    id: number;
     summonerName?: string;
     token?: string;
     lastMatchUpdateAt?: Date;
   };
+  getMySummoner: Function;
 }
 
 const MySummonerDetail: React.FC<MySummonerDetailProps> = (
@@ -19,9 +21,45 @@ const MySummonerDetail: React.FC<MySummonerDetailProps> = (
     show,
     setShow,
     detailData,
+    getMySummoner,
   }
 ) => {
 
+  const deleteSummoner = async (id: number) => {
+
+    if (!window.confirm('선택한 소환사는 삭제되지만 전적은 삭제되지 않습니다.\n정말 삭제하시겠습니까?')) {
+      return
+    }
+
+    try {
+      const { data: {
+        success,
+        error,
+        message,
+      } }: any = await $axios({
+        url: `/users/delete-summoner`,
+        method: 'delete',
+        data: {
+          summonerId: id,
+        }
+      });
+
+      if (success) {
+        alert('정상적으로 삭제되었습니다!');
+        getMySummoner();
+        setShow(false);
+      } else {
+        if (error) {
+          alert(error.name);
+        }
+        if (message) {
+          alert(message);
+        }
+      }
+    } catch (e) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+    }
+  }
   return (
     <Transition.Root show={show} as={Fragment}>
       <Dialog
@@ -107,6 +145,13 @@ const MySummonerDetail: React.FC<MySummonerDetailProps> = (
                 </div>
               </div>
               <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-400 text-base font-medium text-white mb-1 hover:bg-red-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm sm:mb-0"
+                  onClick={() => deleteSummoner(detailData.id)}
+                >
+                  소환사 삭제하기
+                </button>
                 <button
                   type="button"
                   className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-gray-400 text-base font-medium text-white hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500 sm:ml-3 sm:w-auto sm:text-sm"
