@@ -26,8 +26,8 @@ const ItemBoxComponent: React.FC<ItemBoxProps> = (
             src={`${CDN_HOST}/${version}/img/item/${item}.png`}
           />
           <ToolTip>
-            <div className={'text-sm text-yellow-400'}>{ itemData.name } { itemData.gold.total }G</div>
-            <div className={'text-xs'}>{ itemData.plaintext }</div>
+            <div className={'text-xs md:text-sm text-yellow-400'}>{ itemData.name } { itemData.gold.total }G</div>
+            <div className={'text-2xs md:text-xs'}>{ itemData.plaintext }</div>
           </ToolTip>
         </div>
       )}

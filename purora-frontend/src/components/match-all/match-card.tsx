@@ -78,6 +78,9 @@ const MatchCardComponent: React.FC<MatchCardProps> = (
             </div>
           </div>
         )}
+        <div className={'bg-blue-300 hover:bg-blue-200 mt-1 text-center rounded-md text-white text-base cursor-pointer'}>
+          게임 자세히 보기
+        </div>
       </div>
       <button
         className={`w-8 md:w-10 flex-grow-0 rounded-r-xl p-2 md:p-3 text-white text-2xl md:text-3xl bg-blue-300 hover:bg-blue-200 btn-normal focus:outline-none`}

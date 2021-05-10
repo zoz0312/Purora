@@ -79,6 +79,8 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
     tripleKills,
     quadraKills,
     pentaKills,
+    visionScore,
+    visionWardsBoughtInGame,
   } = stats;
 
   const kda = deaths === 0 ? 'Prefect' : `${((kills + assists) / deaths).toFixed(2)}:1`;
@@ -94,9 +96,13 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
     killBadge = '더블킬';
   }
 
+  const bgColor = match.winStatus === 0 ? 'bg-blue-200' : 'bg-red-200';
+  const btnBgColor = match.winStatus === 0 ? 'bg-blue-400 hover:bg-blue-300' : 'bg-red-400 hover:bg-red-300';
+
+
   return (
-    <div className={`max-w-4xl mx-auto bg-blue-50 flex flex-row text-gray-700 shadow md:shadow-lg mb-2 md:mb-5 w-full border border-white rounded-xl`}>
-      <div className={'flex flex-col p-2 md:p-5 flex-grow'}>
+    <div className={`max-w-4xl mx-auto ${bgColor} flex flex-row text-gray-700 shadow md:shadow-lg mb-2 md:mb-3 w-full border border-white rounded-xl`}>
+      <div className={'flex flex-col p-2 md:p-3 flex-grow'}>
         <div className={'flex flex-row items-end'}>
           <h1 className={'text-xl mr-2'}>{ gameType[mode] }</h1>
           { match.winStatus === 0 ? (
@@ -109,21 +115,21 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
           <h3 className={'text-2xs md:text-sm'}>{ durationParse(duration) }</h3>
           <h3 className={'ml-2 text-2xs md:text-sm'}>({ moment(+creation).format(gmaeTimeFormat) })</h3>
         </div>
-        <div className={'flex flex-row'}>
+        <div className={'flex flex-row justify-center items-center'}>
           <div className={'flex flex-col justify-center items-center'}>
             <div className={'flex flex-row'}>
-              <div className={'w-10 flex flex-col justify-center items-center'}>
-                <img className={'w-8 h-8 md:w-10 md:h-10 rounded-full'} src={champSrc} alt={champion.name} />
+              <div className={'w-14 flex flex-col justify-center items-center'}>
+                <img className={'w-10 h-10 md:w-14 md:h-14 rounded-full'} src={champSrc} alt={champion.name} />
               </div>
               <div className={'flex flex-col mx-0.5'}>
-                <div className={'w-4 h-4 md:w-6 md:h-6 tooltip-box'}>
+                <div className={'w-5 h-5 md:w-7 md:h-7 tooltip-box'}>
                   <img className={'rounded-sm md:rounded-md'} src={spell1Src} alt={spell1.name} />
                   <ToolTip>
                     <div className={'text-sm text-yellow-400'}>{ spell1.name }</div>
                     <div className={'text-xs'}>{ spell1.description }</div>
                   </ToolTip>
                 </div>
-                <div className={'w-4 h-4 md:w-6 md:h-6 tooltip-box'}>
+                <div className={'w-5 h-5 md:w-7 md:h-7 tooltip-box'}>
                   <img className={'rounded-sm md:rounded-md'} src={spell2Src} alt={spell2.name} />
                   <ToolTip>
                     <div className={'text-sm text-yellow-400'}>{ spell2.name }</div>
@@ -132,48 +138,74 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
                 </div>
               </div>
             </div>
-            <div className={'text-2xs md:text-sm'}>{champion.name}</div>
+            <div className={'text-xs md:text-base'}>{champion.name}</div>
           </div>
-          <div className={'flex flex-col items-center mx-1 md:mx-2'}>
+          <div className={'flex flex-col items-center ml-1 md:ml-2'}>
             <div className={'flex flex-row'}>
-              <div className={'text-xs md:text-base'}>{ stats.kills }</div>
-              <div className={'text-xs md:text-base'}>/</div>
-              <div className={'text-xs md:text-base'}>{ stats.deaths }</div>
-              <div className={'text-xs md:text-base'}>/</div>
-              <div className={'text-xs md:text-base'}>{ stats.assists }</div>
+              <div className={'text-xs md:text-xl'}>{ stats.kills }</div>
+              <div className={'text-xs md:text-xl'}>/</div>
+              <div className={'text-xs md:text-xl'}>{ stats.deaths }</div>
+              <div className={'text-xs md:text-xl'}>/</div>
+              <div className={'text-xs md:text-xl'}>{ stats.assists }</div>
             </div>
             <div className={'flex flex-row w-15'}>
               <div className={'text-2xs md:text-base'}>{ kda }</div>
             </div>
             { killBadge !== '' && (
-              <div className={'px-1 py-0.5 rounded-full text-white bg-red-500 text-2xs md:text-xs'}>{ killBadge }</div>
+              <div className={'px-1 py-0.5 mt-0.5 rounded-full text-white bg-red-500 text-2xs md:text-xs'}>{ killBadge }</div>
             )}
           </div>
-          <div className={'flex flex-col items-center mx-1 md:mx-2'}>
+          <div className={'flex flex-col items-center ml-1 md:ml-2'}>
             <div className={'text-xs md:text-base'}>
-              레벨:{ champLevel }
+              레벨 { champLevel }
             </div>
             <div className={'text-2xs md:text-base'}>
-              CS:{ totalMinionsKilled }
+              CS { totalMinionsKilled }
+            </div>
+            <div className={'text-2xs md:text-base'}>
+              시야점수 { visionScore }
+            </div>
+            <div className={'text-2xs md:text-base'}>
+              제어와드 { visionWardsBoughtInGame }
             </div>
           </div>
-          <div className={'flex flex-wrap w-28 md:w-auto'}>
-            { itmes.map((item, itemIdx) => (
-              <ItemBoxComponent
-                key={itemIdx}
-                className={'w-6 h-6 md:w-8 md:h-8 mr-0.5'}
-                version={champion.version}
-                item={item}
-                itemData={itemData[item]}
-              />
-            ))}
+          <div className={'flex flex-col md:flex-row w-32 md:w-auto ml-1 md:ml-2'}>
+            <div className={'flex flex-row'}>
+              { itmes.filter((_, idx) => (idx < 3))
+                .map((item, itemIdx) => (
+                    <ItemBoxComponent
+                      key={itemIdx}
+                      className={'w-7 h-7 md:w-10 md:h-10 mr-0.5'}
+                      version={champion.version}
+                      item={item}
+                      itemData={itemData[item]}
+                    />
+                  )
+                )}
+            </div>
+            <div className={'flex flex-row'}>
+              { itmes.filter((_, idx) => (idx >= 3))
+                .map((item, itemIdx) => (
+                    <ItemBoxComponent
+                      key={itemIdx}
+                      className={'w-7 h-7 md:w-10 md:h-10 mr-0.5'}
+                      version={champion.version}
+                      item={item}
+                      itemData={itemData[item]}
+                    />
+                  )
+                )}
+            </div>
           </div>
         </div>
+        <div className={`${btnBgColor} mt-1 text-center rounded-md text-white text-base cursor-pointer`}>
+          게임 자세히 보기
+        </div>
       </div>
-      {/*<button*/}
-      {/*  className={`w-8 md:w-10 flex-grow-0 rounded-r-xl p-2 md:p-3 text-white text-2xl md:text-3xl bg-blue-300 hover:bg-blue-200 btn-normal focus:outline-none`}*/}
-      {/*  onClick={()=>setShowDetail(value => !value)}*/}
-      {/*>{ showDetail ? '-' : '+'}</button>*/}
+      <button
+        className={`w-8 md:w-10 flex-grow-0 rounded-r-xl p-2 md:p-3 text-white text-2xl md:text-3xl ${btnBgColor} btn-normal focus:outline-none`}
+        onClick={()=> { /* TODO: 해당 게임 상세보기 페이지로 이동 */}}
+      >+</button>
     </div>
   )
 };

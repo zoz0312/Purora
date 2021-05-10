@@ -36,3 +36,19 @@
     border-color: black transparent transparent transparent;
   }
 }
+
+@media (max-width: 767px) {
+  .tooltip {
+    width: 100px;
+    bottom: 130%;
+    left: 0;
+    margin-left: -60px;
+
+    &::after {
+      top: 100%;
+      left: 75%;
+      margin-left: -5px;
+    }
+  }
+}
+

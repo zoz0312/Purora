@@ -1,6 +1,7 @@
 import {CDN_HOST} from "@utils/constants";
 import ToolTip from "@components/tooltip/tooltip";
 import ItemBoxComponent from "@components/match-common/item-box";
+import React from "react";
 
 interface MatchPlayerProps {
   userData: any;
@@ -115,15 +116,33 @@ const MatchPlayerComponent: React.FC<MatchPlayerProps> = (
         </div>
       </div>
       <div className={'flex flex-wrap w-28 md:w-auto'}>
-        { itmes.map((item, itemIdx) => (
-          <ItemBoxComponent
-            key={itemIdx}
-            className={'w-6 h-6 md:w-8 md:h-8 mr-0.5'}
-            version={champion.version}
-            item={item}
-            itemData={itemData[item]}
-          />
-        ))}
+
+        <div className={'flex flex-row'}>
+          { itmes.filter((_, idx) => (idx < 3))
+            .map((item, itemIdx) => (
+                <ItemBoxComponent
+                  key={itemIdx}
+                  className={'w-6 h-6 md:w-8 md:h-8 mr-0.5'}
+                  version={champion.version}
+                  item={item}
+                  itemData={itemData[item]}
+                />
+              )
+            )}
+        </div>
+        <div className={'flex flex-row'}>
+          { itmes.filter((_, idx) => (idx >= 3))
+            .map((item, itemIdx) => (
+                <ItemBoxComponent
+                  key={itemIdx}
+                  className={'w-6 h-6 md:w-8 md:h-8 mr-0.5'}
+                  version={champion.version}
+                  item={item}
+                  itemData={itemData[item]}
+                />
+              )
+            )}
+        </div>
       </div>
     </div>
   )
