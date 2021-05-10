@@ -37,6 +37,7 @@ const ModifySummonerPage: React.FC = () => {
       if (message) {
         alert(message);
       }
+      history.push('/my/summoner');
     }
   }
 
@@ -86,18 +87,64 @@ const ModifySummonerPage: React.FC = () => {
     }
   }
 
+  const deleteSummoner = async (id: number) => {
+
+    if (!window.confirm('선택한 소환사는 삭제되지만 전적은 삭제되지 않습니다.\n정말 삭제하시겠습니까?')) {
+      return
+    }
+
+    try {
+      const { data: {
+        success,
+        error,
+        message,
+      } }: any = await $axios({
+        url: `/users/delete-summoner`,
+        method: 'delete',
+        data: {
+          summonerId: id,
+        }
+      });
+
+      if (success) {
+        alert('정상적으로 삭제되었습니다!');
+        history.push('/my/summoner');
+      } else {
+        if (error) {
+          alert(error.name);
+        }
+        if (message) {
+          alert(message);
+        }
+      }
+    } catch (e) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+    }
+  }
+
   return (
     <LoginLayout>
       <Helmet>
         <title>소환사 수정하기 | 포로라</title>
       </Helmet>
-      <SummonerForm
-        type={SummonerFormTypes.modify}
-        handleSubmit={handleSubmit}
-        onSubmit={onSubmit}
-        register={register}
-        errors={errors}
-      />
+      <div className={''}>
+        <SummonerForm
+          type={SummonerFormTypes.modify}
+          handleSubmit={handleSubmit}
+          onSubmit={onSubmit}
+          register={register}
+          errors={errors}
+        />
+        <div className={'max-w-3xl w-full flex items-center justify-center mt-2'}>
+          <button
+            type="button"
+            className="w-60 md:w-full h-12 rounded border border-transparent shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 "
+            onClick={() => deleteSummoner(summonerId)}
+          >
+            소환사 삭제하기
+          </button>
+        </div>
+      </div>
     </LoginLayout>
   )
 }
