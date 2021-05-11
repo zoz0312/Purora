@@ -23,7 +23,7 @@ export interface NavigationProps {
 
 const navigation: NavigationMenu[] = [
   {
-    name: 'Home',
+    name: '전체 소환사',
     host: '/',
   },
   {

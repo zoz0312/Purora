@@ -18,7 +18,7 @@ const ItemBoxComponent: React.FC<ItemBoxProps> = (
 ) => {
 
   return (
-    <div className={`${className} bg-gray-300 rounded-md`}>
+    <div className={`${className} bg-gray-400 rounded-md`}>
       { item !== 0 && (
         <div className={'w-full h-full tooltip-box'}>
           <img

@@ -11,7 +11,11 @@ import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summone
 import { regexMatch } from 'src/common/utils';
 import { removeWhiteSpace } from './../../common/utils';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
-import {ReadAllSummonerOutput, ReadMySummonerOutput, ReadOneSummonerOutput} from './dtos/read-summoner.dto';
+import {
+  ReadMySummonerOutput,
+  ReadOneSummonerOutput,
+  ReadAllSummonerMatchOutput
+} from './dtos/read-summoner.dto';
 import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
 import {ModifySummonerInput, ModifySummonerOutput} from "./dtos/modify-summoner.dto";
 
@@ -151,18 +155,38 @@ export class UsersService {
     }
   }
 
-  async readAllSummoner(
-  ): Promise<ReadAllSummonerOutput> {
+  async readSAllummonerMatch(
+  ): Promise<ReadAllSummonerMatchOutput> {
     try {
       const usersSummonerInfo = await this.usersSummonerInfo.find({
-        select: ['id', 'summonerName', 'createdAt']
+        select: ['id', 'summonerName', 'rating'],
+        relations: ['usersGameInfo', 'user'],
+        cache: true,
+      });
+
+      const parsedSummoner = usersSummonerInfo.map(user => {
+        const reduced = user.usersGameInfo.reduce(({ win, lose }, cur) => {
+          const isWin = cur.winStatus === 0;
+          return {
+            win: isWin ? win + 1 : win,
+            lose: isWin ? lose : lose + 1,
+          }
+        }, { win: 0, lose: 0 });
+
+        delete(user.usersGameInfo);
+
+        return {
+          user,
+          ...reduced
+        };
       });
 
       return {
         success: true,
-        usersSummonerInfo,
+        usersSummonerInfo: parsedSummoner,
       }
     } catch (error) {
+      console.log('error', error);
       return {
         success: false,
         error,

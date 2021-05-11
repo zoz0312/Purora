@@ -69,7 +69,7 @@ export class Users extends CoreEntity {
       onDelete: 'CASCADE',
     }
   )
-  UsersGameInfo: UsersGameInfo[];
+  usersGameInfo: UsersGameInfo[];
 
   @BeforeInsert()
   @BeforeUpdate()

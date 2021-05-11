@@ -7,7 +7,11 @@ import { AuthUser } from './../auth/auth-user.decorator';
 import { Users } from './entities/users.entity';
 import { CreateSummonerInput, CreateSummonerOutput } from './dtos/create-summoner.dto';
 import { ModifyUserInput, ModifyUserOutput } from './dtos/modify-user.dto';
-import { ReadAllSummonerOutput, ReadOneSummonerOutput } from './dtos/read-summoner.dto';
+import {
+  ReadAllSummonerMatchOutput,
+  ReadMySummonerOutput,
+  ReadOneSummonerOutput,
+} from './dtos/read-summoner.dto';
 import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
 import {ModifySummonerInput, ModifySummonerOutput} from "./dtos/modify-summoner.dto";
 
@@ -43,10 +47,10 @@ export class UsersController {
   }
 
   @Role(['ANY'])
-  @Get('read-all-summoner')
-  async readAllSummoner(
-  ): Promise<ReadAllSummonerOutput> {
-    return this.usersService.readAllSummoner();
+  @Get('read-all-summoner-match')
+  async readSummonerMatch(
+  ): Promise<ReadAllSummonerMatchOutput> {
+    return this.usersService.readSAllummonerMatch();
   }
 
   @Role(['ANY'])
@@ -67,7 +71,7 @@ export class UsersController {
   @Get('read-my-summoner')
   async readMySummoner(
     @AuthUser() user: Users,
-  ): Promise<ReadAllSummonerOutput> {
+  ): Promise<ReadMySummonerOutput> {
     return this.usersService.readMySummoner(user);
   }
 

@@ -83,7 +83,8 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
     visionWardsBoughtInGame,
   } = stats;
 
-  const kda = deaths === 0 ? 'Prefect' : `${((kills + assists) / deaths).toFixed(2)}:1`;
+  const kdaValue = ((kills + assists) / deaths).toFixed(2);
+  const kda = deaths === 0 ? 'Prefect' : `${kdaValue}:1`;
 
   let killBadge = '';
   if (pentaKills > 0) {
@@ -149,7 +150,7 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
               <div className={'text-xs md:text-xl'}>{ stats.assists }</div>
             </div>
             <div className={'flex flex-row w-15'}>
-              <div className={'text-2xs md:text-base'}>{ kda }</div>
+              <div className={`text-2xs md:text-base ${(+kdaValue > 3) && 'text-blue-700'}`}>{ kda }</div>
             </div>
             { killBadge !== '' && (
               <div className={'px-1 py-0.5 mt-0.5 rounded-full text-white bg-red-500 text-2xs md:text-xs'}>{ killBadge }</div>

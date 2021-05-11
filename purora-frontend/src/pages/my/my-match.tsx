@@ -45,7 +45,6 @@ const MyMatchPage: React.FC = () => {
 
       setMatchData((value) => [...value, ...parsed]);
       setTotalPages(Math.floor(totalLength/getIndex));
-      console.log('parsed', parsed)
     } else {
       if (error) {
         alert(message);
@@ -74,7 +73,12 @@ const MyMatchPage: React.FC = () => {
       <Helmet>
         <title>내 전적조회 | 포로라</title>
       </Helmet>
-      { matchData.map((match, idx) => (
+      { matchData.length === 0 ? (
+        <>
+          데이터가 없습니다
+        </>
+        ) :
+        matchData.map((match, idx) => (
           <MatcMyCard
             key={idx}
             match={match}
@@ -84,7 +88,6 @@ const MyMatchPage: React.FC = () => {
           />
         ))
       }
-
     </LoginLayout>
   )
 }

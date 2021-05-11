@@ -73,7 +73,7 @@ const Login: React.FC<LoginProps> = (
       <Helmet>
         <title>로그인 | 포로라</title>
       </Helmet>
-      <div className={'p-10 w-full sm:w-2/4 max-w-xl border border-gray-300 border-solid rounded'}>
+      <div className={'p-10 w-full sm:w-2/4 max-w-xl border border-gray-300 border-solid rounded bg-white'}>
         <div className={'flex items-center flex-col p-5'}>
           <img className={'w-40 h-40 rounded-full'} src={poro}/>
           <h3 className={'text-3xl mb-2 pt-5'}>포로라 로그인</h3>

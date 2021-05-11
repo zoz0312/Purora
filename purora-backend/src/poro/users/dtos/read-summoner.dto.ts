@@ -8,8 +8,14 @@ import { UsersSummonerInfo } from '../entities/users-summoner-info.entity';
 // export class ReadOneSummoner {
 // }
 
-export class ReadAllSummonerOutput extends CoreOutput {
-  usersSummonerInfo?: UsersSummonerInfo[];
+class SummonerMatchType {
+  user: UsersSummonerInfo;
+  win: number;
+  lose: number;
+};
+
+export class ReadAllSummonerMatchOutput extends CoreOutput {
+  usersSummonerInfo?: SummonerMatchType[];
 }
 
 export class ReadOneSummonerOutput extends CoreOutput {

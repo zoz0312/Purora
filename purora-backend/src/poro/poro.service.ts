@@ -380,6 +380,7 @@ export class PoroService {
             player: userGame.participantIdentities[0].player,
           }),
           winStatus,
+          summoner,
         }
       });
       await this.usersGameInfo.save(

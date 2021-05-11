@@ -2,6 +2,7 @@ import { Column, Entity, ManyToOne, RelationId } from "typeorm";
 import { CoreEntity } from 'src/common/entities/core.entities';
 import { GameInfo } from "./game-info.entity";
 import { Users } from "./users.entity";
+import {UsersSummonerInfo} from "./users-summoner-info.entity";
 
 @Entity()
 export class UsersGameInfo extends CoreEntity {
@@ -18,7 +19,7 @@ export class UsersGameInfo extends CoreEntity {
 
   @ManyToOne(
     type => Users,
-    users => users.UsersGameInfo,
+    users => users.usersGameInfo,
   )
   users: Users;
 
@@ -26,6 +27,17 @@ export class UsersGameInfo extends CoreEntity {
     (UsersGameInfo: UsersGameInfo) => UsersGameInfo.users
   )
   userId: number;
+
+  @ManyToOne(
+    type => UsersSummonerInfo,
+    usersSummonerInfo => usersSummonerInfo.usersGameInfo,
+  )
+  summoner: UsersSummonerInfo;
+
+  @RelationId(
+    (usersGameInfo: UsersGameInfo) => usersGameInfo.summoner,
+  )
+  summonerId: number;
 
   @Column('longtext')
   gameData: string;

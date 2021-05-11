@@ -1,6 +1,7 @@
 import { CoreEntity } from "src/common/entities/core.entities";
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
+import {Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId} from "typeorm";
 import { Users } from "./users.entity";
+import {UsersGameInfo} from "./user-game-info.entity";
 
 /*
   @author AJu (zoz0312)
@@ -17,6 +18,16 @@ export class UsersSummonerInfo extends CoreEntity {
     (usersSummonerInfo: UsersSummonerInfo) => usersSummonerInfo.user
   )
   userId: number;
+
+  @OneToMany(
+    type => UsersGameInfo,
+    UsersGameInfo => UsersGameInfo.summoner,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+    }
+  )
+  usersGameInfo: UsersGameInfo[];
 
   @Column({ length: 16 })
   summonerName: string;
@@ -37,4 +48,10 @@ export class UsersSummonerInfo extends CoreEntity {
     nullable: true,
   })
   lastMatchUpdateAt: Date;
+
+  @Column({
+    type: 'int',
+    default: 0,
+  })
+  rating: number;
 }
