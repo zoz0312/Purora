@@ -104,7 +104,7 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
         { children }
       </div>
       <footer>
-        footer
+        Author: zoz0312 (AJu) [GitHub | Naver Blog]
       </footer>
     </>
   )

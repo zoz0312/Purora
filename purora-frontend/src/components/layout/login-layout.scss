@@ -1,5 +1,5 @@
 
-$footerH: 80px;
+$footerH: 40px;
 .main-container {
   min-height: calc(100% - 64px - 84px);
   padding-bottom: $footerH !important;
@@ -17,4 +17,6 @@ footer {
   width: 100%;
   height: $footerH;
   margin-top: -$footerH !important;
+  color: #EEEEEE;
+  background-color: #2487a6;
 }
