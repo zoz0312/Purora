@@ -1,13 +1,14 @@
 
 $footerH: 40px;
+$footerHH: 60px;
 .main-container {
   min-height: calc(100% - 64px - 84px);
-  padding-bottom: $footerH !important;
+  padding-bottom: $footerHH !important;
 }
 
 .main-container-none-header {
   min-height: calc(100% - 64px);
-  padding-bottom: $footerH !important;;
+  padding-bottom: $footerHH !important;
 }
 
 footer {

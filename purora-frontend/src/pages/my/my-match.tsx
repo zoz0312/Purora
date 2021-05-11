@@ -90,7 +90,6 @@ const MyMatchPage: React.FC = () => {
       }
     </LoginLayout>
   )
-}
-
+};
 
 export default MyMatchPage;

@@ -18,6 +18,7 @@ import {
 } from './dtos/read-summoner.dto';
 import {DeleteSummonerInput, DeleteSummonerOutput} from "./dtos/delete-summoner.dto";
 import {ModifySummonerInput, ModifySummonerOutput} from "./dtos/modify-summoner.dto";
+import {Tier} from "../../common/constants";
 
 @Injectable()
 export class UsersService {
@@ -268,7 +269,10 @@ export class UsersService {
         }
       }
 
-      const { summonerName: inputSummonerName } = createSummonerInput;
+      const {
+        summonerName: inputSummonerName,
+        summonerTier,
+      } = createSummonerInput;
       const createSummonerName = removeWhiteSpace(inputSummonerName);
 
       for (let i=0; i<user.usersSummonerInfo.length; i++) {
@@ -284,10 +288,18 @@ export class UsersService {
         }
       }
 
+      if (!Tier[summonerTier]) {
+        return {
+          success: false,
+          message: `존재하지 않는 티어입니다 -_-`,
+        }
+      }
+
       await this.usersSummonerInfo.save(
         this.usersSummonerInfo.create({
           user,
           summonerName: createSummonerName,
+          rating: Tier[summonerTier].value,
         })
       );
       return {

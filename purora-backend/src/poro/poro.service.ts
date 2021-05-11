@@ -307,8 +307,10 @@ export class PoroService {
         let winStatus;
         if (win) {
           winStatus = teamId === 100 ? 1 : 2;
+          score += 15;
         } else {
           winStatus = teamId === 100 ? 2 : 1;
+          score -= 15;
         }
 
         return {
@@ -346,6 +348,7 @@ export class PoroService {
      * UsersGameData와 크롤링한 데이터의 길이가 다른 경우,
      * DB에 없는 데이터 Insert
      */
+    let score = 0;
     if (gameInfoWhere.length !== dbUserGameInfo.length) {
       flag = true;
       const insertUsersGameInfo = gameInfoWhere.filter(gameInfo => {
@@ -367,9 +370,13 @@ export class PoroService {
           }
         } = participants;
 
-        let winStatus = 0;
-        if (!win) {
+        let winStatus;
+        if (win) {
+          score += 15;
+          winStatus = 0;
+        } else {
           winStatus = 1;
+          score -= 15;
         }
 
         return {
@@ -389,6 +396,7 @@ export class PoroService {
     }
 
     summoner.lastMatchUpdateAt = new Date();
+    summoner.rating += score;
     await this.usersSummonerInfo.save(summoner);
 
     if (!flag) {

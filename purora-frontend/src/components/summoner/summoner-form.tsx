@@ -1,10 +1,12 @@
 import poro from "@image/poro.jpg";
 import React from "react";
+import {Tier} from "@utils/constants";
 
 export enum SummonerFormTypes {
   create = 'create',
   modify = 'modify',
-}
+};
+
 interface SummonerFormProps {
   type: SummonerFormTypes;
   handleSubmit: Function;
@@ -53,6 +55,19 @@ const SummonerForm: React.FC<SummonerFormProps> = (
         { errors.summonerName?.message && (
           <>{ errors.summonerName?.message }</>
         )}
+        <select
+          className={'p-3 mt-2 outline-none border border-personal border-solid rounded'}
+          ref={register({
+            required: '티어는 필수값 입니다.',
+          })}
+          name="summonerTier"
+        >
+          {Object.keys(Tier).map(key => (
+            <option key={key} value={key}>
+              { key }
+            </option>
+          ))}
+        </select>
         <button
           type="submit"
           className={'w-full h-12 mt-2 btn-personal rounded'}

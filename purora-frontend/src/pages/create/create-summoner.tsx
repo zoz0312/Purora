@@ -3,13 +3,12 @@ import React, {useState} from "react";
 import {useForm} from "react-hook-form";
 import {$axios} from "@utils/axios";
 import {Helmet} from "react-helmet-async";
-import poro from "@image/poro.jpg";
-import {regexMatch, regexPw} from "@utils/regex";
 import LoginLayout from "@components/layout/login-layout";
 import SummonerForm, {SummonerFormTypes} from "@components/summoner/summoner-form";
 
 type FormInputs = {
   summonerName: string;
+  summonerTier: string;
 };
 
 const CreateSummonerPage: React.FC = () => {
@@ -24,7 +23,7 @@ const CreateSummonerPage: React.FC = () => {
   });
 
   const onSubmit = async (data: FormInputs) => {
-    const { summonerName } = data;
+    const { summonerName, summonerTier } = data;
 
     if (!summonerName) {
       alert('소환사명을 입력해주세요!');
@@ -36,6 +35,7 @@ const CreateSummonerPage: React.FC = () => {
       url: '/users/create-summoner',
       data: {
         summonerName,
+        summonerTier,
       }
     });
 
