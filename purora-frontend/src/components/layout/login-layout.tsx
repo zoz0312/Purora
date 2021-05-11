@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import { Link, useLocation } from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import Navigation from "@components/layout/navigation";
 import NavigationMobile from "@components/layout/navigation-mobile";
@@ -17,6 +17,8 @@ export interface NavigationProps {
   profile: NavigationMenu[];
   pathname: string;
   open: boolean;
+  logout: () => void;
+  user: any;
 }
 
 const navigation: NavigationMenu[] = [
@@ -39,10 +41,10 @@ const navigation: NavigationMenu[] = [
 ];
 
 const profile: NavigationMenu[] = [
-  {
-    name: '내 정보',
-    host: '/my/profile',
-  },
+  // {
+  //   name: '내 정보',
+  //   host: '/my/profile',
+  // },
 ];
 
 interface LoginLayoutProps extends AuthStateType, AuthDispatchType {};
@@ -52,11 +54,18 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
     children,
     user,
     token,
+    setLogout,
   }
 ) => {
   let { pathname } = useLocation();
+  const history = useHistory();
 
   const curHeader = navigation.find(({ host, name }) => host === pathname);
+
+  const logout = () => {
+    setLogout();
+    history.push('/');
+  }
 
   return (
     <>
@@ -68,12 +77,16 @@ const LoginLayout: React.FC<LoginLayoutProps> = (
               profile={profile}
               pathname={pathname}
               open={open}
+              logout={logout}
+              user={user}
             />
             <NavigationMobile
               navigation={navigation}
               profile={profile}
               pathname={pathname}
               open={open}
+              logout={logout}
+              user={user}
             />
           </>
         )}

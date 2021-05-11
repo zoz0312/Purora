@@ -52,6 +52,7 @@ const auth = createSlice({
       return {
         ...state,
         token,
+        user,
       };
     },
     setLogout: (state) => {

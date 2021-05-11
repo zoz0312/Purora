@@ -54,12 +54,14 @@ const Login: React.FC<LoginProps> = (
       data: {
         success,
         token,
+        user,
       }
     }:any = result;
 
     if (success) {
       setLogin({
         token,
+        user,
       });
     } else {
       alert('아이디 또는 비밀번호가 잘못되었습니다!')

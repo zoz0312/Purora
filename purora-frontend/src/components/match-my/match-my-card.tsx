@@ -156,7 +156,7 @@ const MatchCardComponent: React.FC<MatchMyCardProps> = (
             )}
           </div>
           <div className={'flex flex-col items-center ml-1 md:ml-2'}>
-            <div className={'text-xs md:text-base'}>
+            <div className={'text-2xs md:text-base'}>
               레벨 { champLevel }
             </div>
             <div className={'text-2xs md:text-base'}>

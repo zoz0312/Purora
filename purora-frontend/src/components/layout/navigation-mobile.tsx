@@ -9,8 +9,11 @@ const NavigationMobile: React.FC<NavigationProps> = (
     profile,
     pathname,
     open,
+    logout,
+    user,
   }
 ) => {
+  console.log('user', user)
   return (
     <Disclosure.Panel className="md:hidden">
       <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
@@ -47,8 +50,8 @@ const NavigationMobile: React.FC<NavigationProps> = (
             </svg>
           </div>
           <div className="ml-3">
-            <div className="text-base font-medium leading-none text-white">Tom Cook</div>
-            <div className="text-sm font-medium leading-none text-gray-100">tom@example.com</div>
+            <div className="text-base font-medium leading-none text-white">{ user.nickName }</div>
+            <div className="text-sm font-medium leading-none text-gray-100">{ user.userId }</div>
           </div>
           {/*
             <button className="ml-auto bg-personal-2 flex-shrink-0 p-1 rounded-full text-gray-100 hover:text-white focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-white">
@@ -66,6 +69,10 @@ const NavigationMobile: React.FC<NavigationProps> = (
               className="block px-3 py-2 rounded-md text-base font-medium text-gray-100 hover:text-white hover:bg-personal-2"
             >{name}</Link>
           ))}
+          <button
+            className="w-full text-left px-3 py-2 rounded-md text-base font-medium text-red-600 hover:text-red-200 hover:text-white hover:bg-personal-2"
+            onClick={() => { logout() }}
+          >로그아웃</button>
         </div>
       </div>
     </Disclosure.Panel>

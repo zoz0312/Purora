@@ -27,7 +27,10 @@ const ItemBoxComponent: React.FC<ItemBoxProps> = (
           />
           <ToolTip>
             <div className={'text-xs md:text-sm text-yellow-400'}>{ itemData.name } { itemData.gold.total }G</div>
-            <div className={'text-2xs md:text-xs'}>{ itemData.plaintext }</div>
+            <div
+              className={'text-2xs md:text-xs text-left'}
+              dangerouslySetInnerHTML={ {__html: itemData.description} }
+            />
           </ToolTip>
         </div>
       )}

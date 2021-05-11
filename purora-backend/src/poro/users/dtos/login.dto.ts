@@ -12,4 +12,5 @@ export class LoginInput {
 export class LoginOutput extends CoreOutput {
   @IsString()
   token?: string;
+  user?: any;
 }

@@ -13,6 +13,8 @@ const Navigation: React.FC<NavigationProps> = (
     profile,
     pathname,
     open,
+    logout,
+    user,
   }
 ) => {
   return (
@@ -87,6 +89,12 @@ const Navigation: React.FC<NavigationProps> = (
                       static
                       className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                     >
+                      <Menu.Item>
+                        <div className="ml-3 py-2">
+                          <div className="text-base font-medium leading-none text-gray-600 mb-1">{ user.nickName }</div>
+                          <div className="text-sm font-medium leading-none text-gray-600">{ user.userId }</div>
+                        </div>
+                      </Menu.Item>
                       {profile.map(({ host, name}, profileIdx) => (
                         <Menu.Item key={profileIdx}>
                           {({ active }) => (
@@ -100,6 +108,12 @@ const Navigation: React.FC<NavigationProps> = (
                           )}
                         </Menu.Item>
                       ))}
+                      <Menu.Item>
+                        <button
+                          className={'hover:bg-gray-100 w-full text-left px-4 py-2 text-sm text-red-500'}
+                          onClick={() => { logout() }}
+                        >로그아웃</button>
+                      </Menu.Item>
                     </Menu.Items>
                   </Transition>
                 </>

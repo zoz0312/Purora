@@ -114,7 +114,7 @@ export class UsersService {
       const user = await this.users.findOne({
         userId
       }, {
-        select: ['id', 'userPw']
+        select: ['id', 'userId', 'userPw', 'role', 'nickName']
       });
 
       if (!user) {
@@ -136,6 +136,12 @@ export class UsersService {
       return {
         success: true,
         token,
+        user: {
+          id: user.id,
+          userId: user.userId,
+          role: user.role,
+          nickName: user.nickName,
+        }
       }
     } catch (error) {
       return {
