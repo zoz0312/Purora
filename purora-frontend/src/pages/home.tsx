@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import { Helmet } from 'react-helmet-async';
 import LoginLayout from "@components/layout/login-layout";
 import {$axios} from "@utils/axios";
+import {Tier} from "@utils/constants";
 
 
 const Home: React.FC = (): JSX.Element => {
@@ -88,6 +89,15 @@ const Home: React.FC = (): JSX.Element => {
                     textColor = 'text-green-500';
                   }
 
+                  let myTier = '랭크없음';
+                  for (let key of Object.keys(Tier)) {
+                    if (Tier[key].value < summoner.user.rating) {
+                      myTier = Tier[key].name;
+                    } else {
+                      break;
+                    }
+                  }
+
                   return (
                     <tr key={summoner.user.id}>
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -105,7 +115,7 @@ const Home: React.FC = (): JSX.Element => {
                         { winRate }%
                       </td>
                       <td className={`px-6 py-4 whitespace-nowrap`}>
-                        { summoner.user.rating }
+                        { myTier } ({ summoner.user.rating })
                       </td>
                     </tr>
                   )

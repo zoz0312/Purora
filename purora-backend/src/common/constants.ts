@@ -1,6 +1,10 @@
 export const CONFIG_OPTIONS = `config_options`;
 
 export const Tier = {
+  'UNRANK': {
+    name: 'UNRANK',
+    value: 0,
+  },
   'IRON_IV': {
     name: 'IRON_IV',
     value: 100,
