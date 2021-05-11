@@ -127,7 +127,7 @@ const ModifySummonerPage: React.FC = () => {
       <Helmet>
         <title>소환사 수정하기 | 포로라</title>
       </Helmet>
-      <div className={''}>
+      <div className={'max-w-xl mx-auto'}>
         <SummonerForm
           type={SummonerFormTypes.modify}
           handleSubmit={handleSubmit}
@@ -135,10 +135,10 @@ const ModifySummonerPage: React.FC = () => {
           register={register}
           errors={errors}
         />
-        <div className={'max-w-3xl w-full flex items-center justify-center mt-2'}>
+        <div className={'w-full flex items-center justify-center mt-2'}>
           <button
             type="button"
-            className="w-60 md:w-full h-12 rounded border border-transparent shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 "
+            className="w-full h-12 rounded border border-transparent shadow-sm px-4 py-2 bg-red-500 text-base font-medium text-white hover:bg-red-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 "
             onClick={() => deleteSummoner(summonerId)}
           >
             소환사 삭제하기

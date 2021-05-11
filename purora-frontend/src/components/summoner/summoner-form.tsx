@@ -24,8 +24,8 @@ const SummonerForm: React.FC<SummonerFormProps> = (
 ) => {
 
   return (
-    <div className={'flex flex-col items-center justify-center'}>
-      <div className={'flex items-center flex-col p-5'}>
+    <div className={'flex flex-col items-center justify-center w-full'}>
+      <div className={'flex items-center flex-col p-5 w-full'}>
         <img className={'w-40 h-40 rounded-full'} src={poro}/>
         <h3 className={'text-3xl mb-2 pt-5'}>
           { type === SummonerFormTypes.create && ('소환사 생성하기') }
@@ -34,7 +34,7 @@ const SummonerForm: React.FC<SummonerFormProps> = (
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={'flex flex-col justify-center'}
+        className={'flex flex-col justify-center w-full'}
       >
         <input
           className="p-3 mt-2 outline-none border border-personal border-solid rounded"
