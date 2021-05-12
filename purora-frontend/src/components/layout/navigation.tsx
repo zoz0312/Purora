@@ -3,7 +3,7 @@ import React, {Fragment} from "react";
 import {Link} from "react-router-dom";
 import {Disclosure, Menu, Transition} from "@headlessui/react";
 import {MenuIcon, XIcon} from "@heroicons/react/outline";
-import {NavigationMenu, NavigationProps} from "@components/layout/login-layout";
+import {NavigationProps} from "@components/layout/login-layout";
 import {classNames} from "@utils/functions";
 
 

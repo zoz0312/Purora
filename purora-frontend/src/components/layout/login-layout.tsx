@@ -1,6 +1,6 @@
-import React, {useState} from 'react';
-import {Link, useHistory, useLocation} from "react-router-dom";
-import { Disclosure, Menu, Transition } from '@headlessui/react'
+import React from 'react';
+import {useHistory, useLocation} from "react-router-dom";
+import { Disclosure } from '@headlessui/react'
 import Navigation from "@components/layout/navigation";
 import NavigationMobile from "@components/layout/navigation-mobile";
 import {AuthDispatchType, authMapDispatchToProps, authMapStateToProps, AuthStateType} from "@store/auth";

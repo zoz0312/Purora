@@ -2,7 +2,6 @@ import React, { Fragment, useRef, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { Link } from 'react-router-dom';
 import TokenForm from "@components/modal/token-form";
-import {$axios} from "@utils/axios";
 
 interface MySummonerDetailProps {
   show: boolean;

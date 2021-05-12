@@ -1,5 +1,4 @@
 import {moment} from "@utils/moment";
-import MatchTeamDetail from "@components/match-all/match-team-detail";
 import React, {useState} from "react";
 import {durationParse, findDataById} from "@utils/functions";
 import {CDN_HOST, gameType, gmaeTimeFormat} from "@utils/constants";
