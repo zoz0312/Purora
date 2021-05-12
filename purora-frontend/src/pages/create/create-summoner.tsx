@@ -13,6 +13,7 @@ type FormInputs = {
 
 const CreateSummonerPage: React.FC = () => {
   const history = useHistory();
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const {
     errors,
@@ -23,6 +24,9 @@ const CreateSummonerPage: React.FC = () => {
   });
 
   const onSubmit = async (data: FormInputs) => {
+    if (isLoading) {
+      return;
+    }
     const { summonerName, summonerTier } = data;
 
     if (!summonerName) {
@@ -30,28 +34,36 @@ const CreateSummonerPage: React.FC = () => {
       return;
     }
 
-    const result = await $axios({
-      method: 'post',
-      url: '/users/create-summoner',
-      data: {
-        summonerName,
-        summonerTier,
-      }
-    });
+    setLoading(true);
 
-    const {
-      data: {
-        success,
-        message,
-      }
-    }:any = result;
+    try {
+      const result = await $axios({
+        method: 'post',
+        url: '/users/create-summoner',
+        data: {
+          summonerName,
+          summonerTier,
+        }
+      });
 
-    if (success) {
-      history.push('/my/summoner')
-    } else {
-      if (message) {
-        alert(Array.isArray(message) ? message[0] : message);
+      const {
+        data: {
+          success,
+          message,
+        }
+      }: any = result;
+
+      if (success) {
+        history.push('/my/summoner')
+      } else {
+        if (message) {
+          alert(Array.isArray(message) ? message[0] : message);
+        }
       }
+      setLoading(false);
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+      setLoading(false);
     }
   }
 
@@ -66,6 +78,7 @@ const CreateSummonerPage: React.FC = () => {
         onSubmit={onSubmit}
         register={register}
         errors={errors}
+        isLoading={isLoading}
       />
     </LoginLayout>
   )

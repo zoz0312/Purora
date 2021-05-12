@@ -6,6 +6,7 @@ import {useForm} from "react-hook-form";
 import {useHistory} from "react-router-dom";
 import {$axios} from "@utils/axios";
 import {regexPw, regexMatch} from "@utils/regex";
+import CircleLoading from "@components/loading/circle-loadig";
 
 type FormInputs = {
   nickName: string;
@@ -17,6 +18,7 @@ type FormInputs = {
 const CreateAccount: React.FC = () => {
   const history = useHistory();
   const [isSame, setIsSame] = useState(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const {
     errors,
@@ -27,6 +29,9 @@ const CreateAccount: React.FC = () => {
   });
 
   const onSubmit = async (data: FormInputs) => {
+    if (isLoading) {
+      return;
+    }
     setIsSame(false);
 
     const { nickName, id, password, password2 } = data;
@@ -56,27 +61,35 @@ const CreateAccount: React.FC = () => {
       return;
     }
 
-    const result = await $axios({
-      method: 'post',
-      url: '/users/create-user',
-      data: {
-        nickName,
-        userId: id,
-        userPw: password,
+    setLoading(true);
+
+    try {
+      const result = await $axios({
+        method: 'post',
+        url: '/users/create-user',
+        data: {
+          nickName,
+          userId: id,
+          userPw: password,
+        }
+      });
+
+      const {
+        data: {
+          success,
+          message,
+        }
+      }:any = result;
+
+      alert(Array.isArray(message) ? message[0] : message);
+
+      setLoading(false);
+      if (success) {
+        history.push('/')
       }
-    });
-
-    const {
-      data: {
-        success,
-        message,
-      }
-    }:any = result;
-
-    alert(Array.isArray(message) ? message[0] : message);
-
-    if (success) {
-      history.push('/')
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+      setLoading(false);
     }
   }
 
@@ -85,7 +98,7 @@ const CreateAccount: React.FC = () => {
       <Helmet>
         <title>회원가입 | 포로라</title>
       </Helmet>
-      <div className={'p-10 w-full sm:w-2/4 max-w-xl border border-gray-300 border-solid rounded'}>
+      <div className={'p-10 w-full sm:w-2/4 max-w-xl border border-gray-300 border-solid rounded bg-white'}>
         <div className={'flex items-center flex-col p-5'}>
           <img className={'w-40 h-40 rounded-full'} src={poro}/>
           <h3 className={'text-3xl mb-2 pt-5'}>포로라 회원가입</h3>
@@ -194,7 +207,7 @@ const CreateAccount: React.FC = () => {
           <button
             type="submit"
             className={'w-full h-12 mt-2 btn-personal rounded'}
-          >회원가입</button>
+          ><CircleLoading isLoading={isLoading}>회원가입</CircleLoading></button>
           <Link
             to={'/'}
             className={'text-blue-700 underline cursor-pointer'}

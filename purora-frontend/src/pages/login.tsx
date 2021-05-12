@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import { Helmet } from 'react-helmet-async';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
@@ -7,6 +7,7 @@ import {$axios} from "../utils/axios";
 import {AuthDispatchType, authMapDispatchToProps, authMapStateToProps, AuthStateType} from "@store/auth";
 import {connect} from "react-redux";
 import poro from '../image/poro.jpg';
+import CircleLoading from "@components/loading/circle-loadig";
 
 type FormInputs = {
   id: string;
@@ -20,6 +21,7 @@ const Login: React.FC<LoginProps> = (
     setLogin
   }
 ) => {
+  const [isLoading, setLoading] = useState<boolean>(false);
   const {
     errors,
     register,
@@ -29,6 +31,9 @@ const Login: React.FC<LoginProps> = (
   });
 
   const onSubmit = async (data: FormInputs) => {
+    if (isLoading) {
+      return;
+    }
     const { id, password } = data;
 
     if (!id) {
@@ -41,30 +46,38 @@ const Login: React.FC<LoginProps> = (
       return;
     }
 
-    const result = await $axios({
-      method: 'post',
-      url: '/users/login',
-      data: {
-        userId: id,
-        userPw: password,
-      }
-    });
+    setLoading(true);
 
-    const {
-      data: {
-        success,
-        token,
-        user,
-      }
-    }:any = result;
-
-    if (success) {
-      setLogin({
-        token,
-        user,
+    try {
+      const result = await $axios({
+        method: 'post',
+        url: '/users/login',
+        data: {
+          userId: id,
+          userPw: password,
+        }
       });
-    } else {
-      alert('아이디 또는 비밀번호가 잘못되었습니다!')
+
+      const {
+        data: {
+          success,
+          token,
+          user,
+        }
+      }: any = result;
+
+      if (success) {
+        setLogin({
+          token,
+          user,
+        });
+      } else {
+        alert('아이디 또는 비밀번호가 잘못되었습니다!')
+      }
+      setLoading(false);
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+      setLoading(false);
     }
   }
 
@@ -108,7 +121,11 @@ const Login: React.FC<LoginProps> = (
           <button
             type="submit"
             className={'w-full h-12 mt-2 btn-personal rounded'}
-          >Login</button>
+          >
+            <CircleLoading isLoading={isLoading}>
+              로그인
+            </CircleLoading>
+          </button>
           <Link
             to={'/create/account'}
             className={'text-blue-700 underline cursor-pointer'}

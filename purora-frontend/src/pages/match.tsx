@@ -40,53 +40,56 @@ const MatchPage: React.FC = () => {
   const [offset, setOffset] = useState<number>(getIndex);
 
   const readMatchData = async () => {
-    const { data: {
-      success,
-      error,
-      message,
-      data,
-      totalLength,
-    } }: any = await $axios({
-      method: 'get',
-      url: `/poro/read-match-all?beginIndex=${offset - getIndex}&endIndex=${offset}`,
-    });
-
-    if (success) {
-      const parsed = data.map((item: any) => {
-        item.creation = +item.creation;
-        item.blue = [];
-        item.red = [];
-        item.UsersGameInfo.map((user: any) => {
-          user.gameData = JSON.parse(user.gameData);
-          if (user.gameData.participants.teamId === 100) { // blue
-            item.blue.push(user);
-          }
-          if (user.gameData.participants.teamId === 200) { // red
-            item.red.push(user);
-          }
-        });
-
-        for (let i=0; i<5; i++) {
-          if (!item.blue[i]) {
-            item.blue[i] = null;
-          }
-          if (!item.red[i]) {
-            item.red[i] = null;
-          }
-        }
-        delete(item.UsersGameInfo);
-        return item;
+    try {
+      const { data: {
+        success,
+        error,
+        message,
+        data,
+        totalLength,
+      } }: any = await $axios({
+        method: 'get',
+        url: `/poro/read-match-all?beginIndex=${offset - getIndex}&endIndex=${offset}`,
       });
-      setMatchData((value) => [...value, ...parsed]);
-      setTotalPages(Math.floor(totalLength/getIndex));
-      console.log('matchData', matchData)
-    } else {
-      if (error) {
-        alert(message);
+
+      if (success) {
+        const parsed = data.map((item: any) => {
+          item.creation = +item.creation;
+          item.blue = [];
+          item.red = [];
+          item.UsersGameInfo.map((user: any) => {
+            user.gameData = JSON.parse(user.gameData);
+            if (user.gameData.participants.teamId === 100) { // blue
+              item.blue.push(user);
+            }
+            if (user.gameData.participants.teamId === 200) { // red
+              item.red.push(user);
+            }
+          });
+
+          for (let i = 0; i < 5; i++) {
+            if (!item.blue[i]) {
+              item.blue[i] = null;
+            }
+            if (!item.red[i]) {
+              item.red[i] = null;
+            }
+          }
+          delete (item.UsersGameInfo);
+          return item;
+        });
+        setMatchData((value) => [...value, ...parsed]);
+        setTotalPages(Math.floor(totalLength / getIndex));
+      } else {
+        if (error) {
+          alert(message);
+        }
+        if (message) {
+          alert(message);
+        }
       }
-      if (message) {
-        alert(message);
-      }
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
     }
   }
 
@@ -94,10 +97,10 @@ const MatchPage: React.FC = () => {
     setOffset(page * getIndex);
   }, [page]);
 
-  useEffect(() => {
-    console.log('itemData', itemData);
-    console.log('spellData', spellData)
-  }, [itemData, spellData])
+  // useEffect(() => {
+  //   console.log('itemData', itemData);
+  //   console.log('spellData', spellData)
+  // }, [itemData, spellData])
 
   useEffect(() => {
     readMatchData();

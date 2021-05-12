@@ -1,6 +1,7 @@
 import poro from "@image/poro.jpg";
 import React from "react";
 import {Tier} from "@utils/constants";
+import CircleLoading from "@components/loading/circle-loadig";
 
 export enum SummonerFormTypes {
   create = 'create',
@@ -13,6 +14,7 @@ interface SummonerFormProps {
   onSubmit: Function;
   register: any;
   errors: any;
+  isLoading: boolean;
 };
 
 const SummonerForm: React.FC<SummonerFormProps> = (
@@ -22,6 +24,7 @@ const SummonerForm: React.FC<SummonerFormProps> = (
     onSubmit,
     register,
     errors,
+    isLoading,
   }
 ) => {
 
@@ -36,7 +39,7 @@ const SummonerForm: React.FC<SummonerFormProps> = (
       </div>
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className={'flex flex-col justify-center w-full'}
+        className={'flex flex-col justify-center w-full b'}
       >
         <input
           className="p-3 mt-2 outline-none border border-personal border-solid rounded"
@@ -72,8 +75,10 @@ const SummonerForm: React.FC<SummonerFormProps> = (
           type="submit"
           className={'w-full h-12 mt-2 btn-personal rounded'}
         >
-          { type === SummonerFormTypes.create && ('소환사 추가하기') }
-          { type === SummonerFormTypes.modify && ('소환사 수정하기') }
+          <CircleLoading isLoading={isLoading}>
+            { type === SummonerFormTypes.create && ('소환사 추가하기') }
+            { type === SummonerFormTypes.modify && ('소환사 수정하기') }
+          </CircleLoading>
         </button>
       </form>
     </div>

@@ -12,25 +12,31 @@ const MySummoner: React.FC = () => {
   const [detailData, setDetaildata] = useState({ id: 0});
 
   const getMySummoner = async () => {
-    const { data: {
-      success,
-      error,
-      message,
-      usersSummonerInfo
-    } }: any = await $axios({
-      method: 'get',
-      url: '/users/read-my-summoner',
-    });
+    try {
+      const {
+        data: {
+          success,
+          error,
+          message,
+          usersSummonerInfo
+        }
+      }: any = await $axios({
+        method: 'get',
+        url: '/users/read-my-summoner',
+      });
 
-    if (success) {
-      setSummonerInfo(usersSummonerInfo);
-    } else {
-      if (error) {
-        alert(error);
+      if (success) {
+        setSummonerInfo(usersSummonerInfo);
+      } else {
+        if (error) {
+          alert(error);
+        }
+        if (message) {
+          alert(message);
+        }
       }
-      if (message) {
-        alert(message);
-      }
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
     }
   }
 

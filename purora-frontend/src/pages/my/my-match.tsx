@@ -26,32 +26,38 @@ const MyMatchPage: React.FC = () => {
   const [offset, setOffset] = useState<number>(getIndex);
 
   const readMatchData = async () => {
-    const { data: {
-      success,
-      error,
-      message,
-      data,
-      totalLength,
-    } }: any = await $axios({
-      method: 'get',
-      url: `/poro/read-match-user?beginIndex=${offset - getIndex}&endIndex=${offset}`,
-    });
-
-    if (success) {
-      const parsed = data.map((item: any) => {
-        item.gameData = JSON.parse(item.gameData);
-        return item;
+    try {
+      const {
+        data: {
+          success,
+          error,
+          message,
+          data,
+          totalLength,
+        }
+      }: any = await $axios({
+        method: 'get',
+        url: `/poro/read-match-user?beginIndex=${offset - getIndex}&endIndex=${offset}`,
       });
 
-      setMatchData((value) => [...value, ...parsed]);
-      setTotalPages(Math.floor(totalLength/getIndex));
-    } else {
-      if (error) {
-        alert(message);
+      if (success) {
+        const parsed = data.map((item: any) => {
+          item.gameData = JSON.parse(item.gameData);
+          return item;
+        });
+
+        setMatchData((value) => [...value, ...parsed]);
+        setTotalPages(Math.floor(totalLength / getIndex));
+      } else {
+        if (error) {
+          alert(message);
+        }
+        if (message) {
+          alert(message);
+        }
       }
-      if (message) {
-        alert(message);
-      }
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
     }
   }
 
@@ -59,10 +65,10 @@ const MyMatchPage: React.FC = () => {
     setOffset(page * getIndex);
   }, [page]);
 
-  useEffect(() => {
-    console.log('itemData', itemData);
-    console.log('spellData', spellData)
-  }, [itemData, spellData])
+  // useEffect(() => {
+  //   console.log('itemData', itemData);
+  //   console.log('spellData', spellData)
+  // }, [itemData, spellData])
 
   useEffect(() => {
     readMatchData();

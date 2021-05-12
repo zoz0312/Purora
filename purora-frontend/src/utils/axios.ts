@@ -39,7 +39,7 @@ export const $axios = async ({
       }).then(response => {
         res(response)
       }).catch(error => {
-        console.log('error', error)
+        console.log('error', error);
         rej(error)
       })
     });
