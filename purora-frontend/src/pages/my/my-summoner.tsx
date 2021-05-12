@@ -4,12 +4,14 @@ import { Link } from 'react-router-dom';
 import LoginLayout from "@components/layout/login-layout";
 import {$axios} from "@utils/axios";
 import MySummonerDetail from "@components/modal/my-summoner-detail";
+import CircleLoading from "@components/loading/circle-loadig";
 
 const MySummoner: React.FC = () => {
   const [summonerInfo, setSummonerInfo] = useState([]);
   const hasData = useMemo(() => summonerInfo.length !== 0, [summonerInfo]);
   const [detailModal, setDetailModal] = useState(false);
   const [detailData, setDetaildata] = useState({ id: 0});
+  const [isLoading, setLoading] = useState<boolean>(false);
 
   const getMySummoner = async () => {
     try {
@@ -40,6 +42,45 @@ const MySummoner: React.FC = () => {
     }
   }
 
+  const initalizeMatchData = async (summonerIndex: number) => {
+    if (isLoading) {
+      return;
+    }
+    setLoading(true);
+    try {
+      const {
+        data: {
+          success,
+          error,
+          message,
+        }
+      }: any = await $axios({
+        method: 'post',
+        url: '/poro/initalize-match-data',
+        data: {
+          beginIndex: 0,
+          endIndex: 30,
+          summonerIndex: summonerIndex,
+        }
+      });
+
+      if (success) {
+        alert('성공적으로 갱신되었습니다!');
+      } else {
+        if (error) {
+          alert(error);
+        }
+        if (message) {
+          alert(message);
+        }
+      }
+      setLoading(false);
+    } catch (error) {
+      alert('서버 통신에 문제가 발생하였습니다.');
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     getMySummoner();
   }, []);
@@ -57,20 +98,22 @@ const MySummoner: React.FC = () => {
 
       { hasData && (
         summonerInfo.map((summoner: any, index) => (
-          <div
-            key={summoner.id}
-            className={`flex flex-row shadow-md mt-3 p-5 w-full rounded-xl bg-white cursor-pointer hover:bg-personal-1 hover:text-white transition`}
-            onClick={() => detailButton(index)}
-          >
-            <div className={'flex-grow flex flex-row'}>
-              <div className={'mr-2'}>
-                {index + 1}
+          <div key={summoner.id} className={'flex flex-row mt-3'}>
+            <div
+              className={`flex flex-row shadow-md px-5 py-3 w-full ${summoner.token !== null ? 'rounded-l-xl' : 'rounded-xl' } bg-white cursor-pointer hover:bg-personal-1 hover:text-white transition`}
+              onClick={() => detailButton(index)}
+            >
+              <div className={'flex-grow flex flex-row'}>
+                <div className={'flex-grow flex flex-row items-center'}>
+                  <div className={'mr-2'}>
+                    {index + 1}
+                  </div>
+                  <div className={''}>
+                    {summoner.summonerName}
+                  </div>
+                </div>
               </div>
-              <div className={''}>
-                {summoner.summonerName}
-              </div>
-            </div>
-            {/*<div className={'flex-none w-6 flex justify-center'}>*/}
+              {/*<div className={'flex-none w-6 flex justify-center'}>*/}
               {/*<button className={'focus:outline-none text-red-500 hover:text-red-600'}>*/}
               {/*  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 20 20" fill="currentColor">*/}
               {/*    <path*/}
@@ -79,7 +122,18 @@ const MySummoner: React.FC = () => {
               {/*      clip-rule="evenodd"/>*/}
               {/*  </svg>*/}
               {/*</button>*/}
-            {/*</div>*/}
+              {/*</div>*/}
+            </div>
+            { summoner.token !== null && (
+              <button
+                className={'flex-grow-0 w-40 btn-normal py-1 px-2 text-white rounded-r-xl bg-blue-500 hover:bg-blue-300 focus:outline-none'}
+                onClick={() => { initalizeMatchData(summoner.id) }}
+              >
+                <CircleLoading isLoading={isLoading}>
+                  전적갱신하기
+                </CircleLoading>
+              </button>
+            )}
           </div>
         ))
       )}
