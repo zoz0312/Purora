@@ -24,7 +24,6 @@ export class RiotCrawlerService {
       .build();
     try {
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');
-      await driver.manage().window().maximize();
       await driver.wait(until.elementLocated(By.linkText("로그인")));
       await driver.findElement(By.linkText("로그인")).click();
       // const loginPageButton = await driver.wait(until.elementLocated(By.className('riotbar-account-action')), 10000);
