@@ -12,7 +12,7 @@ interface MySummonerDetailProps {
     token?: string;
     lastMatchUpdateAt?: Date;
   };
-  getMySummoner: Function;
+  getMySummoner: () => void;
 }
 
 const MySummonerDetail: React.FC<MySummonerDetailProps> = (
@@ -94,6 +94,7 @@ const MySummonerDetail: React.FC<MySummonerDetailProps> = (
                             <td colSpan={2}>
                               <TokenForm
                                 summonerId={detailData.id}
+                                getMySummoner={getMySummoner}
                               />
                             </td>
                           </tr>

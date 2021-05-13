@@ -5,6 +5,7 @@ import CircleLoading from "@components/loading/circle-loadig";
 
 interface TokenFormProps {
   summonerId?: number;
+  getMySummoner: () => void;
 }
 type FormInputs = {
   riotId: string;
@@ -14,6 +15,7 @@ type FormInputs = {
 const TokenForm: React.FC<TokenFormProps> = (
   {
     summonerId,
+    getMySummoner,
   }
 ) => {
   const {
@@ -71,6 +73,7 @@ const TokenForm: React.FC<TokenFormProps> = (
 
       if (success) {
         alert('토큰이 갱신되었습니다!');
+        getMySummoner();
       } else {
         if (message) {
           alert(message);
