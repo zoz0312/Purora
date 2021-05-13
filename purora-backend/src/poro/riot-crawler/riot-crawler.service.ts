@@ -1,8 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { Builder, By, Key, until } from 'selenium-webdriver';
+import { Options } from 'selenium-webdriver/chrome';
 import { GetUserCustomMatchInput, GetUserCustomMatchOutput } from './dtos/get-match.dto';
 import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
+
+const option = new Options()
+  .headless()
+  .addArguments(
+    "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
+  );
 
 @Injectable()
 export class RiotCrawlerService {
@@ -10,22 +17,26 @@ export class RiotCrawlerService {
     userId,
     userPw,
   }: GetTokenInput): Promise<GetTokenOutput> {
-    const driver = await new Builder().forBrowser('chrome').build();
+
+    const driver = await new Builder()
+      .forBrowser('chrome')
+      .setChromeOptions(option)
+      .build();
     try {
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');
-
-      const loginPageButton = await driver.wait(until.elementLocated(By.className('riotbar-account-action')), 1000);
-
-      loginPageButton.click();
-
-      const userName = await driver.wait(until.elementLocated(By.name('username')), 1000);
-      const password = await driver.wait(until.elementLocated(By.name('password')), 1000);
+      await driver.manage().window().maximize();
+      await driver.wait(until.elementLocated(By.linkText("로그인")));
+      await driver.findElement(By.linkText("로그인")).click();
+      // const loginPageButton = await driver.wait(until.elementLocated(By.className('riotbar-account-action')), 10000);
+      // loginPageButton.click();
+      const userName = await driver.wait(until.elementLocated(By.name('username')), 10000);
+      const password = await driver.wait(until.elementLocated(By.name('password')), 10000);
       userName.sendKeys(userId);
       password.sendKeys(userPw);
-      const loginButton = await driver.wait(until.elementLocated(By.className('mobile-button')), 1000);
+      const loginButton = await driver.wait(until.elementLocated(By.className('mobile-button')), 10000);
       await loginButton.click();
 
-      await sleep(4000);
+      await driver.wait(until.elementLocated(By.className('riotbar-account-action')), 10000);
       const cookies = await driver.manage().getCookies();
 
       const getKeyList = [
@@ -59,6 +70,7 @@ export class RiotCrawlerService {
         keyList: userCookieInfo,
       };
     } catch (error) {
+      console.log('error', error)
       return {
         error
       }
