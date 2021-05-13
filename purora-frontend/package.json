@@ -35,13 +35,13 @@
     "web-vitals": "^1.1.1"
   },
   "scripts": {
-    "start": "npm run tailwind:build && craco start",
+    "start": "cross-env NODE_ENV=devlopment npm run tailwind:build && craco start",
     "build": "npm run tailwind:devbuild && CI=false craco build",
     "build:prod": "npm run tailwind:prodbuild && craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
     "tailwind:prodbuild": "cross-env NODE_ENV=production npm run tailwind:build",
-    "tailwind:devbuild": "cross-env NODE_ENV=dev npm run tailwind:build",
+    "tailwind:devbuild": "cross-env NODE_ENV=devlopment npm run tailwind:build",
     "tailwind:build": "tailwind build ./src/style/tailwind.css -o ./src/style/styles.css",
     "predeploy": "npm run build:prod",
     "deploy": "gh-pages -d build"

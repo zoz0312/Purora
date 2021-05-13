@@ -58,19 +58,21 @@ const SummonerForm: React.FC<SummonerFormProps> = (
         { errors.summonerName?.message && (
           <>{ errors.summonerName?.message }</>
         )}
-        <select
-          className={'p-3 mt-2 outline-none border border-personal border-solid rounded'}
-          ref={register({
-            required: '티어는 필수값 입니다.',
-          })}
-          name="summonerTier"
-        >
-          {Object.keys(Tier).map(key => (
-            <option key={key} value={key}>
-              { key }
-            </option>
-          ))}
-        </select>
+        {  type === SummonerFormTypes.create && (
+          <select
+            className={'p-3 mt-2 outline-none border border-personal border-solid rounded'}
+            ref={register({
+              required: '티어는 필수값 입니다.',
+            })}
+            name="summonerTier"
+          >
+            {Object.keys(Tier).map(key => (
+              <option key={key} value={key}>
+                { key }
+              </option>
+            ))}
+          </select>
+        )}
         <button
           type="submit"
           className={'w-full h-12 mt-2 btn-personal rounded'}

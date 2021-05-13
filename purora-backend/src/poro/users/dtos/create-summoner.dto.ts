@@ -2,10 +2,10 @@ import { IsString, MinLength } from "class-validator";
 import { CoreOutput } from "src/common/dtos/output.dto";
 
 export class CreateSummonerInput {
-  @IsString()
+  // @IsString()
   summonerName: string;
 
-  @IsString()
+  // @IsString()
   summonerTier: string;
 }
 

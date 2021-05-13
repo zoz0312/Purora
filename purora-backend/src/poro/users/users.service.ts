@@ -313,7 +313,7 @@ export class UsersService {
     }
   }
 
-    async modifySummoner(
+  async modifySummoner(
     authUser: Users,
     { summonerId, summonerName }: ModifySummonerInput,
   ): Promise<ModifySummonerOutput> {
