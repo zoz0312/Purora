@@ -27,6 +27,7 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
+				PORT: Joi.string(),
         NODE_ENV: Joi.string().valid('dev', 'production', 'test').required(),
         DB_HOST: Joi.string(),
         DB_PORT: Joi.string(),
