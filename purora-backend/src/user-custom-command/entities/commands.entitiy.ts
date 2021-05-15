@@ -1,5 +1,5 @@
 import { type } from "os";
-import { CoreEntity } from "src/common/entities/core.entities";
+import {CommandCoreEntity} from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { Keyword } from "./keyword.entitiy";
 
@@ -8,7 +8,7 @@ import { Keyword } from "./keyword.entitiy";
   Commands: 키워드에 맞는 outputText를 보내기 위한 Table
 */
 @Entity()
-export class Commands extends CoreEntity {
+export class Commands extends CommandCoreEntity {
   @Column({ type: 'longtext' })
   outputText: string;
 

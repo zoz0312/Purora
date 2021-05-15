@@ -1,4 +1,4 @@
-import { CoreEntity } from "src/common/entities/core.entities";
+import {CommandCoreEntity, CoreEntity} from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, OneToMany, RelationId } from "typeorm";
 import { Commands } from "./commands.entitiy";
 import { Rooms } from "./rooms.entitiy";
@@ -8,7 +8,7 @@ import { Rooms } from "./rooms.entitiy";
   Keyword: 공통된 Keyword를 위한 Table
 */
 @Entity()
-export class Keyword extends CoreEntity {
+export class Keyword extends CommandCoreEntity {
   @Column()
   keyword: string;
 

@@ -4,6 +4,20 @@ import { CreateDateColumn, DeleteDateColumn, PrimaryGeneratedColumn, UpdateDateC
   @author AJu (zoz0312)
   DB 컬럼의 공통 부분
 */
+export class CommandCoreEntity {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
+
+  @DeleteDateColumn()
+  deletedAt: Date;
+}
+
 export class CoreEntity {
   @PrimaryGeneratedColumn()
   id: number;

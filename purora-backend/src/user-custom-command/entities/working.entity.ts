@@ -1,4 +1,4 @@
-import { CoreEntity } from "src/common/entities/core.entities";
+import {CommandCoreEntity, CoreEntity} from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { IsEnum } from 'class-validator';
 
@@ -13,7 +13,7 @@ export enum Status {
   룽지님 작업자 상태
 */
 @Entity()
-export class Working extends CoreEntity {
+export class Working extends CommandCoreEntity {
   @Column()
   userName: string;
 

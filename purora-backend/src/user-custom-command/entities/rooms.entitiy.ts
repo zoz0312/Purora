@@ -1,5 +1,5 @@
 import { type } from "os";
-import { CoreEntity } from "src/common/entities/core.entities";
+import {CommandCoreEntity, CoreEntity} from "src/common/entities/core.entities";
 import { Column, Entity, ManyToOne, OneToMany, PrimaryGeneratedColumn, RelationId } from "typeorm";
 import { Keyword } from "./keyword.entitiy";
 
@@ -8,7 +8,7 @@ import { Keyword } from "./keyword.entitiy";
   Commands: 방별로 구분 짓기 위한 Entitiy
 */
 @Entity()
-export class Rooms extends CoreEntity {
+export class Rooms extends CommandCoreEntity {
   // @Column()
   @OneToMany(
     type => Keyword,
