@@ -6,10 +6,11 @@ import { GetUserCustomMatchInput, GetUserCustomMatchOutput } from './dtos/get-ma
 import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
 
 const option = new Options()
-  .headless()
-  .addArguments(
-    "user-agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.100 Safari/537.36"
-  );
+	.addArguments("User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36")
+	.addArguments("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+	.addArguments("--headless")
+	.addArguments("--no-sandbox")
+	.addArguments("--disable-dev-shm-usage");
 
 @Injectable()
 export class RiotCrawlerService {
@@ -17,12 +18,12 @@ export class RiotCrawlerService {
     userId,
     userPw,
   }: GetTokenInput): Promise<GetTokenOutput> {
-
     const driver = await new Builder()
       .forBrowser('chrome')
-      .setChromeOptions(option)
+		  .setChromeOptions(option)
       .build();
     try {
+			await driver.manage().window().maximize();
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');
       await driver.wait(until.elementLocated(By.linkText("로그인")));
       await driver.findElement(By.linkText("로그인")).click();
