@@ -307,10 +307,8 @@ export class PoroService {
         let winStatus;
         if (win) {
           winStatus = teamId === 100 ? 1 : 2;
-          score += 15;
         } else {
           winStatus = teamId === 100 ? 2 : 1;
-          score -= 15;
         }
 
         return {
