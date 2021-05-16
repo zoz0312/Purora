@@ -36,7 +36,7 @@
   },
   "scripts": {
     "start": "cross-env NODE_ENV=devlopment npm run tailwind:build && craco start",
-    "build": "npm run tailwind:devbuild && CI=false craco build",
+    "build": "npm run tailwind:devbuild && craco build",
     "build:prod": "npm run tailwind:prodbuild && craco build",
     "test": "craco test",
     "eject": "react-scripts eject",
