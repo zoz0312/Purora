@@ -1,15 +1,31 @@
-# This is a basic workflow that is manually triggered
+name: MAIN CI
 
-name: CI
-
-on: [push]
-
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+on:
+  push:
+    branches:
+     - main
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-18.04
   
     steps:
-    - uses: actions/checkout@v1
-    - name: Run a on-line script
-      run: echo "Hello ${{ github.event.inputs.name }}"
+    - name: git clone #
+      uses: actions/checkout@v2
+      
+    - name: npm install #
+      run: |
+        cd purora-frontend \
+        npm install
+        
+    - name: build #
+      run: npm run build:prod
+      
+    - name: deploy
+      env:
+        AWS_ACCESS_KEY_ID: '${{ secrets.AWS_ACCESS_KEY_ID }}'
+        AWS_SECRET_ACCESS_KEY: '${{ secrets.AWS_SECRET_ACCESS_KEY }}'
+      run: |
+        aws s3 cp \
+        --recursive \
+        --region ap-northeast-2 \
+        dist s3://purora
