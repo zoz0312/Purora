@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/Purora/static/css/main.a18f1441.chunk.css",
-    "main.js": "/Purora/static/js/main.ecc3b295.chunk.js",
-    "main.js.map": "/Purora/static/js/main.ecc3b295.chunk.js.map",
+    "main.js": "/Purora/static/js/main.6f805648.chunk.js",
+    "main.js.map": "/Purora/static/js/main.6f805648.chunk.js.map",
     "runtime-main.js": "/Purora/static/js/runtime-main.f2974c10.js",
     "runtime-main.js.map": "/Purora/static/js/runtime-main.f2974c10.js.map",
     "static/js/2.ec8e2011.chunk.js": "/Purora/static/js/2.ec8e2011.chunk.js",
@@ -16,6 +16,6 @@
     "static/js/runtime-main.f2974c10.js",
     "static/js/2.ec8e2011.chunk.js",
     "static/css/main.a18f1441.chunk.css",
-    "static/js/main.ecc3b295.chunk.js"
+    "static/js/main.6f805648.chunk.js"
   ]
 }
