@@ -52,7 +52,7 @@ const Routers: React.FC<RoutersProps> = (
 
   // LogIn
   return (
-    <Router>
+    <Router basename='/Purora'>
       <Switch>
         { commonRoutes.map(route => (
           <Route exact path={route.path} key={route.path} component={route.component} />
