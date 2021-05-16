@@ -37,7 +37,7 @@ const Routers: React.FC<RoutersProps> = (
   }
 ): JSX.Element => {
   return (
-    <Router>
+    <Router basename='/Purora'>
       <Switch>
         {(!user || !token) ? ( /* LogOut */
           logoutRouters.map(route => (
