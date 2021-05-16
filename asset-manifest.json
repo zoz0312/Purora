@@ -1,21 +1,21 @@
 {
   "files": {
-    "main.css": "/Purora/static/css/main.26462fed.chunk.css",
-    "main.js": "/Purora/static/js/main.4b727708.chunk.js",
-    "main.js.map": "/Purora/static/js/main.4b727708.chunk.js.map",
+    "main.css": "/Purora/static/css/main.a18f1441.chunk.css",
+    "main.js": "/Purora/static/js/main.a7f17e77.chunk.js",
+    "main.js.map": "/Purora/static/js/main.a7f17e77.chunk.js.map",
     "runtime-main.js": "/Purora/static/js/runtime-main.f2974c10.js",
     "runtime-main.js.map": "/Purora/static/js/runtime-main.f2974c10.js.map",
-    "static/js/2.e2f0d9b9.chunk.js": "/Purora/static/js/2.e2f0d9b9.chunk.js",
-    "static/js/2.e2f0d9b9.chunk.js.map": "/Purora/static/js/2.e2f0d9b9.chunk.js.map",
+    "static/js/2.ec8e2011.chunk.js": "/Purora/static/js/2.ec8e2011.chunk.js",
+    "static/js/2.ec8e2011.chunk.js.map": "/Purora/static/js/2.ec8e2011.chunk.js.map",
     "index.html": "/Purora/index.html",
-    "static/css/main.26462fed.chunk.css.map": "/Purora/static/css/main.26462fed.chunk.css.map",
-    "static/js/2.e2f0d9b9.chunk.js.LICENSE.txt": "/Purora/static/js/2.e2f0d9b9.chunk.js.LICENSE.txt",
+    "static/css/main.a18f1441.chunk.css.map": "/Purora/static/css/main.a18f1441.chunk.css.map",
+    "static/js/2.ec8e2011.chunk.js.LICENSE.txt": "/Purora/static/js/2.ec8e2011.chunk.js.LICENSE.txt",
     "static/media/poro.b42d8fb6.jpg": "/Purora/static/media/poro.b42d8fb6.jpg"
   },
   "entrypoints": [
     "static/js/runtime-main.f2974c10.js",
-    "static/js/2.e2f0d9b9.chunk.js",
-    "static/css/main.26462fed.chunk.css",
-    "static/js/main.4b727708.chunk.js"
+    "static/js/2.ec8e2011.chunk.js",
+    "static/css/main.a18f1441.chunk.css",
+    "static/js/main.a7f17e77.chunk.js"
   ]
 }
