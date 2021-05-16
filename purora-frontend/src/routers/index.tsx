@@ -36,27 +36,18 @@ const Routers: React.FC<RoutersProps> = (
     token,
   }
 ): JSX.Element => {
-  // LogOut
-  if (!user || !token) {
-    return (
-			<Router basename='/Purora'>
-        <Switch>
-          { logoutRouters.map(route => (
-            <Route exact path={route.path} key={route.path} component={route.component} />
-          ))}
-          <Route component={NotFound}/>
-        </Switch>
-      </Router>
-    )
-  }
-
-  // LogIn
   return (
     <Router basename='/Purora'>
       <Switch>
-        { commonRoutes.map(route => (
-          <Route exact path={route.path} key={route.path} component={route.component} />
-        ))}
+        {(!user || !token) ? ( /* LogOut */
+          logoutRouters.map(route => (
+            <Route exact path={route.path} key={route.path} component={route.component}/>
+          ))
+        ) : ( /* LogIn */
+          commonRoutes.map(route => (
+            <Route exact path={route.path} key={route.path} component={route.component}/>
+          ))
+        )}
         <Route component={NotFound}/>
       </Switch>
     </Router>
