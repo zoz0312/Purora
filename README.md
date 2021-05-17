@@ -19,7 +19,7 @@
 - [Purora Backend](./purora-backend)
 
 
-## Purora Client
+## Purora FrontEnd
 
 ### 개요
 - 포로라 서비스의 FrontEnd
