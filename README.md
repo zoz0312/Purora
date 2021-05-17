@@ -9,12 +9,21 @@
 
 ### 개요
 
-- Mobile에서 카카오톡 알림 중 명령어에 응답합니다.
+- 메신저봇 R에 삽입되는 소스코드
+- [Purora Client](./purora-client)
 
 ## Purora Backend
 
 ### 개요
-- Mobile에서 전달받은 내용을 처리, 저장, 결과값 반환 등 역할을 수행합니다.
+- 포로라 서비스의 BackEnd
+- [Purora Backend](./purora-backend)
+
+
+## Purora Client
+
+### 개요
+- 포로라 서비스의 FrontEnd
+- [Purora FrontEnd](./purora-frontend)
 
 ### docker
  - docker-compose.forgit.yml 파일을 수정하여 실서버에 사용
