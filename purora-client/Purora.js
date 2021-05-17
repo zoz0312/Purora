@@ -12,15 +12,14 @@ const scriptName = "Purora.js";
  */
 function response (room, msg, sender, isGroupChat, replier, imageDB, packageName) {
 
-    const resourceUrl = "http://zoz0312.com:8822"; // test port: 8000
+    const resourceUrl = "http://192.168.219.200"; // test port: 8000
     const myRoom = [
-        '롤키웨이(LoLky Way)',
+        '',
     ];
 
     if (!myRoom.includes(room)) {
         return;
     }
-
     let svcCd = "/user-custom-command";
 
     const flag = msg.trim()[0] === "/";
@@ -28,19 +27,25 @@ function response (room, msg, sender, isGroupChat, replier, imageDB, packageName
         svcCd = "/command-manager";
     }
 
-    const res = org.jsoup.Jsoup.connect(resourceUrl + svcCd)
-        .data('room', room)
-        .data('msg', msg.trim())
-        .data('sender', sender.split('/')[0])
-        .data('isGroupChat', isGroupChat)
-        .ignoreHttpErrors(true)
-        .ignoreContentType(true)
-        .post()
-        .wholeText();
+    try {
+        const res = org.jsoup.Jsoup.connect(resourceUrl + svcCd)
+          .data('room', room)
+          .data('msg', msg.trim())
+          .data('sender', sender.split('/')[0])
+          .data('isGroupChat', isGroupChat)
+          .ignoreHttpErrors(true)
+          .ignoreContentType(true)
+          .post()
+          .wholeText();
 
-    const json = JSON.parse(res);
-    if (json.success || flag) {
-        replier.reply(json.message);
+        const json = JSON.parse(res);
+        if (json.success || flag) {
+            replier.reply(json.message);
+        }
+    } catch (error) {
+        if (flag) {
+            replier.reply('서버와 통신이 안됩니다\n잠시만 기다려주세요 ㅠ.ㅜ');
+        }
     }
 }
 
