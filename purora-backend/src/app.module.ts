@@ -35,6 +35,7 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
         DB_USER: Joi.string(),
         DB_PASSSWORD: Joi.string(),
         PRIVATE_KEY: Joi.string().required(),
+        SELENIUM_SERVER: Joi.string().required(),
       }),
     }),
     CommandManagerModule,
@@ -64,7 +65,9 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
     JwtModule.forRoot({
       privateKey: process.env.PRIVATE_KEY
     }),
-    PoroModule,
+    PoroModule.forRoot({
+      seleniumServer: process.env.SELENIUM_SERVER
+    }),
   ],
   controllers: [],
   providers: [],

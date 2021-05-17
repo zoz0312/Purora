@@ -1,27 +1,36 @@
-import { Injectable } from '@nestjs/common';
+import {Inject, Injectable} from '@nestjs/common';
 import axios from 'axios';
-import { Builder, By, Key, until } from 'selenium-webdriver';
+import { Builder, By, until } from 'selenium-webdriver';
 import { Options } from 'selenium-webdriver/chrome';
 import { GetUserCustomMatchInput, GetUserCustomMatchOutput } from './dtos/get-match.dto';
 import { GetTokenInput, GetTokenOutput } from './dtos/get-token.dto';
+import {PORO_CONFIG_OPTIONS} from "../../common/constants";
+import {PorotModuleOptions} from "../poro.module";
 
 const option = new Options()
-	.addArguments("User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36")
-	.addArguments("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
-	.addArguments("--headless")
-	.addArguments("--no-sandbox")
-	.addArguments("--disable-dev-shm-usage");
+  .addArguments("User-Agent=Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.113 Safari/537.36")
+  .addArguments("Accept-Language=ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7")
+  .addArguments("--headless")
+  .addArguments("--no-sandbox")
+  .addArguments("--disable-dev-shm-usage");
 
 @Injectable()
 export class RiotCrawlerService {
+  constructor(
+    @Inject(PORO_CONFIG_OPTIONS)
+    private readonly options: PorotModuleOptions,
+  ) {}
+
   async getToken({
     userId,
     userPw,
   }: GetTokenInput): Promise<GetTokenOutput> {
     const driver = await new Builder()
       .forBrowser('chrome')
+      .usingServer(`${this.options.seleniumServer}/wd/hub`)
 		  .setChromeOptions(option)
       .build();
+
     try {
 			await driver.manage().window().maximize();
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');

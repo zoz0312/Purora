@@ -1,4 +1,5 @@
 export const CONFIG_OPTIONS = `config_options`;
+export const PORO_CONFIG_OPTIONS = `poro_config_options`;
 
 export const Tier = {
   'UNRANK': {

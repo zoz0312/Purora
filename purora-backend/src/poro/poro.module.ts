@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import {DynamicModule, Module} from '@nestjs/common';
 import { UsersModule } from './users/users.module';
 import { PoroController } from './poro.controller';
 import { PoroService } from './poro.service';
@@ -12,21 +12,32 @@ import { UsersGameInfoRepotitory } from './users/repositories/users-game-info.re
 import { UsersSummonerInfoRepository } from './users/repositories/users-summoner-info.repository';
 import { AdminModule } from './admin/admin.module';
 
-@Module({
-  imports: [
-    TypeOrmModule.forFeature([
-      UsersRepository,
-      GameInfoRepotitory,
-      UsersGameInfoRepotitory,
-      UsersSummonerInfoRepository,
-    ]),
-    UsersModule,
-    JwtModule,
-    AuthModule,
-    RiotCrawlerModule,
-    AdminModule,
-  ],
-  controllers: [PoroController],
-  providers: [PoroService],
-})
-export class PoroModule {}
+export interface PorotModuleOptions {
+  seleniumServer: string;
+}
+
+@Module({})
+export class PoroModule {
+  static forRoot(options: PorotModuleOptions): DynamicModule {
+    return {
+      module: PoroModule,
+      imports: [
+        TypeOrmModule.forFeature([
+          UsersRepository,
+          GameInfoRepotitory,
+          UsersGameInfoRepotitory,
+          UsersSummonerInfoRepository,
+        ]),
+        UsersModule,
+        JwtModule,
+        AuthModule,
+        RiotCrawlerModule.forRoot({
+          seleniumServer: options.seleniumServer,
+        }),
+        AdminModule,
+      ],
+      controllers: [PoroController],
+      providers: [PoroService],
+    }
+  }
+}
