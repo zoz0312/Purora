@@ -25,13 +25,13 @@ export class RiotCrawlerService {
     userId,
     userPw,
   }: GetTokenInput): Promise<GetTokenOutput> {
-		let driver;
+    const driver = await new Builder()
+      .forBrowser('chrome')
+      .usingServer(`${this.options.seleniumServer}/wd/hub`)
+		  .setChromeOptions(option)
+      .build();
+
     try {
-			 driver = await new Builder()
-				.forBrowser('chrome')
-				.usingServer(`${this.options.seleniumServer}/wd/hub`)
-				.setChromeOptions(option)
-				.build();
 			await driver.manage().window().maximize();
       await driver.get('https://matchhistory.kr.leagueoflegends.com/ko/#page/landing-page');
       await driver.wait(until.elementLocated(By.linkText("로그인")));
@@ -44,6 +44,14 @@ export class RiotCrawlerService {
       password.sendKeys(userPw);
       const loginButton = await driver.wait(until.elementLocated(By.className('mobile-button')), 20000);
       await loginButton.click();
+
+      // const message = ;
+      // console.log('message', await driver.wait(until.elementLocated(By.className('status-message')), 2000))
+      // if (message) {
+      //   throw new HttpException(`아이디 또는 비밀번호가 잘못되었습니다.`,
+      //     HttpStatus.NOT_FOUND)
+      // }
+
 
       await driver.wait(until.elementLocated(By.className('riotbar-account-action')), 20000);
       const cookies = await driver.manage().getCookies();
@@ -79,12 +87,12 @@ export class RiotCrawlerService {
         keyList: userCookieInfo,
       };
     } catch (error) {
+      console.log('error', error)
       return {
-				error: `${error}`,
+        error
       }
     } finally {
-			if (driver)
-	      await driver.quit();
+      await driver.quit();
     }
   }
 

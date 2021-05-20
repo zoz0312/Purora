@@ -11,10 +11,6 @@ import { translateParty2String } from '../command-manager.controller';
 */
 @Injectable()
 export class PartyUserManager {
-  constructor (
-  ) {
-  }
-
   // Call mainService by controller
   mainService (
     chatBotInput :ChatBotInput,

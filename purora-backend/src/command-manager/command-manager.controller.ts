@@ -92,12 +92,12 @@ export class CommandManagerController {
   /*
     매일 정각에 파티 초기화
   */
-  // @Cron('* * 0 * * *')
-  // dailyPartyDefine() {
-  //   Object.keys(party).map(room => {
-  //     delete party[room];
-  //   });
-  // }
+  @Cron('* * 0 * * *')
+  dailyPartyDefine() {
+    Object.keys(party).map(room => {
+      delete party[room];
+    });
+  }
 }
 
 /*

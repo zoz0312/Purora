@@ -1,23 +1,23 @@
 import { deepCopy } from 'deep-copy-ts';
 
 /* Party List Caching */
-// const curDate = new Date();
-// const rank = new Date(
-//   curDate.getFullYear(),
-//   curDate.getMonth(),
-//   curDate.getDate(),
-//   21,
-//   0,
-//   10
-// );
-// const teamFight = new Date(
-//   curDate.getFullYear(),
-//   curDate.getMonth(),
-//   curDate.getDate(),
-//   22,
-//   0,
-//   10
-// );
+const curDate = new Date();
+export const rank = new Date(
+  curDate.getFullYear(),
+  curDate.getMonth(),
+  curDate.getDate(),
+  22,
+  0,
+  10
+);
+export const teamFight = new Date(
+  curDate.getFullYear(),
+  curDate.getMonth(),
+  curDate.getDate(),
+  22,
+  0,
+  10
+);
 
 /*
   @author AJu (zoz0312)
@@ -33,4 +33,15 @@ export const partyStructure: partyStructureDTO = {
   user: [],
 };
 
-export const party = {};
+export const party = {
+  "롤키웨이(LoLky Way)": {
+    '매일자랭': {
+      ...deepCopy(partyStructure),
+      time: rank,
+    },
+    '매일내전': {
+      ...deepCopy(partyStructure),
+      time: teamFight,
+    },
+  }
+};

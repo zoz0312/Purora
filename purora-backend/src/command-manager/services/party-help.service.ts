@@ -9,8 +9,6 @@ import { commandList } from './commands/index';
 */
 @Injectable()
 export class PartyHelp {
-  constructor() {}
-
   // Call mainService by controller
   mainService (
     name: string,
@@ -47,7 +45,7 @@ export class PartyHelp {
     message += '예시)\n';
     message += '/파티생성 내전 2200\n';
     message += '\n';
-    message += '■ 오로라 학습하기 명령어\n';
+    message += '■ 포로라 학습하기 명령어\n';
     message += '\n';
     message += '/학습하기 {(학습키워드)::(내용)}\n';
     message += '/학습하기 {(학습키워드)::(내용1)|(내용2)|(내용3)...}\n';
@@ -57,7 +55,7 @@ export class PartyHelp {
     message += '예시)\n';
     message += '/학습하기 안녕::안녕하세요\n';
     message += '\n';
-    message += '■ 오로라 특정키워드 명령어\n';
+    message += '■ 포로라 특정키워드 명령어\n';
     message += '\n';
     message += '로또\n';
     message += '연금복권\n';
