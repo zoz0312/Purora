@@ -1,6 +1,6 @@
 import { Controller, Post, Get, Param, Body } from '@nestjs/common';
 import { ChatBotInput, ChatBotOutput } from '../common/dtos/chatBot.dto';
-import { party, partyStructureDTO } from '../cache-party';
+import {party, partyStructure, partyStructureDTO, rank, teamFight} from '../cache-party';
 import { PartyManager } from './services/party-manager.service';
 import {
   PARTY_MANAGER_SERVICE,
@@ -15,6 +15,7 @@ import { CustomUserCommand } from './services/custom-user-command.service';
 import { WorkingListManager } from './services/working-list.service';
 import { PARTY_USER_MANAGER_SERVICE } from 'src/command-manager/command-manager.constants';
 import { CUSTOM_USER_COMMAND_SERVICE } from 'src/command-manager/command-manager.constants';
+import {deepCopy} from "deep-copy-ts";
 
 /*
   @author AJu (zoz0312)
@@ -94,12 +95,24 @@ export class CommandManagerController {
   /*
     매일 정각에 파티 초기화
   */
-  // @Cron('* * 0 * * *')
-  // dailyPartyDefine() {
-  //   Object.keys(party).map(room => {
-  //     delete party[room];
-  //   });
-  // }
+  @Cron('0 0 15 * * *') // 영국시간 = (UTC+9) - 9
+  dailyPartyDefine() {
+    Object.keys(party).map(roomName => {
+      delete party[roomName];
+      if (roomName === '롤키웨이(LoLky Way)') {
+        party[roomName] = {
+          '매일자랭': {
+            ...deepCopy(partyStructure),
+            time: rank,
+          },
+          '매일내전': {
+            ...deepCopy(partyStructure),
+            time: teamFight,
+          },
+        }
+      }
+    });
+  }
 }
 
 /*
