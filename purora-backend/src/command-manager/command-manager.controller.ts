@@ -95,10 +95,13 @@ export class CommandManagerController {
   /*
     매일 정각에 파티 초기화
   */
-  @Cron('0 0 15 * * *') // 영국시간 = (UTC+9) - 9
+  @Cron('0 0 15 * * *',{
+    name: 'dailyPartyDefine',
+    timeZone: 'Europe/Paris',
+  }) // 영국시간 = (UTC+9) - 9
   dailyPartyDefine() {
     Object.keys(party).map(roomName => {
-      delete party[roomName];
+      // delete party[roomName];
       if (roomName === '롤키웨이(LoLky Way)') {
         party[roomName] = {
           '매일자랭': {
