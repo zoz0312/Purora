@@ -100,21 +100,16 @@ export class CommandManagerController {
     timeZone: 'Europe/Paris',
   }) // 영국시간 = (UTC+9) - 9
   dailyPartyDefine() {
-    Object.keys(party).map(roomName => {
-      // delete party[roomName];
-      if (roomName === '롤키웨이(LoLky Way)') {
-        party[roomName] = {
-          '매일자랭': {
-            ...deepCopy(partyStructure),
-            time: rank,
-          },
-          '매일내전': {
-            ...deepCopy(partyStructure),
-            time: teamFight,
-          },
-        }
-      }
-    });
+    party['롤키웨이(LoLky Way)'] = {
+      '매일자랭': {
+      ...deepCopy(partyStructure),
+          time: rank,
+      },
+      '매일내전': {
+      ...deepCopy(partyStructure),
+          time: teamFight,
+      },
+    }
   }
 }
 
