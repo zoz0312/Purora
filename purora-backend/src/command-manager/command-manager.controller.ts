@@ -105,11 +105,11 @@ export class CommandManagerController {
       party['롤키웨이(LoLky Way)'] = {
         '매일자랭': {
           ...deepCopy(partyStructure),
-          time: rank,
+          time: rank(),
         },
         '매일내전': {
           ...deepCopy(partyStructure),
-          time: teamFight,
+          time: teamFight(),
         },
       }
     }
