@@ -1,8 +1,8 @@
 import { deepCopy } from 'deep-copy-ts';
 
 /* Party List Caching */
-const curDate = new Date();
 export const rank = () => {
+  const curDate = new Date();
   return new Date(
     curDate.getFullYear(),
     curDate.getMonth(),
@@ -13,6 +13,7 @@ export const rank = () => {
   );
 }
 export const teamFight = () => {
+  const curDate = new Date();
   return new Date(
     curDate.getFullYear(),
     curDate.getMonth(),
