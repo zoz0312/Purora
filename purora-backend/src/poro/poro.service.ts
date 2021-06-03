@@ -28,58 +28,65 @@ export class PoroService {
     user: Users,
     getRiotTokenInput: GetRiotTokenInput
   ): Promise<GetRiotTokenOutput> {
-    const { userId, userPw, summonerId } = getRiotTokenInput;
-    if (!userId || !userPw) {
+    try {
+      const { userId, userPw, summonerId } = getRiotTokenInput;
+      if (!userId || !userPw) {
+        return {
+          success: false,
+          message: `ID또는 PW를 입력해주세요!`,
+        }
+      }
+
+      const summoner = await this.usersSummonerInfo.findById({
+        summonerId,
+        user,
+      });
+
+      if (!summoner) {
+        return {
+          success: false,
+          message: `권한이 없는 소환사 이름입니다 O_o`,
+        }
+      }
+
+      const { error, keyList } = await this.riotCrawlerService.getToken({
+        userId,
+        userPw,
+      });
+
+      if (error) {
+        return {
+          success: false,
+          error,
+        }
+      }
+
+      if (keyList.length === 0) {
+        return {
+          success: false,
+          message: `아이디 또는 비밀번호가 잘못되어 정보를 가져올 수 없습니다 ㅠ.ㅠ`,
+        }
+      }
+
+      const cookie = {
+        'PVPNET_ID_KR': 'pvpId',
+        'id_token': 'token',
+      }
+
+      keyList.map(item => {
+        summoner[cookie[item.name]] = item.value;
+      });
+
+      await this.usersSummonerInfo.save(summoner);
+
+      return {
+        success: true,
+      }
+    } catch (error) {
       return {
         success: false,
-        message: `ID또는 PW를 입력해주세요!`,
+        error
       }
-    }
-
-    const summoner = await this.usersSummonerInfo.findById({
-      summonerId,
-      user,
-    });
-
-    if (!summoner) {
-      return {
-        success: false,
-        message: `권한이 없는 소환사 이름입니다 O_o`,
-      }
-    }
-
-    const { error, keyList } = await this.riotCrawlerService.getToken({
-      userId,
-      userPw,
-    });
-
-    if (error) {
-      return {
-        success: false,
-        error,
-      }
-    }
-
-    if (keyList.length === 0) {
-      return {
-        success: false,
-        message: `아이디 또는 비밀번호가 잘못되어 정보를 가져올 수 없습니다 ㅠ.ㅠ`,
-      }
-    }
-
-    const cookie = {
-      'PVPNET_ID_KR': 'pvpId',
-      'id_token': 'token',
-    }
-
-    keyList.map(item => {
-      summoner[cookie[item.name]] = item.value;
-    });
-
-    await this.usersSummonerInfo.save(summoner);
-
-    return {
-      success: true,
     }
   }
 

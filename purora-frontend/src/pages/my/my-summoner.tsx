@@ -61,7 +61,8 @@ const MySummoner: React.FC = () => {
           beginIndex: 0,
           endIndex: 30,
           summonerIndex: summonerIndex,
-        }
+        },
+        timeout: 30000,
       });
 
       if (success) {

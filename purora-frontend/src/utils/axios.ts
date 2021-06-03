@@ -17,6 +17,7 @@ interface axiosProps {
     | 'unlink' | 'UNLINK';
   data?: object;
   async?: boolean;
+  timeout?: number;
 }
 
 export const $axios = async ({
@@ -24,6 +25,7 @@ export const $axios = async ({
   method,
   data = {},
   async = true,
+  timeout = 10000,
 }: axiosProps) => {
   const headers = {
     'x-jwt': localStorage.getItem(LOCALSTORAGE_TOKEN),
@@ -36,6 +38,7 @@ export const $axios = async ({
         method,
         url: `${hostURL}${url}`,
         data,
+        timeout,
       }).then(response => {
         res(response)
       }).catch(error => {
