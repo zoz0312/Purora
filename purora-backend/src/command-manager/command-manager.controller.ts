@@ -1,6 +1,15 @@
 import { Controller, Post, Get, Param, Body } from '@nestjs/common';
 import { ChatBotInput, ChatBotOutput } from '../common/dtos/chatBot.dto';
-import {party, partyStructure, partyStructureDTO, rank, teamFight} from '../cache-party';
+import {
+  party,
+  partyStructure,
+  partyStructureDTO,
+  partyType,
+  PartyUserDTO,
+  rank,
+  rankPosition,
+  teamFight
+} from '../cache-party';
 import { PartyManager } from './services/party-manager.service';
 import {
   PARTY_MANAGER_SERVICE,
@@ -106,12 +115,21 @@ export class CommandManagerController {
         '매일자랭': {
           ...deepCopy(partyStructure),
           time: rank(),
+          type: partyType.NONE,
         },
         '매일내전': {
           ...deepCopy(partyStructure),
           time: teamFight(),
+          type: partyType.NONE,
         },
-      }
+      };
+      party['숨고 (정예톡)'] = {
+        '자랭포지션': {
+          ...deepCopy(partyStructure),
+          time: rankPosition(),
+          type: partyType.POSITION,
+        }
+      };
     }
   }
 }
@@ -143,9 +161,19 @@ export const translateParty2String = ({
     if (partyObject.user.length === 0) {
       str += `--- 없음 ---\n`;
     } else {
-      partyObject.user.map((user, index) => {
-        str += `${index+1}. ${user}\n`;
-      });
+      if (partyObject.type === partyType.NONE) {
+        partyObject.user.map((user: string | PartyUserDTO, index) => {
+          if (typeof user === 'string') {
+            str += `${index+1}. ${user}\n`;
+          }
+        });
+      } else if (partyObject.type === partyType.POSITION) {
+        partyObject.user.map((user: string | PartyUserDTO) => {
+          if (typeof user === 'object') {
+            str += `${user.position}: ${user.name}\n`;
+          }
+        });
+      }
     }
     return str += '\n'
   }

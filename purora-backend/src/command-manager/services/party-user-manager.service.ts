@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { party } from '../../cache-party';
+import {party, partyType, userPosition} from '../../cache-party';
 import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
 import { trimInput } from '../../common/utils';
 import { ENTER_PARTY, EXIT_PARTY } from '../command-manager.constants';
@@ -29,7 +29,6 @@ export class PartyUserManager {
     }
   }
 
-
   /*
     enterParty
      - 파티에 참여하는 유저
@@ -38,7 +37,9 @@ export class PartyUserManager {
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
     const { room, sender } = chatBotInput;
-    const [_, partyName] = trimInput(chatBotInput);
+    const [_, trimText] = trimInput(chatBotInput);
+    const [partyName, position] = trimText.split('::');
+
     if (!partyName) {
       return {
         success: false,
@@ -77,7 +78,45 @@ export class PartyUserManager {
           message: '파티가 꽉 찼습니다 ㅠ.ㅠ',
         }
       }
-      party[room][partyName].user.push(sender);
+
+      const currentPartyType = party[room][partyName].type;
+      if (currentPartyType === partyType.NONE) {
+        party[room][partyName].user.push(sender);
+      } else if (currentPartyType === partyType.POSITION) {
+        if (!position) {
+          return {
+            success: false,
+            message: '포지션을 입력해주세요 O_x',
+          }
+        }
+
+        if (!userPosition.hasOwnProperty(position)) {
+          return {
+            success: false,
+            message: '존재하지 않는 포지션입니다 X_x',
+          }
+        }
+
+        for (let i=0; i<party[room][partyName].user.length; i++) {
+          if (party[room][partyName].user[i].name === sender) {
+            return {
+              success: false,
+              message: `이미 참여한 파티입니다!`,
+            }
+          }
+          if (party[room][partyName].user[i].position === userPosition[position]) {
+            return {
+              success: false,
+              message: '이미 참여된 포지션입니다 ㅠ_ㅠ',
+            }
+          }
+        }
+
+        party[room][partyName].user.push({
+          name: sender,
+          position: userPosition[position],
+        });
+      }
 
       return {
         success: true,
@@ -117,7 +156,18 @@ export class PartyUserManager {
     }
 
     if (Object.keys(party[room]).includes(partyName)) {
-      const idx = party[room][partyName].user.indexOf(sender);
+      let idx = -1;
+      if (typeof party[room][partyName].user === 'object') {
+        for (let i=0; i<party[room][partyName].user.length; i++) {
+          if (party[room][partyName].user[i].name === sender) {
+            idx = i;
+            break;
+          }
+        }
+      } else {
+        idx = party[room][partyName].user.indexOf(sender);
+      }
+
       if (idx !== -1) {
         party[room][partyName].user.splice(idx, 1);
         return {

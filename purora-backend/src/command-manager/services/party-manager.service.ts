@@ -1,11 +1,17 @@
-import { party, partyStructure } from '../../cache-party';
-import { deepCopy } from 'deep-copy-ts';
-import { translateParty2String } from '../command-manager.controller';
-import { trimInput } from '../../common/utils';
-import { ChatBotInput, ChatBotOutput } from 'src/common/dtos/chatBot.dto';
-import { Injectable } from '@nestjs/common';
-import { CREATE_PARTY, DELETE_PARTY, FIND_PARTY, MODIFY_PARTY_TIME, PARTY_PRINT_JSON } from '../command-manager.constants';
-import { MODIFY_PARTY_NAME } from './../command-manager.constants';
+import {party, partyStructure, partyType} from '../../cache-party';
+import {deepCopy} from 'deep-copy-ts';
+import {translateParty2String} from '../command-manager.controller';
+import {trimInput} from '../../common/utils';
+import {ChatBotInput, ChatBotOutput} from 'src/common/dtos/chatBot.dto';
+import {Injectable} from '@nestjs/common';
+import {
+  CREATE_PARTY,
+  DELETE_PARTY,
+  FIND_PARTY,
+  MODIFY_PARTY_TIME,
+  PARTY_PRINT_JSON
+} from '../command-manager.constants';
+import {MODIFY_PARTY_NAME} from './../command-manager.constants';
 
 /*
   @author AJu (zoz0312)
@@ -155,6 +161,7 @@ export class PartyManager {
     party[room][partyName] = {
       ...deepCopy(partyStructure),
       time: partyDate,
+      type: partyName.includes('포지션') ? partyType.POSITION : partyType.NONE,
     }
 
     return {
