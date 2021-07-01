@@ -157,15 +157,15 @@ export class PartyUserManager {
 
     if (Object.keys(party[room]).includes(partyName)) {
       let idx = -1;
-      if (typeof party[room][partyName].user === 'object') {
+      if (party[room][partyName].type === partyType.NONE) {
+        idx = party[room][partyName].user.indexOf(sender);
+      } else if (party[room][partyName].type === partyType.POSITION) {
         for (let i=0; i<party[room][partyName].user.length; i++) {
           if (party[room][partyName].user[i].name === sender) {
             idx = i;
             break;
           }
         }
-      } else {
-        idx = party[room][partyName].user.indexOf(sender);
       }
 
       if (idx !== -1) {
