@@ -20,8 +20,7 @@ import {MODIFY_PARTY_NAME} from './../command-manager.constants';
 @Injectable()
 export class PartyManager {
   constructor (
-  ) {
-  }
+  ) {}
 
   // Call mainService by controller
   mainService (
@@ -50,12 +49,13 @@ export class PartyManager {
   }
 
   findParty (
-    { room } :ChatBotInput
+    { room, roomInfo } :ChatBotInput
   ): ChatBotOutput {
     return {
       success: true,
       message: translateParty2String({
         room,
+        roomInfo,
         message: '지금까지의 파티 목록입니다!',
       }),
     };
@@ -114,10 +114,12 @@ export class PartyManager {
   createParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room } = chatBotInput;
+    const { room, roomInfo } = chatBotInput;
     const [_, arguement] = trimInput(chatBotInput);
     const args = arguement.split(' ');
     const partyName = args[0];
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
 
     /* command 정상 입력 유효성 검사 */
     if (!partyName) {
@@ -128,11 +130,11 @@ export class PartyManager {
     }
 
     /* 파티 이름 중복 유효성 검사 */
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    const parties = Object.keys(party[room]);
+    const parties = Object.keys(party[roomName]);
     for (let i=0; i<parties.length; i++) {
       if (parties[i] === partyName) {
         return {
@@ -158,7 +160,7 @@ export class PartyManager {
       10
     );
 
-    party[room][partyName] = {
+    party[roomName][partyName] = {
       ...deepCopy(partyStructure),
       time: partyDate,
       type: partyName.includes('포지션') ? partyType.POSITION : partyType.NONE,
@@ -173,9 +175,11 @@ export class PartyManager {
   modifyPartyName(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room } = chatBotInput;
+    const { room, roomInfo } = chatBotInput;
     const [_, partyName] = trimInput(chatBotInput);
     const [origParty, changeParty] = partyName.split('::');
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
 
     if (!origParty) {
       return {
@@ -191,20 +195,20 @@ export class PartyManager {
       }
     }
 
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    const parties = Object.keys(party[room]);
+    const parties = Object.keys(party[roomName]);
     const trimPartyName = changeParty.trim();
 
     for (let i=0; i<parties.length; i++) {
       if (parties[i] === origParty) {
         const temp = {
-          ...party[room][origParty]
+          ...party[roomName][origParty]
         };
-        delete party[room][origParty];
-        party[room][trimPartyName] = {
+        delete party[roomName][origParty];
+        party[roomName][trimPartyName] = {
           ...temp
         }
         return {
@@ -222,9 +226,11 @@ export class PartyManager {
   modifyPartyTime(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room } = chatBotInput;
+    const { room, roomInfo } = chatBotInput;
     const [_, partyName] = trimInput(chatBotInput);
     const [origParty, changeTime] = partyName.split('::');
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
 
     if (!origParty) {
       return {
@@ -249,15 +255,15 @@ export class PartyManager {
       10
     );
 
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    const parties = Object.keys(party[room]);
+    const parties = Object.keys(party[roomName]);
     for (let i=0; i<parties.length; i++) {
       if (parties[i] === origParty) {
-        party[room][origParty] = {
-          ...party[room][origParty],
+        party[roomName][origParty] = {
+          ...party[roomName][origParty],
           time: partyDate,
         }
         return {
@@ -275,8 +281,11 @@ export class PartyManager {
   deleteParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room } = chatBotInput;
+    const { room, roomInfo } = chatBotInput;
     const [_, partyName] = trimInput(chatBotInput);
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
+
     if (!partyName) {
       return {
         success: false,
@@ -284,14 +293,14 @@ export class PartyManager {
       }
     }
 
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    const parties = Object.keys(party[room]);
+    const parties = Object.keys(party[roomName]);
     for (let i=0; i<parties.length; i++) {
       if (parties[i] === partyName) {
-        delete party[room][partyName];
+        delete party[roomName][partyName];
         return {
           success: true,
           message: `${partyName} 파티가 삭제되었습니다!`,

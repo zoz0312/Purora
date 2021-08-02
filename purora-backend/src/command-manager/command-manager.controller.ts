@@ -144,7 +144,10 @@ export const translateParty2String = ({
   room = '',
   message = '',
   partyName = '',
+  roomInfo,
 }) => {
+  const roomName = roomInfo ? roomInfo.channelId : room;
+
   const partyPart = (
     partyName: string,
     partyObject: partyStructureDTO
@@ -161,33 +164,29 @@ export const translateParty2String = ({
     if (partyObject.user.length === 0) {
       str += `--- 없음 ---\n`;
     } else {
-      if (partyObject.type === partyType.NONE) {
-        partyObject.user.map((user: string | PartyUserDTO, index) => {
-          if (typeof user === 'string') {
-            str += `${index+1}. ${user}\n`;
-          }
-        });
-      } else if (partyObject.type === partyType.POSITION) {
-        partyObject.user.map((user: string | PartyUserDTO) => {
-          if (typeof user === 'object') {
+      partyObject.user.map((user: string | PartyUserDTO, index) => {
+        if (typeof user === 'object') {
+          if (partyObject.type === partyType.NONE) {
+            str += `${index+1}. ${user.name}\n`;
+          } else if (partyObject.type === partyType.POSITION) {
             str += `${user.position}: ${user.name}\n`;
           }
-        });
-      }
+        }
+      });
     }
     return str += '\n'
   }
 
-  if (room === '') {
+  if (roomName === '') {
     return '잘못된 방입니다.';
   }
 
-  if (!party[room]) {
-    party[room] = {};
+  if (!party[roomName]) {
+    party[roomName] = {};
   }
 
-  const myRoom = party[room];
-  const keys = Object.keys(party[room]);
+  const myRoom = party[roomName];
+  const keys = Object.keys(party[roomName]);
   let str = '';
 
   if (keys.length === 0) {

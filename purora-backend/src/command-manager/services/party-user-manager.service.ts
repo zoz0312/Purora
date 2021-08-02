@@ -36,9 +36,11 @@ export class PartyUserManager {
   enterParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room, sender } = chatBotInput;
+    const { room, sender, roomInfo } = chatBotInput;
     const [_, trimText] = trimInput(chatBotInput);
     const [partyName, position] = trimText.split('::');
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
 
     if (!partyName) {
       return {
@@ -47,12 +49,12 @@ export class PartyUserManager {
       }
     }
 
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    if (Object.keys(party[room]).includes(partyName)) {
-      if (party[room][partyName].user.includes(sender)) {
+    if (Object.keys(party[roomName]).includes(partyName)) {
+      if (party[roomName][partyName].user.includes(sender)) {
         return {
           success: false,
           message: `이미 참여한 파티입니다!`,
@@ -72,16 +74,19 @@ export class PartyUserManager {
         maximum = 8;
       }
 
-      if (party[room][partyName].user.length >= maximum) {
+      if (party[roomName][partyName].user.length >= maximum) {
         return {
           success: false,
           message: '파티가 꽉 찼습니다 ㅠ.ㅠ',
         }
       }
 
-      const currentPartyType = party[room][partyName].type;
+      const currentPartyType = party[roomName][partyName].type;
       if (currentPartyType === partyType.NONE) {
-        party[room][partyName].user.push(sender);
+        party[roomName][partyName].user.push({
+          id: 0,
+          name: sender,
+        });
       } else if (currentPartyType === partyType.POSITION) {
         if (!position) {
           return {
@@ -97,14 +102,14 @@ export class PartyUserManager {
           }
         }
 
-        for (let i=0; i<party[room][partyName].user.length; i++) {
-          if (party[room][partyName].user[i].name === sender) {
+        for (let i=0; i<party[roomName][partyName].user.length; i++) {
+          if (party[roomName][partyName].user[i].name === sender) {
             return {
               success: false,
               message: `이미 참여한 파티입니다!`,
             }
           }
-          if (party[room][partyName].user[i].position === userPosition[position]) {
+          if (party[roomName][partyName].user[i].position === userPosition[position]) {
             return {
               success: false,
               message: '이미 참여된 포지션입니다 ㅠ_ㅠ',
@@ -112,7 +117,7 @@ export class PartyUserManager {
           }
         }
 
-        party[room][partyName].user.push({
+        party[roomName][partyName].user.push({
           name: sender,
           position: userPosition[position],
         });
@@ -122,6 +127,7 @@ export class PartyUserManager {
         success: true,
         message: translateParty2String({
           room,
+          roomInfo,
           message: `${partyName} 파티에 참여하였습니다.`,
           partyName,
         }),
@@ -141,8 +147,10 @@ export class PartyUserManager {
   exitParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room, sender } = chatBotInput;
+    const { room, sender, roomInfo } = chatBotInput;
     const [_, partyName] = trimInput(chatBotInput);
+
+    const roomName = roomInfo ? roomInfo.channelId : room;
 
     if (!partyName) {
       return {
@@ -151,25 +159,22 @@ export class PartyUserManager {
       }
     }
 
-    if (!party[room]) {
-      party[room] = {};
+    if (!party[roomName]) {
+      party[roomName] = {};
     }
 
-    if (Object.keys(party[room]).includes(partyName)) {
+    if (Object.keys(party[roomName]).includes(partyName)) {
       let idx = -1;
-      if (party[room][partyName].type === partyType.NONE) {
-        idx = party[room][partyName].user.indexOf(sender);
-      } else if (party[room][partyName].type === partyType.POSITION) {
-        for (let i=0; i<party[room][partyName].user.length; i++) {
-          if (party[room][partyName].user[i].name === sender) {
-            idx = i;
-            break;
-          }
+
+      for (let i=0; i<party[roomName][partyName].user.length; i++) {
+        if (party[roomName][partyName].user[i].name === sender) {
+          idx = i;
+          break;
         }
       }
 
       if (idx !== -1) {
-        party[room][partyName].user.splice(idx, 1);
+        party[roomName][partyName].user.splice(idx, 1);
         return {
           success: true,
           message: `${partyName} 파티에서 떠났습니다~ :D`,

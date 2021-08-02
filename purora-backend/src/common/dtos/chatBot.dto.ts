@@ -10,7 +10,20 @@ export class ChatBotInput {
   sender: string; // 보낸이
   isGroupChat: boolean; // 단체/오픈채팅 여부
   image: string; // Profile Image base64
+  kakaoSender?: sender;
+  roomInfo?: roomInfo;
 };
+
+class sender {
+  userId: number;
+  profileURL: string;
+  fullProfileURL: string;
+  originalProfileURL: string;
+}
+
+class roomInfo {
+  channelId: number;
+}
 
 export class ChatBotOutput extends CoreOutput {
 

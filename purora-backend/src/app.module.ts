@@ -16,6 +16,9 @@ import { PoroModule } from './poro/poro.module';
 import { JwtModule } from './poro/jwt/jwt.module';
 import { GameInfo } from './poro/users/entities/game-info.entity';
 import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
+import { PoroKakaoModule } from './poro-kakao/poro-kakao.module';
+import {AllowRoom} from "./poro-kakao/entities/allow-room.entity";
+import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
 
 /*
   @author AJu (zoz0312)
@@ -36,6 +39,10 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
         DB_PASSSWORD: Joi.string(),
         PRIVATE_KEY: Joi.string().required(),
         SELENIUM_SERVER: Joi.string().required(),
+        DESKTOP_NAME: Joi.string().required(),
+        DEVICE_UUID: Joi.string().required(),
+        KAKAO_ID: Joi.string().required(),
+        KAKAO_PW: Joi.string().required(),
       }),
     }),
     CommandManagerModule,
@@ -59,6 +66,8 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
         UsersSummonerInfo,
         GameInfo,
         UsersGameInfo,
+        AllowRoom,
+        AllowAdmin,
       ],
     }),
     ScheduleModule.forRoot(),
@@ -67,6 +76,12 @@ import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
     }),
     PoroModule.forRoot({
       seleniumServer: process.env.SELENIUM_SERVER
+    }),
+    PoroKakaoModule.forRoot({
+      desktopName: process.env.DESKTOP_NAME,
+      deviceUUID: process.env.DEVICE_UUID,
+      kakaoID: process.env.KAKAO_ID,
+      kakaoPW: process.env.KAKAO_PW,
     }),
   ],
   controllers: [],

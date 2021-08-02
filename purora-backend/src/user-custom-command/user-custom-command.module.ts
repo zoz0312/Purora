@@ -34,5 +34,6 @@ import { WorkingRepository } from './repositories/working.repository';
     LottoDraw,
 		UserCustomCommandService
   ],
+  exports: [UserCustomCommandService],
 })
 export class UserCustomCommandModule {}

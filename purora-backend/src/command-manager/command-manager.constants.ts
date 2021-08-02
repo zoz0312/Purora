@@ -35,3 +35,7 @@ export const SHOW_WORKING_LIST = 'showWorkingList';
 export const CREATE_WORKING = 'createWorking';
 export const UPDATE_WORKING = 'updateWorking';
 export const DELETE_WORKING = 'deleteWorking';
+
+// kakao-user.service
+export const ADMIN_KAKAO_USER_SERVICE = 'adminKakaoUserService';
+export const KAKAO_USER_GET_ID = 'kakaoUserGetId';

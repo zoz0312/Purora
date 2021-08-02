@@ -53,9 +53,17 @@ export class CustomUserCommand {
       },
       relations: ['commands'],
     });
-    const rtnText = allKeyword.map(item => {
-      return `[${item.keyword}] => ${item.commands.length}개`;
-    })
+
+    let rtnText = [];
+
+    if (allKeyword.length === 0) {
+      rtnText = ['등록된 키워드가 없습니다!'];
+    } else {
+      rtnText = allKeyword.map(item => {
+        return `[${item.keyword}] => ${item.commands.length}개`;
+      });
+    }
+
     return {
       success: true,
       message: rtnText.join('\n'),

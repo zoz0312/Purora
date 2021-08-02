@@ -10,6 +10,7 @@ import { CommandsRepository } from '../user-custom-command/repositories/commands
 import { KeywordRepository } from '../user-custom-command/repositories/keyword.repository';
 import { WorkingRepository } from '../user-custom-command/repositories/working.repository';
 import { RoomsRepository } from '../user-custom-command/repositories/rooms.repository';
+import { CommandManagerService } from './command-manager.service';
 
 /*
   @author AJu (zoz0312)
@@ -31,6 +32,8 @@ import { RoomsRepository } from '../user-custom-command/repositories/rooms.repos
     PartyHelp,
     CustomUserCommand,
     WorkingListManager,
+    CommandManagerService,
   ],
+  exports: [CommandManagerService],
 })
 export class CommandManagerModule {}
