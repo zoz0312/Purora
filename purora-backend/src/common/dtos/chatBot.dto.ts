@@ -1,4 +1,6 @@
 import { CoreOutput } from './output.dto';
+import {TalkChatData} from "node-kakao/dist/talk/chat";
+import {TalkChannel} from "node-kakao/dist/talk/channel";
 
 /*
   @author AJu (zoz0312)
@@ -12,7 +14,9 @@ export class ChatBotInput {
   image: string; // Profile Image base64
   kakaoSender?: sender;
   roomInfo?: roomInfo;
-};
+  talkChatData?: TalkChatData;
+  talkChannel?: TalkChannel;
+}
 
 class sender {
   userId: number;

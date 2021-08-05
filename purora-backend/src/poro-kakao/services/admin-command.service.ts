@@ -17,11 +17,9 @@ export class AdminCommandService {
 
   async adminCommandManage(
     chatBotInput : ChatBotInput,
-    data: TalkChatData,
-    channel: TalkChannel,
   ): Promise<ChatBotOutput> {
-
-    const command = '';
+    const userCommand = chatBotInput.msg.slice(1);
+    const command = userCommand.split('::')[0];
 
     for (let i=0; i<adminCommandList.length; i++) {
       const {
@@ -33,7 +31,7 @@ export class AdminCommandService {
       if (cmd.includes(command)) {
         switch (service) {
           case ADMIN_KAKAO_USER_SERVICE:
-            return this.kakaoUserService.mainService(chatBotInput, name, data, channel);
+            return this.kakaoUserService.mainService(chatBotInput, name);
         }
       }
     }

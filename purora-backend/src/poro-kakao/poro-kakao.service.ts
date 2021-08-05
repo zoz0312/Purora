@@ -2,7 +2,7 @@ import {Inject, Injectable} from '@nestjs/common';
 import {PORO_KAKAO_CONFIG_OPTIONS} from "../common/constants";
 import {PoroKakaoModuleOptions} from "./poro-kakao.module";
 import {
-  AuthApiClient, KnownChatType, ReplyAttachment,
+  AuthApiClient, ChatBuilder, KnownChatType, MentionContent, ReplyAttachment, ReplyContent,
   TalkClient,
 } from 'node-kakao';
 import * as readline from 'readline';
@@ -13,6 +13,8 @@ import {CommandManagerService} from "../command-manager/command-manager.service"
 import {UserCustomCommandService} from "../user-custom-command/services/user-custom-command.service";
 import {AllowRoomRepository} from "./repositories/allow-room.repository";
 import {AllowAdminRepository} from "./repositories/allow-admin.repository";
+import {ChatBotInput} from "../common/dtos/chatBot.dto";
+import {AdminCommandService} from "./services/admin-command.service";
 
 interface LoginDataDto {
   email: string;
@@ -32,6 +34,7 @@ export class PoroKakaoService {
     private readonly options: PoroKakaoModuleOptions,
     private readonly commandManagerService: CommandManagerService,
     private readonly userCustomCommandService: UserCustomCommandService,
+    private readonly adminCommandService: AdminCommandService,
     private readonly allowRoomRepository: AllowRoomRepository,
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
@@ -122,9 +125,9 @@ export class PoroKakaoService {
         }
       } } = channel;
 
-      if (!this.allowRoom.includes(+channelId)) {
-        return;
-      }
+      // if (!this.allowRoom.includes(+channelId)) {
+      //   return;
+      // }
 
       const {
         nickname,
@@ -134,10 +137,10 @@ export class PoroKakaoService {
         originalProfileURL,
       } = data.getSenderInfo(channel);
 
-      const chatBotInput = {
+      const chatBotInput: ChatBotInput = {
         room,
         sender: nickname,
-        msg: data.text,
+        msg,
         isGroupChat: false,
         image: '',
         kakaoSender: {
@@ -148,7 +151,9 @@ export class PoroKakaoService {
         },
         roomInfo: {
           channelId: +channelId,
-        }
+        },
+        talkChatData: data,
+        talkChannel: channel,
       };
 
       if (msg[0] === '/') {
@@ -158,9 +163,10 @@ export class PoroKakaoService {
         }
       } else if (msg[0] === '!') {
         if (this.allowAdmin.includes(+userId)) {
-
+          const { message } = await this.adminCommandService.adminCommandManage(chatBotInput);
+          channel.sendChat(`${message}`);
+          replyEvent(data, channel);
         }
-        replyEvent(data, channel);
       } else {
         const { success, message } = await this.userCustomCommandService.userCustomCommandForKakao(chatBotInput);
         if (success) {
