@@ -36,12 +36,11 @@ export class PartyUserManager {
   enterParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room, sender, roomInfo } = chatBotInput;
+    const { room, sender, roomInfo, kakaoSender, talkChatData } = chatBotInput;
     const [_, trimText] = trimInput(chatBotInput);
     const [partyName, position] = trimText.split('::');
 
     const roomName = roomInfo ? roomInfo.channelId : room;
-
     if (!partyName) {
       return {
         success: false,
@@ -54,27 +53,7 @@ export class PartyUserManager {
     }
 
     if (Object.keys(party[roomName]).includes(partyName)) {
-      if (party[roomName][partyName].user.includes(sender)) {
-        return {
-          success: false,
-          message: `이미 참여한 파티입니다!`,
-        }
-      }
-
-      let maximum = 5;
-      if (
-        partyName.includes('내전')
-        || partyName.includes('스크림')
-      ) {
-        maximum = 10;
-      } else if (
-        partyName.includes('롤토체스')
-        || partyName.includes('롤체')
-      ) {
-        maximum = 8;
-      }
-
-      if (party[roomName][partyName].user.length >= maximum) {
+      if (party[roomName][partyName].user.length >= party[roomName][partyName].maximum) {
         return {
           success: false,
           message: '파티가 꽉 찼습니다 ㅠ.ㅠ',
@@ -83,9 +62,18 @@ export class PartyUserManager {
 
       const currentPartyType = party[roomName][partyName].type;
       if (currentPartyType === partyType.NONE) {
+        for (let i=0; i<party[roomName][partyName].user.length; i++) {
+          if (party[roomName][partyName].user[i].id === kakaoSender.userId) {
+            return {
+              success: false,
+              message: `이미 참여한 파티입니다!`,
+            }
+          }
+        }
         party[roomName][partyName].user.push({
-          id: 0,
+          id: kakaoSender.userId,
           name: sender,
+          info: talkChatData,
         });
       } else if (currentPartyType === partyType.POSITION) {
         if (!position) {
@@ -103,7 +91,7 @@ export class PartyUserManager {
         }
 
         for (let i=0; i<party[roomName][partyName].user.length; i++) {
-          if (party[roomName][partyName].user[i].name === sender) {
+          if (party[roomName][partyName].user[i].id === kakaoSender.userId) {
             return {
               success: false,
               message: `이미 참여한 파티입니다!`,
@@ -118,8 +106,10 @@ export class PartyUserManager {
         }
 
         party[roomName][partyName].user.push({
+          id: kakaoSender.userId,
           name: sender,
           position: userPosition[position],
+          info: talkChatData,
         });
       }
 

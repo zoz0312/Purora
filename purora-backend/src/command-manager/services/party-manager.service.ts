@@ -114,7 +114,7 @@ export class PartyManager {
   createParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room, roomInfo } = chatBotInput;
+    const { room, roomInfo, talkChannel } = chatBotInput;
     const [_, arguement] = trimInput(chatBotInput);
     const args = arguement.split(' ');
     const partyName = args[0];
@@ -132,6 +132,10 @@ export class PartyManager {
     /* 파티 이름 중복 유효성 검사 */
     if (!party[roomName]) {
       party[roomName] = {};
+    }
+
+    if (!party[roomName].hasOwnProperty('channel')) {
+      party[roomName].channel = talkChannel;
     }
 
     const parties = Object.keys(party[roomName]);
@@ -160,10 +164,24 @@ export class PartyManager {
       10
     );
 
+    let maximum = 5;
+    if (
+      partyName.includes('내전')
+      || partyName.includes('스크림')
+    ) {
+      maximum = 10;
+    } else if (
+      partyName.includes('롤토체스')
+      || partyName.includes('롤체')
+    ) {
+      maximum = 8;
+    }
+
     party[roomName][partyName] = {
       ...deepCopy(partyStructure),
       time: partyDate,
       type: partyName.includes('포지션') ? partyType.POSITION : partyType.NONE,
+      maximum,
     }
 
     return {

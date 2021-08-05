@@ -25,6 +25,7 @@ import { WorkingListManager } from './services/working-list.service';
 import { PARTY_USER_MANAGER_SERVICE } from 'src/command-manager/command-manager.constants';
 import { CUSTOM_USER_COMMAND_SERVICE } from 'src/command-manager/command-manager.constants';
 import {deepCopy} from "deep-copy-ts";
+import {ChatBuilder, KnownChatType, MentionContent} from "node-kakao";
 
 /*
   @author AJu (zoz0312)
@@ -92,8 +93,65 @@ export class CommandManagerController {
   @Cron('0 * * * * *')
   deletePartyScheduler() {
     const curDate = new Date();
+    const curHour = curDate.getHours();
+    const curMinutes = curDate.getMinutes();
+
     Object.keys(party).map(roomName =>
       Object.keys(party[roomName]).map(partyName => {
+        if (partyName === 'channel') {
+          return;
+        }
+        const pTime = party[roomName][partyName].time;
+        const five = new Date(pTime.getTime() - (1000 * 60 * 5));
+        const fifteen = new Date(pTime.getTime() - (1000 * 60 * 15));
+        const beforeTime = {
+          '0': {
+            hour: pTime.getHours(),
+            minutes: pTime.getMinutes(),
+          },
+          '5': {
+            hour: five.getHours(),
+            minutes: five.getMinutes(),
+          },
+          '15': {
+            hour: fifteen.getHours(),
+            minutes: fifteen.getMinutes(),
+          },
+        };
+
+        const same15 = curHour === beforeTime['15'].hour && curMinutes === beforeTime['15'].minutes;
+        const same5 = curHour === beforeTime['5'].hour && curMinutes === beforeTime['5'].minutes;
+
+        if (same15 || same5) {
+          const channel = party[roomName].channel;
+          const builder = new ChatBuilder();
+          const users = party[roomName][partyName].user;
+          const len = users.length;
+          if (len !== 0) {
+            for (let i=0; i<len; i++) {
+              const user = users[i].info.getSenderInfo(channel);
+              builder.append(new MentionContent(user));
+            }
+          }
+
+          if (same15) {
+            builder.text(`\n\n${partyName} 시작까지 15분 남았습니다.\n`);
+            if (len !== party[roomName][partyName].maximum) {
+              builder.text(`${party[roomName][partyName].maximum - len}명 더 참여해주세요!`);
+            } else {
+              builder.text(`준비해주세요!`);
+            }
+          }
+
+          if (same5) {
+            builder.text(`\n\n${partyName} 시작까지 5분 남았습니다.\n접속하지 못하신 분들은 접속해주세요!`);
+            if (len !== party[roomName][partyName].maximum) {
+              builder.text(`\n${party[roomName][partyName].maximum - len}명 더 참여해주세요!`);
+            }
+          }
+          channel.sendChat(builder.build(KnownChatType.TEXT));
+        }
+
         if (curDate > party[roomName][partyName].time) {
           delete party[roomName][partyName]
         }
