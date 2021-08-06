@@ -25,6 +25,7 @@ interface LoginDataDto {
 @Injectable()
 export class PoroKakaoService {
   private client: TalkClient;
+  private adminEnable: boolean;
   private api: AuthApiClient;
   private allowRoom: number[];
   private allowAdmin: number[];
@@ -39,6 +40,7 @@ export class PoroKakaoService {
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
     this.client = new TalkClient();
+    this.adminEnable = true;
     this.api = null;
     this.allowRoom = [];
     this.allowAdmin = [];
@@ -155,20 +157,25 @@ export class PoroKakaoService {
         talkChannel: channel,
       };
 
-      console.log('this.allowAdmin', this.allowAdmin, +userId);
-      console.log('this.allowRoom', this.allowRoom, +channelId);
-
       if (msg[0] === '!') {
-        if (this.allowAdmin.includes(+userId)) {
-          const { success, message } = await this.adminCommandService.adminCommandManage(chatBotInput);
-          if (success) {
-            if (msg.includes('deleteRoom') || msg.includes('addRoom')) {
-              await this.updateRoom();
-            }
-          }
-          await channel.sendChat(`${message}`);
-          replyEvent(data, channel);
+        if (msg === '!adminToggle') {
+          this.adminEnable = !this.adminEnable;
+          await channel.sendChat(`${this.adminEnable}`);
+          return;
         }
+
+        if (this.adminEnable && !this.allowAdmin.includes(+userId)) {
+          return false;
+        }
+
+        const { success, message } = await this.adminCommandService.adminCommandManage(chatBotInput);
+        if (success) {
+          if (msg.includes('deleteRoom') || msg.includes('addRoom')) {
+            await this.updateRoom();
+          }
+        }
+        await channel.sendChat(`${message}`);
+        replyEvent(data, channel);
         return;
       }
 
