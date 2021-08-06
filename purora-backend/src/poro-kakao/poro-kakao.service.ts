@@ -76,12 +76,8 @@ export class PoroKakaoService {
       throw new Error(`로그인 실패 ${clientResponse.status}`);
     }
 
+    await this.updateUser();
     await this.updateRoom();
-
-    const allowAdmins = await this.allowAdminRepository.find();
-    this.allowAdmin = allowAdmins.map((admin) => {
-      return +admin.userId;
-    });
 
     await this.addChattingEvent();
   }
@@ -112,6 +108,13 @@ export class PoroKakaoService {
     }
   }
 
+  async updateUser () {
+    const allowAdmins = await this.allowAdminRepository.find();
+    this.allowAdmin = allowAdmins.map((admin) => {
+      return +admin.userId;
+    });
+  }
+
   async updateRoom () {
     const allowRooms = await this.allowRoomRepository.find();
     this.allowRoom = allowRooms.map((room) => {
@@ -122,6 +125,7 @@ export class PoroKakaoService {
   async addChattingEvent () {
     this.client.on('chat', async (data: TalkChatData, channel: TalkChannel) => {
       const msg = data.text;
+      await channel.sendChat(`${msg}`);
 
       const room = channel.getDisplayName();
       const { store: {
@@ -172,6 +176,8 @@ export class PoroKakaoService {
         if (success) {
           if (msg.includes('deleteRoom') || msg.includes('addRoom')) {
             await this.updateRoom();
+          } else if (msg.includes('addUserId') || msg.includes('addUserId')) {
+            await this.updateUser();
           }
         }
         await channel.sendChat(`${message}`);
