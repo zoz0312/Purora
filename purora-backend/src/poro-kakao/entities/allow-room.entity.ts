@@ -7,7 +7,9 @@ import { Column, Entity } from "typeorm";
 */
 @Entity()
 export class AllowRoom extends CommandCoreEntity {
-  @Column()
+  @Column({
+    type: "bigint"
+  })
   roomId: number;
 
   @Column('longtext')

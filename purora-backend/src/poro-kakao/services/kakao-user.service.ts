@@ -119,7 +119,7 @@ export class KakaoUserService {
         }
       }
 
-      await this.allowAdminRepository.delete(alreadyUser);
+      await this.allowAdminRepository.softDelete(alreadyUser.id);
 
       return {
         success: true,

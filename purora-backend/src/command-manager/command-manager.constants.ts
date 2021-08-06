@@ -4,8 +4,6 @@
 */
 
 // party-manager.service
-import {MentionContent} from "node-kakao";
-
 export const PARTY_MANAGER_SERVICE = 'partyManagerService';
 export const FIND_PARTY = 'findParty';
 export const PARTY_PRINT_JSON = 'partyPrintJson';
@@ -44,3 +42,9 @@ export const KAKAO_USER_GET_ID = 'kakaoUserGetId';
 export const KAKAO_ADD_USER_ID = 'kakaoAddUserId';
 export const KAKAO_DELETE_USER_ID = 'kakaoDeleteUserId';
 export const KAKAO_ALL_MENTION = 'kakaoAllMention';
+
+// kakao-room.service
+export const ADMIN_KAKAO_ROOM_SERVICE = 'adminKakaoRoomService';
+export const KAKAO_GET_CHANNEL_ID = 'kakaoGetChannelId';
+export const KAKAO_ADD_ROOM = 'kakaoAddRoom';
+export const KAKAO_DELETE_ROOM = 'kakaoDeleteRoom';

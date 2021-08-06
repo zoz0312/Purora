@@ -8,6 +8,7 @@ import {AllowRoom} from "./entities/allow-room.entity";
 import {AdminCommandService} from "./services/admin-command.service";
 import {AllowAdmin} from "./entities/allow-admin.entity";
 import {KakaoUserService} from "./services/kakao-user.service";
+import {KakaoRoomService} from "./services/kakao-room.service";
 
 export interface PoroKakaoModuleOptions {
   desktopName: string;
@@ -37,6 +38,7 @@ export class PoroKakaoModule {
         PoroKakaoService,
         AdminCommandService,
         KakaoUserService,
+        KakaoRoomService,
       ],
       exports: [PoroKakaoService]
     }

@@ -74,18 +74,14 @@ export class PoroKakaoService {
       throw new Error(`로그인 실패 ${clientResponse.status}`);
     }
 
-
-    const allowRooms = await this.allowRoomRepository.find();
-    this.allowRoom = allowRooms.map((room) => {
-      return room.roomId;
-    });
+    await this.updateRoom();
 
     const allowAdmins = await this.allowAdminRepository.find();
     this.allowAdmin = allowAdmins.map((admin) => {
-      return admin.userId;
+      return +admin.userId;
     });
 
-    this.addChattingEvent();
+    await this.addChattingEvent();
   }
 
   async deviceRegistration (config: LoginDataDto) {
@@ -114,6 +110,13 @@ export class PoroKakaoService {
     }
   }
 
+  async updateRoom () {
+    const allowRooms = await this.allowRoomRepository.find();
+    this.allowRoom = allowRooms.map((room) => {
+      return +room.roomId;
+    });
+  }
+
   async addChattingEvent () {
     this.client.on('chat', async (data: TalkChatData, channel: TalkChannel) => {
       const msg = data.text;
@@ -124,10 +127,6 @@ export class PoroKakaoService {
           channelId,
         }
       } } = channel;
-
-      // if (!this.allowRoom.includes(+channelId)) {
-      //   return;
-      // }
 
       const {
         nickname,
@@ -156,21 +155,36 @@ export class PoroKakaoService {
         talkChannel: channel,
       };
 
+      console.log('this.allowAdmin', this.allowAdmin, +userId);
+      console.log('this.allowRoom', this.allowRoom, +channelId);
+
+      if (msg[0] === '!') {
+        if (this.allowAdmin.includes(+userId)) {
+          const { success, message } = await this.adminCommandService.adminCommandManage(chatBotInput);
+          if (success) {
+            if (msg.includes('deleteRoom') || msg.includes('addRoom')) {
+              await this.updateRoom();
+            }
+          }
+          await channel.sendChat(`${message}`);
+          replyEvent(data, channel);
+        }
+        return;
+      }
+
+      if (!this.allowRoom.includes(+channelId)) {
+        return;
+      }
+
       if (msg[0] === '/') {
         const { message } = await this.commandManagerService.commandManage(chatBotInput);
         if (message) {
-          channel.sendChat(`${message}`);
-        }
-      } else if (msg[0] === '!') {
-        if (this.allowAdmin.includes(+userId)) {
-          const { message } = await this.adminCommandService.adminCommandManage(chatBotInput);
-          channel.sendChat(`${message}`);
-          replyEvent(data, channel);
+          await channel.sendChat(`${message}`);
         }
       } else {
         const { success, message } = await this.userCustomCommandService.userCustomCommandForKakao(chatBotInput);
         if (success) {
-          channel.sendChat(`${message}`);
+          await channel.sendChat(`${message}`);
         }
       }
     });
