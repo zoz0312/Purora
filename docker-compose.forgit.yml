@@ -38,6 +38,11 @@ services:
       DB_PASSSWORD: userPassword
       PRIVATE_KEY: ""
       SELENIUM_SERVER: "http://localhost:4444"
+      DESKTOP_NAME: "PURORA-GIT-SERVER"
+      DEVICE_UUID: ""
+      KAKAO_ID: ""
+      KAKAO_PW: ""
+
     ports:
       - 80:80
     depends_on:
