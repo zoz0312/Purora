@@ -6,7 +6,9 @@ import { Column, Entity } from "typeorm";
 */
 @Entity()
 export class AllowAdmin extends CommandCoreEntity {
-  @Column()
+  @Column({
+    type: "bigint"
+  })
   userId: number;
 
   @Column('longtext')
