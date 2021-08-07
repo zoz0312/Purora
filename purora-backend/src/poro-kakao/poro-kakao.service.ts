@@ -125,7 +125,6 @@ export class PoroKakaoService {
   async addChattingEvent () {
     this.client.on('chat', async (data: TalkChatData, channel: TalkChannel) => {
       const msg = data.text;
-      await channel.sendChat(`${msg}`);
 
       const room = channel.getDisplayName();
       const { store: {
