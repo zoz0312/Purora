@@ -48,3 +48,7 @@ export const ADMIN_KAKAO_ROOM_SERVICE = 'adminKakaoRoomService';
 export const KAKAO_GET_CHANNEL_ID = 'kakaoGetChannelId';
 export const KAKAO_ADD_ROOM = 'kakaoAddRoom';
 export const KAKAO_DELETE_ROOM = 'kakaoDeleteRoom';
+
+// admin-help.service
+export const ADMIN_HELP_SERVICE = 'adminHelpService';
+export const ADMIN_HELP = 'adminHelp';
