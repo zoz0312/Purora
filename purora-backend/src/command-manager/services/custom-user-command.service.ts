@@ -24,8 +24,15 @@ export class CustomUserCommand {
     chatBotInput :ChatBotInput,
     name: string,
   ): Promise<ChatBotOutput> {
-    const { room } = chatBotInput;
-    const myRoom = await this.rooms.findMyRoom(room);
+    const { room, talkChannel } = chatBotInput;
+    const roomName = talkChannel.getDisplayName();
+    const { store: {
+      info: {
+        channelId,
+      }
+    } } = talkChannel;
+
+    const myRoom = await this.rooms.findMyRoom(+channelId, roomName);
 
     switch (name) {
       case READ_USER_COMMAND:
@@ -74,7 +81,7 @@ export class CustomUserCommand {
     chatBotInput :ChatBotInput,
     myRoom: Rooms,
   ): Promise<ChatBotOutput> {
-    const { sender: userName } = chatBotInput;
+    const { sender: userName, talkChannel } = chatBotInput;
     const [_, arguement] = trimInput(chatBotInput);
     const [keyword, outputTexts] = arguement.split('::');
 

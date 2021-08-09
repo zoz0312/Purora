@@ -3,17 +3,18 @@ import { Rooms } from "../entities/rooms.entitiy";
 
 @EntityRepository(Rooms)
 export class RoomsRepository extends Repository<Rooms> {
-  async findMyRoom(roomName: string): Promise<Rooms> {
+  async findMyRoom(channelId: number, roomName: string): Promise<Rooms> {
     let myRoom = await this.findOne({
       where: {
-        roomName,
+        roomId: channelId,
       }
     });
 
     if (!myRoom) {
       myRoom = await this.save(
         this.create({
-          roomName
+          roomName,
+          roomId: channelId,
         })
       );
     }

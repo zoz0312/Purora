@@ -32,12 +32,17 @@ export class UserCustomCommandService {
     const {
       room,
       msg,
-      sender,
-      isGroupChat,
-      image,
+      talkChannel,
     } = chatBotInput;
 
-    const myRoom = await this.rooms.findMyRoom(room);
+    const roomName = talkChannel.getDisplayName();
+    const { store: {
+      info: {
+        channelId,
+      }
+    } } = talkChannel;
+
+    const myRoom = await this.rooms.findMyRoom(+channelId, roomName);
 
     /* 특정 키워드 필터링 */
     for (let i=0; i<keywordList.length; i++) {
