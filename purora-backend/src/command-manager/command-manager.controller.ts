@@ -244,7 +244,7 @@ export const translateParty2String = ({
   }
 
   const myRoom = party[roomName];
-  const keys = Object.keys(party[roomName]);
+  const keys = Object.keys(party[roomName]).filter((key) => key !== 'channel');
   let str = '';
 
   if (keys.length === 0) {

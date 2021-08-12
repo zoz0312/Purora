@@ -40,6 +40,8 @@ export class PartyUserManager {
     const [_, trimText] = trimInput(chatBotInput);
     const [partyName, position] = trimText.split('::');
 
+    const splitSender = sender.split('/')[0];
+
     const roomName = roomInfo ? roomInfo.channelId : room;
     if (!partyName) {
       return {
@@ -72,7 +74,7 @@ export class PartyUserManager {
         }
         party[roomName][partyName].user.push({
           id: kakaoSender.userId,
-          name: sender,
+          name: splitSender,
           info: talkChatData,
         });
       } else if (currentPartyType === partyType.POSITION) {
@@ -107,7 +109,7 @@ export class PartyUserManager {
 
         party[roomName][partyName].user.push({
           id: kakaoSender.userId,
-          name: sender,
+          name: splitSender,
           position: userPosition[position],
           info: talkChatData,
         });
