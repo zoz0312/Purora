@@ -62,11 +62,20 @@ export class PartyManager {
   }
 
   printPartyJson (): ChatBotOutput {
-    const partyDeepClone = deepCopy(party);
-    partyDeepClone['curDate'] = new Date();
+    // const partyDeepClone = deepCopy(party);
+    // partyDeepClone['curDate'] = new Date();
+    const json = {};
+    Object.keys(party).map((roomKey) => {
+      json[roomKey] = {};
+      Object.keys(party[roomKey]).map((partyKey) => {
+        if (partyKey !== 'channel') {
+          json[roomKey][partyKey] = party[roomKey][partyKey];
+        }
+      })
+    })
     return {
       success: true,
-      message: JSON.stringify(partyDeepClone),
+      message: JSON.stringify(json),
     }
   }
 

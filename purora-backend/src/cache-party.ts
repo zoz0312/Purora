@@ -70,23 +70,23 @@ export const partyStructure: partyStructureDTO = {
 };
 
 export const party = {
-  "롤키웨이(LoLky Way)": {
-    '매일자랭': {
-      ...deepCopy(partyStructure),
-      time: rank(),
-      type: partyType.NONE,
-    },
-    '매일내전': {
-      ...deepCopy(partyStructure),
-      time: teamFight(),
-      type: partyType.NONE,
-    },
-  },
-  '숨고 (정예톡)': {
-    '자랭포지션': {
-      ...deepCopy(partyStructure),
-      time: rankPosition(),
-      type: partyType.POSITION,
-    }
-  }
+  // "롤키웨이(LoLky Way)": {
+  //   '매일자랭': {
+  //     ...deepCopy(partyStructure),
+  //     time: rank(),
+  //     type: partyType.NONE,
+  //   },
+  //   '매일내전': {
+  //     ...deepCopy(partyStructure),
+  //     time: teamFight(),
+  //     type: partyType.NONE,
+  //   },
+  // },
+  // '숨고 (정예톡)': {
+  //   '자랭포지션': {
+  //     ...deepCopy(partyStructure),
+  //     time: rankPosition(),
+  //     type: partyType.POSITION,
+  //   }
+  // }
 };

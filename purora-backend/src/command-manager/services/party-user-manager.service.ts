@@ -38,11 +38,12 @@ export class PartyUserManager {
   ): ChatBotOutput {
     const { room, sender, roomInfo, kakaoSender, talkChatData } = chatBotInput;
     const [_, trimText] = trimInput(chatBotInput);
-    const [partyName, position] = trimText.split('::');
+    const [partyName, position] = trimText.split(' ');
 
     const splitSender = sender.split('/')[0];
 
     const roomName = roomInfo ? roomInfo.channelId : room;
+
     if (!partyName) {
       return {
         success: false,
@@ -139,7 +140,8 @@ export class PartyUserManager {
   exitParty(
     chatBotInput :ChatBotInput
   ): ChatBotOutput {
-    const { room, sender, roomInfo } = chatBotInput;
+    const { room, sender, roomInfo, kakaoSender: { userId: inputUserId } } = chatBotInput;
+    const userId = +inputUserId;
     const [_, partyName] = trimInput(chatBotInput);
 
     const roomName = roomInfo ? roomInfo.channelId : room;
@@ -159,7 +161,8 @@ export class PartyUserManager {
       let idx = -1;
 
       for (let i=0; i<party[roomName][partyName].user.length; i++) {
-        if (party[roomName][partyName].user[i].name === sender) {
+        const currnetUserId = party[roomName][partyName].user[i].id;
+        if (currnetUserId === userId) {
           idx = i;
           break;
         }
