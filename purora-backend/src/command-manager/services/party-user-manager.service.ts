@@ -38,7 +38,7 @@ export class PartyUserManager {
   ): ChatBotOutput {
     const { room, sender, roomInfo, kakaoSender, talkChatData } = chatBotInput;
     const [_, trimText] = trimInput(chatBotInput);
-    const [partyName, position] = trimText.split(' ');
+    const [partyName, position] = trimText.split('::');
 
     const splitSender = sender.split('/')[0];
 
