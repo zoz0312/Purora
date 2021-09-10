@@ -184,6 +184,13 @@ export class CustomUserCommand {
         relations: ['commands'],
       });
 
+      if (outputText.commands.length === 0) {
+        return {
+          success: true,
+          message: '조회된 내역이 없습니다 =__=',
+        }
+      }
+
       let text = `-- "${keyword}" 학습 내역 --\n`;
       text += outputText.commands.map(({
         id,
