@@ -2,18 +2,17 @@ import {Inject, Injectable} from '@nestjs/common';
 import {PORO_KAKAO_CONFIG_OPTIONS} from "../common/constants";
 import {PoroKakaoModuleOptions} from "./poro-kakao.module";
 import {
-  AuthApiClient, ChatBuilder, KnownChatType, MentionContent, ReplyAttachment, ReplyContent,
+  AuthApiClient,
   TalkClient,
 } from 'node-kakao';
 import * as readline from 'readline';
-import {replyEvent} from "./events/replyEvent";
 import {TalkChatData} from "node-kakao/dist/talk/chat";
 import {TalkChannel} from "node-kakao/dist/talk/channel";
 import {CommandManagerService} from "../command-manager/command-manager.service";
 import {UserCustomCommandService} from "../user-custom-command/services/user-custom-command.service";
 import {AllowRoomRepository} from "./repositories/allow-room.repository";
 import {AllowAdminRepository} from "./repositories/allow-admin.repository";
-import {ChatBotInput} from "../common/dtos/chatBot.dto";
+import {ChatBotInput, ChatBotOutput} from "../common/dtos/chatBot.dto";
 import {AdminCommandService} from "./services/admin-command.service";
 
 interface LoginDataDto {
@@ -29,6 +28,8 @@ export class PoroKakaoService {
   private api: AuthApiClient;
   private allowRoom: number[];
   private allowAdmin: number[];
+  private updateRoomCommand: string[];
+  private updateUserCommand: string[];
 
   constructor(
     @Inject(PORO_KAKAO_CONFIG_OPTIONS)
@@ -44,10 +45,19 @@ export class PoroKakaoService {
     this.api = null;
     this.allowRoom = [];
     this.allowAdmin = [];
+    this.updateRoomCommand = ['addRoom', 'deleteRoom',];
+    this.updateUserCommand = ['addUserId', 'deleteUserId',];
     this.init().then();
   }
 
   async init() {
+    await this.login()
+    await this.updateUser();
+    await this.updateRoom();
+    await this.addChattingEvent();
+  }
+
+  async login (): Promise<ChatBotOutput> {
     const {
       desktopName,
       deviceUUID,
@@ -68,18 +78,26 @@ export class PoroKakaoService {
         await this.deviceRegistration(loginForm);
         login = await this.api.login(loginForm);
       }
-      throw new Error(`로그인에 실패하였습니다!`);
+      return {
+        success: false,
+        message: `로그인 실패 ${login.status}`,
+      }
+      // throw new Error(`로그인에 실패하였습니다!`);
     }
 
     const clientResponse = await this.client.login(login.result);
     if (!clientResponse.success) {
-      throw new Error(`로그인 실패 ${clientResponse.status}`);
+      return {
+        success: false,
+        message: `로그인 실패 ${clientResponse.status}`,
+      }
+      // throw new Error(`로그인 실패 ${clientResponse.status}`);
     }
 
-    await this.updateUser();
-    await this.updateRoom();
-
-    await this.addChattingEvent();
+    return {
+      success: true,
+      message: `로그인 성공!`,
+    }
   }
 
   async deviceRegistration (config: LoginDataDto) {
@@ -123,9 +141,25 @@ export class PoroKakaoService {
   }
 
   async addChattingEvent () {
+    this.client.on('user_join', (joinLog, channel, user, feed) => {
+      console.log(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
+    });
+    this.client.on('user_left', (leftLog, channel, user, feed) => {
+      console.log(`${user.nickname}님께서 방을 나가셨습니다 ㅠ___ㅠ`);
+    });
+    // this.client.on('chat_deleted', (feedChatlog, channel, feed) => {
+    //   const userInfo = channel.getUserInfo({userId: feedChatlog.sender.userId});
+    //   if (userInfo === undefined) {
+    //     return;
+    //   }
+    //   // console.log('feedChatlog', feedChatlog)
+    //   // console.log('feed', feed)
+    //   // console.log('channel', channel)
+    //   channel.sendChat(`${userInfo.nickname}님의 채팅 삭제를 감지`);
+    // });
+
     this.client.on('chat', async (data: TalkChatData, channel: TalkChannel) => {
       const msg = data.text;
-
       const room = channel.getDisplayName();
       const { store: {
         info: {
@@ -173,14 +207,15 @@ export class PoroKakaoService {
 
         const { success, message } = await this.adminCommandService.adminCommandManage(chatBotInput);
         if (success) {
-          if (msg.includes('deleteRoom') || msg.includes('addRoom')) {
+          if (this.updateRoomCommand.includes(msg)) {
             await this.updateRoom();
-          } else if (msg.includes('addUserId') || msg.includes('addUserId')) {
+          } else if (this.updateUserCommand.includes(msg)) {
             await this.updateUser();
           }
         }
-        await channel.sendChat(`${message}`);
-        replyEvent(data, channel);
+        if (message) {
+          await channel.sendChat(`${message}`);
+        }
         return;
       }
 

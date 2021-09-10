@@ -10,6 +10,7 @@ import {AllowAdmin} from "./entities/allow-admin.entity";
 import {KakaoUserService} from "./services/kakao-user.service";
 import {KakaoRoomService} from "./services/kakao-room.service";
 import {AdminHelpService} from "./services/admin-help.service";
+import { PoroKakaoController } from './poro-kakao.controller';
 
 export interface PoroKakaoModuleOptions {
   desktopName: string;
@@ -19,6 +20,8 @@ export interface PoroKakaoModuleOptions {
 }
 
 @Module({
+
+  controllers: [PoroKakaoController]
 })
 export class PoroKakaoModule {
   static forRoot(options: PoroKakaoModuleOptions): DynamicModule {

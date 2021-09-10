@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { UserCustomCommandController } from './user-custom-command.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Commands } from './entities/commands.entitiy';
 import { Keyword } from './entities/keyword.entitiy';
@@ -28,7 +27,6 @@ import { WorkingRepository } from './repositories/working.repository';
     Rooms,
     RoomsRepository,
   ])],
-  controllers: [UserCustomCommandController],
   providers: [
     WorkingList,
     LottoDraw,
