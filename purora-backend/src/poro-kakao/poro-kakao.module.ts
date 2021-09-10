@@ -18,7 +18,8 @@ export interface PoroKakaoModuleOptions {
   kakaoPW: string;
 }
 
-@Module({})
+@Module({
+})
 export class PoroKakaoModule {
   static forRoot(options: PoroKakaoModuleOptions): DynamicModule {
     return {

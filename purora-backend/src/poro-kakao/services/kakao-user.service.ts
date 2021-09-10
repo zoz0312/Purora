@@ -4,11 +4,12 @@ import {TalkChatData} from "node-kakao/dist/talk/chat";
 import {TalkChannel} from "node-kakao/dist/talk/channel";
 import {
   KAKAO_ADD_USER_ID, KAKAO_ALL_MENTION,
-  KAKAO_DELETE_USER_ID,
+  KAKAO_DELETE_USER_ID, KAKAO_READERS,
   KAKAO_USER_GET_ID
 } from "../../command-manager/command-manager.constants";
 import {ChatBuilder, KnownChatType, MentionContent, ReplyAttachment, ReplyContent} from "node-kakao";
 import {AllowAdminRepository} from "../repositories/allow-admin.repository";
+import {ChannelUserInfo} from "node-kakao/dist/user";
 
 @Injectable()
 export class KakaoUserService {
@@ -30,6 +31,8 @@ export class KakaoUserService {
         return this.deleteUserId(chatBotInput);
       case KAKAO_ALL_MENTION:
         return this.allMention(chatBotInput);
+      case KAKAO_READERS:
+        return this.readers(chatBotInput);
       default:
         return {
           success: false,
@@ -148,5 +151,48 @@ export class KakaoUserService {
       success: true,
       message: `모두들 봐주세요!`,
     }
+  }
+
+  /*
+   @description
+   답장시 읽은사람 확인
+ */
+  async readers (
+    { talkChatData, talkChannel }: ChatBotInput,
+  ): Promise<ChatBotOutput> {
+    const sender = talkChatData.getSenderInfo(talkChannel);
+    if (!sender) return;
+
+    if (talkChatData.originalType === KnownChatType.REPLY) {
+      const reply = talkChatData.attachment<ReplyAttachment>();
+      const logId = reply.src_logId;
+
+      if (logId) {
+        const readers = talkChannel.getReaders({ logId });
+        const readersText = this.filterReplyKeywordAlram(readers);
+
+        talkChannel.sendChat(`읽은사람 (${readers.length})\n${readersText.join('\n')}`);
+      }
+    }
+
+    return {
+      success: true,
+    }
+  }
+
+  /*
+   @description
+   유저 닉네임 사이에 의미없는 유니코드를 삽입하여
+   읽은사람 호출 안되게 파싱
+  */
+  filterReplyKeywordAlram = (readers: ChannelUserInfo[]) => {
+    const textByReaders = readers.map((reader: ChannelUserInfo) => {
+      let text = '';
+      for (let i=0; i<reader.nickname.length; i++) {
+        text += reader.nickname[i] + String.fromCharCode(8203)
+      }
+      return text;
+    });
+    return textByReaders;
   }
 }

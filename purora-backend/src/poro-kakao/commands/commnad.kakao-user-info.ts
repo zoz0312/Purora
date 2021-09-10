@@ -1,6 +1,6 @@
 import {
   ADMIN_KAKAO_USER_SERVICE,
-  KAKAO_ADD_USER_ID, KAKAO_ALL_MENTION, KAKAO_DELETE_USER_ID,
+  KAKAO_ADD_USER_ID, KAKAO_ALL_MENTION, KAKAO_DELETE_USER_ID, KAKAO_READERS,
   KAKAO_USER_GET_ID
 } from "../../command-manager/command-manager.constants";
 
@@ -29,5 +29,11 @@ export const commandAdminCommand: adminCommandDTO[] = [
     name: KAKAO_ALL_MENTION,
     command: ['전체멘션', 'allMention'],
     desc: '전체 유저 멘션',
+  },
+  {
+    service,
+    name: KAKAO_READERS,
+    command: ['reader' ,'readers'],
+    desc: '읽은 사람 확인',
   },
 ];

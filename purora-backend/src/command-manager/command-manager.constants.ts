@@ -42,6 +42,7 @@ export const KAKAO_USER_GET_ID = 'kakaoUserGetId';
 export const KAKAO_ADD_USER_ID = 'kakaoAddUserId';
 export const KAKAO_DELETE_USER_ID = 'kakaoDeleteUserId';
 export const KAKAO_ALL_MENTION = 'kakaoAllMention';
+export const KAKAO_READERS = 'kakaoReaders';
 
 // kakao-room.service
 export const ADMIN_KAKAO_ROOM_SERVICE = 'adminKakaoRoomService';
