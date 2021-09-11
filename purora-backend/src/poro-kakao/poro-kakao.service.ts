@@ -10,10 +10,10 @@ import {TalkChatData} from "node-kakao/dist/talk/chat";
 import {TalkChannel} from "node-kakao/dist/talk/channel";
 import {CommandManagerService} from "../command-manager/command-manager.service";
 import {UserCustomCommandService} from "../user-custom-command/services/user-custom-command.service";
-import {AllowRoomRepository} from "./repositories/allow-room.repository";
 import {AllowAdminRepository} from "./repositories/allow-admin.repository";
 import {ChatBotInput, ChatBotOutput} from "../common/dtos/chatBot.dto";
 import {AdminCommandService} from "./services/admin-command.service";
+import {RoomsRepository} from "../user-custom-command/repositories/rooms.repository";
 
 interface LoginDataDto {
   email: string;
@@ -26,7 +26,7 @@ export class PoroKakaoService {
   private client: TalkClient;
   private adminEnable: boolean;
   private api: AuthApiClient;
-  private allowRoom: number[];
+  private allowRoom: string[];
   private allowAdmin: number[];
   private updateRoomCommand: string[];
   private updateUserCommand: string[];
@@ -37,7 +37,7 @@ export class PoroKakaoService {
     private readonly commandManagerService: CommandManagerService,
     private readonly userCustomCommandService: UserCustomCommandService,
     private readonly adminCommandService: AdminCommandService,
-    private readonly allowRoomRepository: AllowRoomRepository,
+    private readonly roomsRepository: RoomsRepository,
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
     this.client = new TalkClient();
@@ -134,18 +134,18 @@ export class PoroKakaoService {
   }
 
   async updateRoom () {
-    const allowRooms = await this.allowRoomRepository.find();
+    const allowRooms = await this.roomsRepository.find();
     this.allowRoom = allowRooms.map((room) => {
-      return +room.roomId;
+      return room.roomId;
     });
   }
 
   async addChattingEvent () {
     this.client.on('user_join', (joinLog, channel, user, feed) => {
-      console.log(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
+      channel.sendChat(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
     });
     this.client.on('user_left', (leftLog, channel, user, feed) => {
-      console.log(`${user.nickname}님께서 방을 나가셨습니다 ㅠ___ㅠ`);
+      channel.sendChat(`${user.nickname}님께서 방을 나가셨습니다 ㅠ___ㅠ`);
     });
     // this.client.on('chat_deleted', (feedChatlog, channel, feed) => {
     //   const userInfo = channel.getUserInfo({userId: feedChatlog.sender.userId});
@@ -219,7 +219,7 @@ export class PoroKakaoService {
         return;
       }
 
-      if (!this.allowRoom.includes(+channelId)) {
+      if (!this.allowRoom.includes(String(channelId))) {
         return;
       }
 

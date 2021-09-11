@@ -42,7 +42,14 @@ export class UserCustomCommandService {
       }
     } } = talkChannel;
 
-    const myRoom = await this.rooms.findMyRoom(+channelId, roomName);
+    const myRoom = await this.rooms.findMyRoom(String(channelId));
+
+    if (!myRoom) {
+      return {
+        success: false,
+        message: `등록되지 않은 방입니다.`,
+      }
+    }
 
     /* 특정 키워드 필터링 */
     for (let i=0; i<keywordList.length; i++) {

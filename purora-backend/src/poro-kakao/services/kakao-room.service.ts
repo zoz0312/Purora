@@ -4,12 +4,12 @@ import {
   KAKAO_ADD_ROOM, KAKAO_DELETE_ROOM,
   KAKAO_GET_CHANNEL_ID,
 } from "../../command-manager/command-manager.constants";
-import {AllowRoomRepository} from "../repositories/allow-room.repository";
+import {RoomsRepository} from "../../user-custom-command/repositories/rooms.repository";
 
 @Injectable()
 export class KakaoRoomService {
   constructor(
-    private readonly allowRoomRepository: AllowRoomRepository,
+    private readonly rooms: RoomsRepository,
   ) {}
 
   async mainService(
@@ -34,7 +34,7 @@ export class KakaoRoomService {
   async getChannelId (
     { talkChannel }: ChatBotInput,
   ): Promise<ChatBotOutput> {
-    const message = String(+talkChannel.store.info.channelId);
+    const message = String(talkChannel.store.info.channelId);
     return {
       message,
       success: true,
@@ -44,30 +44,25 @@ export class KakaoRoomService {
   async addRoom (
     { talkChannel }: ChatBotInput,
   ): Promise<ChatBotOutput> {
-    const roomId = +talkChannel.store.info.channelId;
+    const roomId = String(talkChannel.store.info.channelId);
     const roomName = talkChannel.getDisplayName();
 
     try {
-      const alreadyRoom = await this.allowRoomRepository.findOne({
-        where: {
-          roomId
-        }
-      });
+      const myRoom = await this.rooms.findMyRoom(roomId);
 
-      if (alreadyRoom) {
+      if (myRoom) {
         return {
           success: false,
           message: `"${roomName}"는 이미 등록된 방입니다.`
         }
       }
 
-      await this.allowRoomRepository.save(
-        this.allowRoomRepository.create({
+      await this.rooms.save(
+        this.rooms.create({
           roomId,
-          description: `${roomName}`,
+          roomName,
         })
       );
-
 
       return {
         success: true,
@@ -84,23 +79,19 @@ export class KakaoRoomService {
   async deleteRoom (
     { talkChannel }: ChatBotInput,
   ): Promise<ChatBotOutput> {
-    const roomId = +talkChannel.store.info.channelId;
-    const roomName = talkChannel.getDisplayName();
+    const roomId = String(talkChannel.store.info.channelId);
+    // const roomName = talkChannel.getDisplayName();
     try {
-      const alreadyRoom = await this.allowRoomRepository.findOne({
-        where: {
-          roomId
-        }
-      });
+      const myRoom = await this.rooms.findMyRoom(roomId);
 
-      if (!alreadyRoom) {
+      if (!myRoom) {
         return {
           success: false,
           message: `등록되지 않은 방입니다.`
         }
       }
 
-      await this.allowRoomRepository.softDelete(alreadyRoom.id);
+      await this.rooms.softDelete(myRoom.id);
 
       return {
         success: true,

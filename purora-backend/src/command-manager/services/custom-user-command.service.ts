@@ -32,7 +32,14 @@ export class CustomUserCommand {
       }
     } } = talkChannel;
 
-    const myRoom = await this.rooms.findMyRoom(+channelId, roomName);
+    const myRoom = await this.rooms.findMyRoom(String(channelId));
+
+    if (!myRoom) {
+      return {
+        success: false,
+        message: `등록되지 않은 방입니다.`,
+      }
+    }
 
     switch (name) {
       case READ_USER_COMMAND:

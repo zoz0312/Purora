@@ -17,7 +17,6 @@ import { JwtModule } from './poro/jwt/jwt.module';
 import { GameInfo } from './poro/users/entities/game-info.entity';
 import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
 import { PoroKakaoModule } from './poro-kakao/poro-kakao.module';
-import {AllowRoom} from "./poro-kakao/entities/allow-room.entity";
 import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
 
 /*
@@ -66,7 +65,6 @@ import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
         UsersSummonerInfo,
         GameInfo,
         UsersGameInfo,
-        AllowRoom,
         AllowAdmin,
       ],
     }),

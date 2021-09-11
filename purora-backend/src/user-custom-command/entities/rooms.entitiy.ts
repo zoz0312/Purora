@@ -20,10 +20,8 @@ export class Rooms extends CommandCoreEntity {
   )
   keyword: Keyword[];
 
-  @Column({
-    type: "bigint"
-  })
-  roomId: number;
+  @Column()
+  roomId: string;
 
   @Column()
   roomName: string;
