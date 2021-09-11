@@ -12,6 +12,13 @@ export class Keyword extends CommandCoreEntity {
   @Column()
   keyword: string;
 
+  @Column({
+    type: 'tinyint',
+    comment: '0: NONE, 1: Global',
+    default: 0,
+  })
+  globalStatus: number;
+
   @ManyToOne(
     type => Rooms,
   )

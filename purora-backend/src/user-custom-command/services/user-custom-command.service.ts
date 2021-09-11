@@ -89,10 +89,14 @@ export class UserCustomCommandService {
 	): Promise<ChatBotOutput> {
 		try {
       const outputText = await this.keyword.findOne({
-        where: {
+        where: [{
           keyword: msg,
           rooms: myRoom,
-        },
+          globalStatus: 0,
+        },{
+          keyword: msg,
+          globalStatus: 1,
+        }],
         relations: ['commands']
       });
 
