@@ -88,7 +88,7 @@ export class UserCustomCommandService {
     myRoom: Rooms,
 	): Promise<ChatBotOutput> {
 		try {
-      const outputText = await this.keyword.findOne({
+      const outputText = await this.keyword.find({
         where: [{
           keyword: msg,
           rooms: myRoom,
@@ -100,14 +100,18 @@ export class UserCustomCommandService {
         relations: ['commands']
       });
 
-      if (!outputText) {
+      if (outputText.length === 0) {
         return {
           success: false,
           message: '등록된 키워드가 없습니다.'
         }
       }
 
-      const len = outputText.commands.length;
+      const texts = outputText.reduce((prev, text) => {
+        return [...prev, ...text.commands];
+      }, []);
+
+      const len = texts.length;
       if (len === 0) {
         return {
           success: false,
@@ -118,7 +122,7 @@ export class UserCustomCommandService {
       const ramdomValue = Math.floor(Math.random() * (len));
 			return {
         success: true,
-        message: outputText.commands[ramdomValue].outputText,
+        message: texts[ramdomValue].outputText,
       }
     } catch (error) {
       return {
