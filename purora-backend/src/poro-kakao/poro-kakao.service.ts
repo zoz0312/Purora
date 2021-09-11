@@ -45,8 +45,8 @@ export class PoroKakaoService {
     this.api = null;
     this.allowRoom = [];
     this.allowAdmin = [];
-    this.updateRoomCommand = ['addRoom', 'deleteRoom',];
-    this.updateUserCommand = ['addUserId', 'deleteUserId',];
+    this.updateRoomCommand = ['!addRoom', '!deleteRoom',];
+    this.updateUserCommand = ['!addUserId', '!deleteUserId',];
     this.init().then();
   }
 
@@ -142,7 +142,7 @@ export class PoroKakaoService {
 
   async addChattingEvent () {
     this.client.on('user_join', (joinLog, channel, user, feed) => {
-      channel.sendChat(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
+      // channel.sendChat(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
     });
     this.client.on('user_left', (leftLog, channel, user, feed) => {
       channel.sendChat(`${user.nickname}님께서 방을 나가셨습니다 ㅠ___ㅠ`);
