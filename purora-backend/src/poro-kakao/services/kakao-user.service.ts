@@ -140,12 +140,31 @@ export class KakaoUserService {
     { talkChatData, talkChannel }: ChatBotInput,
   ): Promise<ChatBotOutput> {
     const allUser = talkChannel.getAllUserInfo();
-    const builder = new ChatBuilder()
-      .append(new ReplyContent(talkChatData.chat))
+    const builders = [];
+    const MAX_MENTION_COUNT = 15;
+    let count = 0;
+
+    let builder = null;
     for (const user of allUser) {
+      if (count === 0) {
+        builder = new ChatBuilder()
+          .append(new ReplyContent(talkChatData.chat));
+      }
       builder.append(new MentionContent(user));
+      count++;
+      if (count === MAX_MENTION_COUNT - 1) {
+        builders.push(builder);
+        count = 0;
+      }
     }
-    talkChannel.sendChat(builder.build(KnownChatType.REPLY));
+
+    if (count != 0) {
+      builders.push(builder);
+    }
+
+    builders.map((builder) => {
+      talkChannel.sendChat(builder.build(KnownChatType.REPLY));
+    })
 
     return {
       success: true,
