@@ -13,6 +13,7 @@
       <mapping pattern="aaa" type="TypeScript JSX" />
       <removed_mapping ext="apk" approved="true" type="ARCHIVE" />
       <removed_mapping ext="psd" approved="true" type="Image" />
+      <removed_mapping ext="vue" approved="true" type="PLAIN_TEXT" />
     </extensionMap>
   </component>
 </application>
