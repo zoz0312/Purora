@@ -11,6 +11,7 @@ import { KeywordRepository } from '../user-custom-command/repositories/keyword.r
 import { WorkingRepository } from '../user-custom-command/repositories/working.repository';
 import { RoomsRepository } from '../user-custom-command/repositories/rooms.repository';
 import { CommandManagerService } from './command-manager.service';
+import { StockManagerService } from "./services/stock.service";
 
 /*
   @author AJu (zoz0312)
@@ -33,6 +34,7 @@ import { CommandManagerService } from './command-manager.service';
     CustomUserCommand,
     WorkingListManager,
     CommandManagerService,
+    StockManagerService,
   ],
   exports: [CommandManagerService],
 })

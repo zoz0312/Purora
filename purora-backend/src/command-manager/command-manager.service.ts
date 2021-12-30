@@ -8,9 +8,10 @@ import {commandList} from "./services/commands";
 import {
   CUSTOM_USER_COMMAND_SERVICE, PARTY_HELP_SERVICE,
   PARTY_MANAGER_SERVICE,
-  PARTY_USER_MANAGER_SERVICE, WORKING_LIST_MANAGER_SERVICE
+  PARTY_USER_MANAGER_SERVICE, STOCK_SERVICE, WORKING_LIST_MANAGER_SERVICE
 } from "./command-manager.constants";
 import {ChatBotInput} from "../common/dtos/chatBot.dto";
+import { StockManagerService } from "./services/stock.service";
 
 
 @Injectable()
@@ -21,6 +22,7 @@ export class CommandManagerService {
     private partyUserManager: PartyUserManager,
     private partyHelp: PartyHelp,
     private workingManager: WorkingListManager,
+    private stockManager: StockManagerService,
   ) {}
 
   async commandManage(chatBotInput: ChatBotInput) {
@@ -46,6 +48,8 @@ export class CommandManagerService {
             return this.workingManager.mainService(chatBotInput, name);
           case PARTY_HELP_SERVICE:
             return this.partyHelp.mainService(name);
+          case STOCK_SERVICE:
+            return this.stockManager.mainService(chatBotInput, name);
         }
       }
     }

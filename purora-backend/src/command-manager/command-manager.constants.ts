@@ -22,6 +22,10 @@ export const PARTY_HELP_SERVICE = 'partyHelpService';
 export const HELP_PARTY = 'helpParty';
 export const HELP_PARTY_DETAIL = 'helpPartyDetail';
 
+// stock.service
+export const STOCK_SERVICE = 'stockService';
+export const STOCK_SEARCH = 'stockSearch';
+
 // custom-user-command.service
 export const CUSTOM_USER_COMMAND_SERVICE = 'customUserCommandService';
 export const READ_USER_COMMAND = 'readUserCommand';

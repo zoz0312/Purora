@@ -3,6 +3,7 @@ import { commandPartyUserManager } from './command.party-user-manager';
 import { commandPartyHelp } from './command.party-help';
 import { commandCustomUserCommand } from './command.custom-user-command';
 import { commandWorkingListManager } from './command.working-list';
+import { commandStockManager } from "./command.stock";
 
 /*
   @author AJu (zoz0312)
@@ -14,4 +15,5 @@ export const commandList: commandDTO[] = [
   ...commandPartyHelp,
   ...commandCustomUserCommand,
   ...commandWorkingListManager,
+  ...commandStockManager,
 ];

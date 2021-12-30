@@ -60,7 +60,8 @@ export class PartyHelp {
     message += '\n';
     message += '로또\n';
     message += '연금복권\n';
-    message += '작업목록\n';
+    // message += '작업목록\n';
+    message += '주식검색\n';
 
     return {
       success: true,
