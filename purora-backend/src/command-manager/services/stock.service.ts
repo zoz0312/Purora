@@ -32,7 +32,7 @@ export class StockManagerService {
   ): Promise<ChatBotOutput> {
     const [_, args] = trimInput(chatBotInput);
     const argSplit = args.split(',');
-    const code = argSplit[0];
+    const code = (argSplit[0]).toUpperCase();
     let startDate = argSplit[1] ?? '';
     let endDate = argSplit[2] ?? '';
     let getType = (argSplit[3] ?? 'day').toLowerCase();
@@ -122,8 +122,13 @@ export class StockManagerService {
         }
       }
     );
-    stockCode = stockCodeData.items[0][0][0][0];
-    const stockName = stockCodeData.items[0][0][1][0];
+
+    const sockElement = stockCodeData.items[0].find(element => {
+      return element[0][0] === code || element[1][0] === code;
+    });
+
+    stockCode = sockElement[0][0];
+    const stockName = sockElement[1][0];
 
     const stockPriceURL = `https://api.finance.naver.com/siseJson.naver`;
     const { data } = await axios.get(
