@@ -48,9 +48,7 @@ export class StockManagerService {
       startDate = momentDate.format('YYYYMMDD');
     } else {
       const current = moment();
-      if (current.hours() < 9) {
-        current.subtract(1, 'd');
-      }
+      current.subtract(7, 'd');
       startDate = current.format('YYYYMMDD');
     }
 
@@ -127,6 +125,13 @@ export class StockManagerService {
       return element[0][0] === code || element[1][0] === code;
     });
 
+    if (!sockElement) {
+      return {
+        success: false,
+        message: `존재하지 않는 종목입니다 X__x`,
+      }
+    }
+
     stockCode = sockElement[0][0];
     const stockName = sockElement[1][0];
 
@@ -155,9 +160,44 @@ export class StockManagerService {
     const arr = JSON.parse(replaced);
     let message = `📈 ${stockName} (${stockCode})\n`;
 
+    if (arr.length === 1) {
+      return {
+        success: false,
+        message: `해당 날짜의 데이터가 없습니다 ㅠ__ㅠ`,
+      }
+    }
+
+    // item
+    // 0: 날짜
+    // 1: 시가
+    // 2: 고가
+    // 3: 저가
+    // 4: 종가
+    // 5: 거래량
+    // 6: 외국인소진률
+
+    let prevPrice = 0;
     message += arr.map((item, index) => {
-      let msg = `${item[0]}`;
-      msg += ` | ${item[1]}${index !== 0 ? '원' : ''}`;
+      let msg = '';
+      if (index === 0) {
+        msg = `${item[0]} | ${item[4]}(이전대비)`;
+      } else {
+        const price = +item[4];
+        msg = `${moment(item[0]).format('YY.MM.DD')}`;
+        msg += ` | ${price.toLocaleString()}원`;
+        if (prevPrice !== 0) {
+          const diff = prevPrice - price;
+          const percent = ((diff / price) * 100) * -1;
+          msg += ` (${percent.toFixed(2)}%`;
+          if (percent > 0) {
+            msg += `⬆`;
+          } else if (percent < 0) {
+            msg += `⬇`;
+          }
+          msg += `)`;
+        }
+        prevPrice = price;
+      }
       return msg;
     }).join('\n');
 
