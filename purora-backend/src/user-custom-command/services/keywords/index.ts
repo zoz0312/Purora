@@ -1,5 +1,5 @@
-
 import { keywordLottoDraw } from './keyword.lotto-draw';
+import { keywordWeatherManager } from './keyword.weather';
 import { keywordWorkingList } from './keyword.working-list';
 /*
   @author AJu (zoz0312)
@@ -8,4 +8,5 @@ import { keywordWorkingList } from './keyword.working-list';
 export const keywordList: keywordDTO[] = [
   ...keywordWorkingList,
   ...keywordLottoDraw,
+  ...keywordWeatherManager,
 ];

@@ -15,7 +15,6 @@ import {
   PARTY_MANAGER_SERVICE,
   WORKING_LIST_MANAGER_SERVICE,
   PARTY_HELP_SERVICE,
-  WEATHER_COMMAND,
 } from './command-manager.constants';
 import { PartyUserManager } from './services/party-user-manager.service';
 import { Cron } from '@nestjs/schedule';
@@ -23,14 +22,10 @@ import { commandList } from './services/commands/index';
 import { PartyHelp } from './services/party-help.service';
 import { CustomUserCommand } from './services/custom-user-command.service';
 import { WorkingListManager } from './services/working-list.service';
-import {
-  PARTY_USER_MANAGER_SERVICE,
-  WEATHER_SERVICE,
-} from 'src/command-manager/command-manager.constants';
+import { PARTY_USER_MANAGER_SERVICE } from 'src/command-manager/command-manager.constants';
 import { CUSTOM_USER_COMMAND_SERVICE } from 'src/command-manager/command-manager.constants';
 import { deepCopy } from 'deep-copy-ts';
 import { ChatBuilder, KnownChatType, MentionContent } from 'node-kakao';
-import { WeatherService } from './services/weather.service';
 
 /*
   @author AJu (zoz0312)
@@ -45,7 +40,6 @@ export class CommandManagerController {
     private partyUserManager: PartyUserManager,
     private partyHelp: PartyHelp,
     private workingManager: WorkingListManager,
-    private WeatherService: WeatherService,
   ) {}
 
   // @Get()

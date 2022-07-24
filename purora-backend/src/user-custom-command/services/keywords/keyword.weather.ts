@@ -2,14 +2,14 @@ import {
   WEATHER_HELP,
   WEATHER_SERVICE,
 } from 'src/command-manager/command-manager.constants';
-import { WEATHER_COMMAND } from '../../command-manager.constants';
+import { WEATHER_COMMAND } from '../../../command-manager/command-manager.constants';
 
 /*
   @author AJu (zoz0312)
   날씨 API 명령어 목록
 */
 const service = WEATHER_SERVICE;
-export const commandWeatherManager: commandDTO[] = [
+export const keywordWeatherManager: commandDTO[] = [
   {
     service,
     name: WEATHER_HELP,

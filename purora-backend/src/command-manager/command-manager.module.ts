@@ -12,7 +12,7 @@ import { WorkingRepository } from '../user-custom-command/repositories/working.r
 import { RoomsRepository } from '../user-custom-command/repositories/rooms.repository';
 import { CommandManagerService } from './command-manager.service';
 import { StockManagerService } from './services/stock.service';
-import { WeatherService } from './services/weather.service';
+import { WeatherService } from '../user-custom-command/services/weather.service';
 
 /*
   @author AJu (zoz0312)
@@ -38,7 +38,6 @@ import { WeatherService } from './services/weather.service';
     WorkingListManager,
     CommandManagerService,
     StockManagerService,
-    WeatherService,
   ],
   exports: [CommandManagerService],
 })

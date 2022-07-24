@@ -11,27 +11,26 @@ import { RoomsRepository } from './repositories/rooms.repository';
 import { KeywordRepository } from './repositories/keyword.repository';
 import { CommandsRepository } from './repositories/commands.repository';
 import { WorkingRepository } from './repositories/working.repository';
+import { WeatherService } from './services/weather.service';
 
 /*
   @author AJu (zoz0312)
   '/명령어'를 제외한 유저의 텍스트를 받을 수 있는 모듈의 묶음
 */
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    Commands,
-    CommandsRepository,
-    Keyword,
-    KeywordRepository,
-    Working,
-    WorkingRepository,
-    Rooms,
-    RoomsRepository,
-  ])],
-  providers: [
-    WorkingList,
-    LottoDraw,
-		UserCustomCommandService
+  imports: [
+    TypeOrmModule.forFeature([
+      Commands,
+      CommandsRepository,
+      Keyword,
+      KeywordRepository,
+      Working,
+      WorkingRepository,
+      Rooms,
+      RoomsRepository,
+    ]),
   ],
+  providers: [WorkingList, LottoDraw, UserCustomCommandService, WeatherService],
   exports: [UserCustomCommandService],
 })
 export class UserCustomCommandModule {}

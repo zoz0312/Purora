@@ -15,8 +15,6 @@ import {
 } from './command-manager.constants';
 import { ChatBotInput } from '../common/dtos/chatBot.dto';
 import { StockManagerService } from './services/stock.service';
-import { WEATHER_SERVICE } from 'src/command-manager/command-manager.constants';
-import { WeatherService } from './services/weather.service';
 
 @Injectable()
 export class CommandManagerService {
@@ -27,7 +25,6 @@ export class CommandManagerService {
     private partyHelp: PartyHelp,
     private workingManager: WorkingListManager,
     private stockManager: StockManagerService,
-    private WeatherService: WeatherService,
   ) {}
 
   async commandManage(chatBotInput: ChatBotInput) {
@@ -51,8 +48,6 @@ export class CommandManagerService {
             return this.partyHelp.mainService(name);
           case STOCK_SERVICE:
             return this.stockManager.mainService(chatBotInput, name);
-          case WEATHER_SERVICE:
-            return this.WeatherService.mainService(chatBotInput, name);
         }
       }
     }

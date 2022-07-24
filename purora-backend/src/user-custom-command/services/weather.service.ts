@@ -2,15 +2,7 @@ import { Injectable } from '@nestjs/common';
 import axios from 'axios';
 import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
 import { trimInput } from '../../common/utils';
-import { Status } from '../../user-custom-command/entities/working.entity';
-import {
-  CREATE_WORKING,
-  DELETE_WORKING,
-  UPDATE_WORKING,
-  WEATHER_HELP,
-  WEATHER_COMMAND,
-} from '../command-manager.constants';
-import { weatherCode, weatherIdList } from '../command-manager.constatnt';
+import { weatherCode, weatherIdList } from '../user-custom-command.constant';
 
 /*
   @author AJu (zoz0312)
@@ -19,33 +11,6 @@ import { weatherCode, weatherIdList } from '../command-manager.constatnt';
 @Injectable()
 export class WeatherService {
   constructor() {}
-
-  // Call mainService by controller
-  async mainService(
-    chatBotInput: ChatBotInput,
-    name: string,
-  ): Promise<ChatBotOutput> {
-    switch (name) {
-      case WEATHER_HELP:
-        return this.weatherHelp(chatBotInput);
-      case WEATHER_COMMAND:
-        return this.weather(chatBotInput);
-      default:
-        return {
-          success: false,
-          message: `${name}은 잘못 되었습니다.`,
-        };
-    }
-  }
-
-  async weatherHelp(chatBotInput: ChatBotInput): Promise<ChatBotOutput> {
-    // TODO 날씨 도움말
-
-    return {
-      success: true,
-      message: 'TODO',
-    };
-  }
 
   async weather(chatBotInput: ChatBotInput): Promise<ChatBotOutput> {
     const [_, arguement] = trimInput(chatBotInput);
@@ -74,8 +39,8 @@ export class WeatherService {
       message += weatherIdList.reduce((prev, id) => {
         const { regionName, tmpr, wetrTxt, wetrCd } = weatherData[id];
         const icon = weatherCode[wetrCd] ? weatherCode[wetrCd].icon : '';
-        return prev + `${regionName}: ${tmpr}°C ${wetrTxt}${icon}\n`;
-      });
+        return prev + `\n${regionName}: ${tmpr}°C ${wetrTxt}${icon}`;
+      }, '');
 
       return {
         success: true,
