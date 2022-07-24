@@ -3,7 +3,10 @@ import { Rooms } from '../entities/rooms.entitiy';
 import { Injectable } from '@nestjs/common';
 import { KeywordRepository } from '../repositories/keyword.repository';
 import { keywordList } from './keywords';
-import { SHOW_WORKING_LIST } from '../../command-manager/command-manager.constants';
+import {
+  SHOW_WORKING_LIST,
+  WEATHER_WEEKLY_COMMAND,
+} from '../../command-manager/command-manager.constants';
 import { RANDOM_LOTTO, RANDOM_PENTION_LOTTO } from '../../constants';
 import { RoomsRepository } from '../repositories/rooms.repository';
 import { WorkingList } from './working-list.service';
@@ -59,6 +62,8 @@ export class UserCustomCommandService {
             return this.lottoDraw.randomPensionLotto();
           case WEATHER_COMMAND:
             return this.WeatherService.weather(chatBotInput);
+          case WEATHER_WEEKLY_COMMAND:
+            return this.WeatherService.weatherWeekly();
         }
       }
     }

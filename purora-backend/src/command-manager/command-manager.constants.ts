@@ -61,4 +61,5 @@ export const ADMIN_HELP = 'adminHelp';
 // weather.service
 export const WEATHER_SERVICE = 'weatherService';
 export const WEATHER_COMMAND = 'weatherCommand';
+export const WEATHER_WEEKLY_COMMAND = 'weatherWeeklyCommand';
 export const WEATHER_HELP = 'weatherHelp';

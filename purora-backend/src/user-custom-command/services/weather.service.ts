@@ -45,7 +45,44 @@ export class WeatherService {
         message,
       };
     } catch (error) {
-      console.log('error', error);
+      return {
+        success: false,
+        error,
+      };
+    }
+  }
+  async weatherWeekly(): Promise<ChatBotOutput> {
+    try {
+      const extractSpanPattern = /(<([^>]+)>)/gi;
+      const url =
+        'https://search.naver.com/search.naver?where=nexearch&sm=top_sug.pre&fbm=0&acr=1&acq=%EC%A3%BC%EA%B0%84+%EB%82%A0%E3%85%86&qdt=0&ie=utf8&query=%EC%A3%BC%EA%B0%84+%EB%82%A0%EC%94%A8';
+      const { data } = await axios.get(url);
+      const [weekly] = data.split('<ul class="week_list">')[1].split('</ul>');
+
+      let weeklyData = weekly.replace(extractSpanPattern, '');
+      weeklyData = weeklyData
+        .replace(/         /gi, '\n')
+        .replace(/최저기온/gi, '')
+        .replace(/최고기온/gi, '')
+        .trim()
+        .split('\n');
+
+      let message =
+        '[주간날씨]\n\n요일 | 날짜 | 오전 | 오후 | 최저기온 | 최고기온\n';
+      weeklyData.map((item, index) => {
+        const text = item.replace(/\s+/gi, ' ').split(' ');
+        if (index === 0) {
+          message += `\n[${text[0]} - ${text[1]}] ${text[3]} ${text[4]} | ${text[6]} ${text[7]} | ${text[8]} | ${text[10]}`;
+        } else {
+          message += `\n[${text[0]} - ${text[1]}] ${text[2]} ${text[3]} | ${text[4]} ${text[5]} | ${text[6]} | ${text[8]}`;
+        }
+      });
+
+      return {
+        success: true,
+        message,
+      };
+    } catch (error) {
       return {
         success: false,
         error,

@@ -26,6 +26,7 @@ import { PARTY_USER_MANAGER_SERVICE } from 'src/command-manager/command-manager.
 import { CUSTOM_USER_COMMAND_SERVICE } from 'src/command-manager/command-manager.constants';
 import { deepCopy } from 'deep-copy-ts';
 import { ChatBuilder, KnownChatType, MentionContent } from 'node-kakao';
+import axios from 'axios';
 
 /*
   @author AJu (zoz0312)
@@ -43,14 +44,7 @@ export class CommandManagerController {
   ) {}
 
   // @Get()
-  // async test(): Promise<ChatBotOutput> {
-  //   return this.WeatherService.weather({
-  //     room: '',
-  //     sender: '나',
-  //     isGroupChat: false,
-  //     image: '',
-  //     msg: '/날씨',
-  //   });
+  // async test() {
   // }
 
   @Post()
