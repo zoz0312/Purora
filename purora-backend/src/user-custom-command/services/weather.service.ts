@@ -33,8 +33,6 @@ export class WeatherService {
 
       const searchWeatherURL = `https://weather.naver.com/today/api/nation/20220724/now`;
       const { data: weatherData } = await axios.get(searchWeatherURL);
-
-      console.log('weatherData', weatherData);
       let message = '[전국날씨]\n';
       message += weatherIdList.reduce((prev, id) => {
         const { regionName, tmpr, wetrTxt, wetrCd } = weatherData[id];
