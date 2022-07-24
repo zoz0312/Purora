@@ -11,21 +11,24 @@ import { KeywordRepository } from '../user-custom-command/repositories/keyword.r
 import { WorkingRepository } from '../user-custom-command/repositories/working.repository';
 import { RoomsRepository } from '../user-custom-command/repositories/rooms.repository';
 import { CommandManagerService } from './command-manager.service';
-import { StockManagerService } from "./services/stock.service";
+import { StockManagerService } from './services/stock.service';
+import { WeatherService } from './services/weather.service';
 
 /*
   @author AJu (zoz0312)
 */
 @Module({
-  imports: [TypeOrmModule.forFeature([
-    CommandsRepository,
-    KeywordRepository,
-    WorkingRepository,
-    RoomsRepository,
-    // Commands,
-    // Keyword,
-    // Working,
-  ])],
+  imports: [
+    TypeOrmModule.forFeature([
+      CommandsRepository,
+      KeywordRepository,
+      WorkingRepository,
+      RoomsRepository,
+      // Commands,
+      // Keyword,
+      // Working,
+    ]),
+  ],
   controllers: [CommandManagerController],
   providers: [
     PartyManager,
@@ -35,6 +38,7 @@ import { StockManagerService } from "./services/stock.service";
     WorkingListManager,
     CommandManagerService,
     StockManagerService,
+    WeatherService,
   ],
   exports: [CommandManagerService],
 })

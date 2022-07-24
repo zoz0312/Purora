@@ -17,7 +17,7 @@ import { JwtModule } from './poro/jwt/jwt.module';
 import { GameInfo } from './poro/users/entities/game-info.entity';
 import { UsersGameInfo } from './poro/users/entities/user-game-info.entity';
 import { PoroKakaoModule } from './poro-kakao/poro-kakao.module';
-import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
+import { AllowAdmin } from './poro-kakao/entities/allow-admin.entity';
 
 /*
   @author AJu (zoz0312)
@@ -29,8 +29,10 @@ import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
       envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env',
       ignoreEnvFile: process.env.NODE_ENV === 'production',
       validationSchema: Joi.object({
-				PORT: Joi.string(),
-        NODE_ENV: Joi.string().valid('dev', 'production', 'test').required(),
+        PORT: Joi.string(),
+        NODE_ENV: Joi.string()
+          .valid('dev', 'production', 'test')
+          .required(),
         DB_HOST: Joi.string(),
         DB_PORT: Joi.string(),
         DB_DATABASE: Joi.string(),
@@ -42,6 +44,7 @@ import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
         DEVICE_UUID: Joi.string().required(),
         KAKAO_ID: Joi.string().required(),
         KAKAO_PW: Joi.string().required(),
+        // WEATHER_KEY: Joi.string().required(),
       }),
     }),
     CommandManagerModule,
@@ -70,10 +73,10 @@ import {AllowAdmin} from "./poro-kakao/entities/allow-admin.entity";
     }),
     ScheduleModule.forRoot(),
     JwtModule.forRoot({
-      privateKey: process.env.PRIVATE_KEY
+      privateKey: process.env.PRIVATE_KEY,
     }),
     PoroModule.forRoot({
-      seleniumServer: process.env.SELENIUM_SERVER
+      seleniumServer: process.env.SELENIUM_SERVER,
     }),
     PoroKakaoModule.forRoot({
       desktopName: process.env.DESKTOP_NAME,

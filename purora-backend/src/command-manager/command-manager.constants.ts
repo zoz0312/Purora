@@ -57,3 +57,8 @@ export const KAKAO_DELETE_ROOM = 'kakaoDeleteRoom';
 // admin-help.service
 export const ADMIN_HELP_SERVICE = 'adminHelpService';
 export const ADMIN_HELP = 'adminHelp';
+
+// weather.service
+export const WEATHER_SERVICE = 'weatherService';
+export const WEATHER_COMMAND = 'weatherCommand';
+export const WEATHER_HELP = 'weatherHelp';
