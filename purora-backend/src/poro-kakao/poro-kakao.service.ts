@@ -1,19 +1,16 @@
-import {Inject, Injectable} from '@nestjs/common';
-import {PORO_KAKAO_CONFIG_OPTIONS} from "../common/constants";
-import {PoroKakaoModuleOptions} from "./poro-kakao.module";
-import {
-  AuthApiClient,
-  TalkClient,
-} from 'node-kakao';
+import { Inject, Injectable } from '@nestjs/common';
+import { PORO_KAKAO_CONFIG_OPTIONS } from '../common/constants';
+import { PoroKakaoModuleOptions } from './poro-kakao.module';
+import { AuthApiClient, TalkClient } from 'node-kakao';
 import * as readline from 'readline';
-import {TalkChatData} from "node-kakao/dist/talk/chat";
-import {TalkChannel} from "node-kakao/dist/talk/channel";
-import {CommandManagerService} from "../command-manager/command-manager.service";
-import {UserCustomCommandService} from "../user-custom-command/services/user-custom-command.service";
-import {AllowAdminRepository} from "./repositories/allow-admin.repository";
-import {ChatBotInput, ChatBotOutput} from "../common/dtos/chatBot.dto";
-import {AdminCommandService} from "./services/admin-command.service";
-import {RoomsRepository} from "../user-custom-command/repositories/rooms.repository";
+import { TalkChatData } from 'node-kakao/dist/talk/chat';
+import { TalkChannel } from 'node-kakao/dist/talk/channel';
+import { CommandManagerService } from '../command-manager/command-manager.service';
+import { UserCustomCommandService } from '../user-custom-command/services/user-custom-command.service';
+import { AllowAdminRepository } from './repositories/allow-admin.repository';
+import { ChatBotInput, ChatBotOutput } from '../common/dtos/chatBot.dto';
+import { AdminCommandService } from './services/admin-command.service';
+import { RoomsRepository } from '../user-custom-command/repositories/rooms.repository';
 
 interface LoginDataDto {
   email: string;
@@ -23,6 +20,7 @@ interface LoginDataDto {
 
 @Injectable()
 export class PoroKakaoService {
+  private config: any;
   private client: TalkClient;
   private adminEnable: boolean;
   private api: AuthApiClient;
@@ -40,30 +38,34 @@ export class PoroKakaoService {
     private readonly roomsRepository: RoomsRepository,
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
-    this.client = new TalkClient();
+    this.config = {
+      agent: 'android',
+      mccmnc: '999',
+      deviceModel: 'SM-T976N',
+      appVersion: '9.6.0',
+      version: '9.6.0',
+      netType: 0,
+      subDevice: true,
+    };
+    this.client = new TalkClient(this.config);
     this.adminEnable = true;
     this.api = null;
     this.allowRoom = [];
     this.allowAdmin = [];
-    this.updateRoomCommand = ['!addRoom', '!deleteRoom',];
-    this.updateUserCommand = ['!addUserId', '!deleteUserId',];
+    this.updateRoomCommand = ['!addRoom', '!deleteRoom'];
+    this.updateUserCommand = ['!addUserId', '!deleteUserId'];
     this.init().then();
   }
 
   async init() {
-    await this.login()
+    await this.login();
     await this.updateUser();
     await this.updateRoom();
     await this.addChattingEvent();
   }
 
-  async login (): Promise<ChatBotOutput> {
-    const {
-      desktopName,
-      deviceUUID,
-      kakaoID,
-      kakaoPW,
-    }  = this.options;
+  async login(): Promise<ChatBotOutput> {
+    const { desktopName, deviceUUID, kakaoID, kakaoPW } = this.options;
 
     const loginForm = {
       email: kakaoID,
@@ -71,7 +73,7 @@ export class PoroKakaoService {
       forced: true,
     };
 
-    this.api = await AuthApiClient.create(desktopName, deviceUUID);
+    this.api = await AuthApiClient.create(desktopName, deviceUUID, this.config);
     let login = await this.api.login(loginForm);
     if (!login.success) {
       if (login.status === -100) {
@@ -81,7 +83,7 @@ export class PoroKakaoService {
       return {
         success: false,
         message: `로그인 실패 ${login.status}`,
-      }
+      };
       // throw new Error(`로그인에 실패하였습니다!`);
     }
 
@@ -90,19 +92,19 @@ export class PoroKakaoService {
       return {
         success: false,
         message: `로그인 실패 ${clientResponse.status}`,
-      }
+      };
       // throw new Error(`로그인 실패 ${clientResponse.status}`);
     }
 
     return {
       success: true,
       message: `로그인 성공!`,
-    }
+    };
   }
 
-  async deviceRegistration (config: LoginDataDto) {
+  async deviceRegistration(config: LoginDataDto) {
     if (this.api === null) {
-      throw new Error(`MUST API Initialized`)
+      throw new Error(`MUST API Initialized`);
     }
 
     const { success: passCodeSuccess } = await this.api.requestPasscode(config);
@@ -115,32 +117,36 @@ export class PoroKakaoService {
       output: process.stdout,
     });
 
-    const passcode = await new Promise<string>((resolve) => {
+    const passcode = await new Promise<string>(resolve => {
       return inputInterface.question('Enter passcode: ', resolve);
     });
     inputInterface.close();
 
-    const { success: registerSuccess } = await this.api.registerDevice(config, passcode, true);
+    const { success: registerSuccess } = await this.api.registerDevice(
+      config,
+      passcode,
+      true,
+    );
     if (!registerSuccess) {
       throw new Error(`Device registration failed`);
     }
   }
 
-  async updateUser () {
+  async updateUser() {
     const allowAdmins = await this.allowAdminRepository.find();
-    this.allowAdmin = allowAdmins.map((admin) => {
+    this.allowAdmin = allowAdmins.map(admin => {
       return +admin.userId;
     });
   }
 
-  async updateRoom () {
+  async updateRoom() {
     const allowRooms = await this.roomsRepository.find();
-    this.allowRoom = allowRooms.map((room) => {
+    this.allowRoom = allowRooms.map(room => {
       return room.roomId;
     });
   }
 
-  async addChattingEvent () {
+  async addChattingEvent() {
     this.client.on('user_join', (joinLog, channel, user, feed) => {
       // channel.sendChat(`${user.nickname}님께서 방에 들어오셨습니다\n어서오세요~ 닉변 부탁드립니다.\n[소환사명/나이/포지션/지역]으로 맞춰주세요.`);
     });
@@ -161,11 +167,11 @@ export class PoroKakaoService {
     this.client.on('chat', async (data: TalkChatData, channel: TalkChannel) => {
       const msg = data.text;
       const room = channel.getDisplayName();
-      const { store: {
-        info: {
-          channelId,
-        }
-      } } = channel;
+      const {
+        store: {
+          info: { channelId },
+        },
+      } = channel;
 
       const {
         nickname,
@@ -205,7 +211,10 @@ export class PoroKakaoService {
           return false;
         }
 
-        const { success, message } = await this.adminCommandService.adminCommandManage(chatBotInput);
+        const {
+          success,
+          message,
+        } = await this.adminCommandService.adminCommandManage(chatBotInput);
         if (success) {
           if (this.updateRoomCommand.includes(msg)) {
             await this.updateRoom();
@@ -224,12 +233,19 @@ export class PoroKakaoService {
       }
 
       if (msg[0] === '/') {
-        const { message } = await this.commandManagerService.commandManage(chatBotInput);
+        const { message } = await this.commandManagerService.commandManage(
+          chatBotInput,
+        );
         if (message) {
           await channel.sendChat(`${message}`);
         }
       } else {
-        const { success, message } = await this.userCustomCommandService.userCustomCommandForKakao(chatBotInput);
+        const {
+          success,
+          message,
+        } = await this.userCustomCommandService.userCustomCommandForKakao(
+          chatBotInput,
+        );
         if (success) {
           await channel.sendChat(`${message}`);
         }
@@ -237,4 +253,3 @@ export class PoroKakaoService {
     });
   }
 }
-
