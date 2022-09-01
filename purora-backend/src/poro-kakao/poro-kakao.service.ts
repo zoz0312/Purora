@@ -41,9 +41,9 @@ export class PoroKakaoService {
     this.config = {
       agent: 'android',
       mccmnc: '999',
-      deviceModel: 'SM-T976N',
-      appVersion: '9.6.0',
-      version: '9.6.0',
+      deviceModel: 'SM-F936NDREKOO',
+      appVersion: '3.4.2.3187',
+      version: '9.7.7',
       netType: 0,
       subDevice: true,
     };
