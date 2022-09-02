@@ -1,7 +1,7 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PORO_KAKAO_CONFIG_OPTIONS } from '../common/constants';
 import { PoroKakaoModuleOptions } from './poro-kakao.module';
-import { AuthApiClient, TalkClient } from 'node-kakao';
+import { util, api, AuthApiClient, TalkClient } from 'node-kakao';
 import * as readline from 'readline';
 import { TalkChatData } from 'node-kakao/dist/talk/chat';
 import { TalkChannel } from 'node-kakao/dist/talk/channel';
@@ -39,11 +39,14 @@ export class PoroKakaoService {
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
     this.config = {
-      agent: 'android',
+      //agent: 'android',
+      agent: 'win32',
+      osVersion: '10.0',
       mccmnc: '999',
-      deviceModel: 'SM-F936NDREKOO',
+      deviceModel: 'SM-A235N',
       appVersion: '3.4.2.3187',
-      version: '9.6.0',
+      version: '9.5.6',
+      deviceType: 2,
       netType: 0,
       subDevice: true,
     };
@@ -73,25 +76,32 @@ export class PoroKakaoService {
       forced: true,
     };
 
-    this.api = await AuthApiClient.create(desktopName, deviceUUID, this.config);
+    this.api = await AuthApiClient.create(
+      desktopName,
+      deviceUUID,
+      this.config,
+      api.xvc.AndroidSubXVCProvider,
+    );
     let login = await this.api.login(loginForm);
     if (!login.success) {
       if (login.status === -100) {
         await this.deviceRegistration(loginForm);
         login = await this.api.login(loginForm);
       }
+
+      const message = `AuthApiClient: 로그인 실패 ${login.status}`;
       return {
         success: false,
-        message: `로그인 실패 ${login.status}`,
+        message,
       };
-      // throw new Error(`로그인에 실패하였습니다!`);
     }
 
     const clientResponse = await this.client.login(login.result);
     if (!clientResponse.success) {
+      const message = `clientResponse: 로그인 실패 ${clientResponse.status}`;
       return {
         success: false,
-        message: `로그인 실패 ${clientResponse.status}`,
+        message,
       };
       // throw new Error(`로그인 실패 ${clientResponse.status}`);
     }
@@ -104,12 +114,12 @@ export class PoroKakaoService {
 
   async deviceRegistration(config: LoginDataDto) {
     if (this.api === null) {
-      throw new Error(`MUST API Initialized`);
+      console.log('MUST API Initialized');
     }
 
     const { success: passCodeSuccess } = await this.api.requestPasscode(config);
     if (!passCodeSuccess) {
-      throw new Error(`PassCode Fail`);
+      console.log('PassCode Fail');
     }
 
     const inputInterface = readline.createInterface({
@@ -122,13 +132,11 @@ export class PoroKakaoService {
     });
     inputInterface.close();
 
-    const { success: registerSuccess } = await this.api.registerDevice(
-      config,
-      passcode,
-      true,
-    );
-    if (!registerSuccess) {
-      throw new Error(`Device registration failed`);
+    //const { success: registerSuccess } = await this.api.registerDevice(
+    const result = await this.api.registerDevice(config, passcode, true);
+
+    if (!result.success) {
+      console.log('Device registration failed');
     }
   }
 
