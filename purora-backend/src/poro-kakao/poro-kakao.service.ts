@@ -43,7 +43,7 @@ export class PoroKakaoService {
       mccmnc: '999',
       deviceModel: 'SM-F936NDREKOO',
       appVersion: '3.4.2.3187',
-      version: '9.7.7',
+      version: '9.6.0',
       netType: 0,
       subDevice: true,
     };
