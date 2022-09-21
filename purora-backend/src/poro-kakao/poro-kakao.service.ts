@@ -38,17 +38,30 @@ export class PoroKakaoService {
     private readonly roomsRepository: RoomsRepository,
     private readonly allowAdminRepository: AllowAdminRepository,
   ) {
+    // this.config = {
+    //   //agent: 'android',
+    //   agent: 'win32',
+    //   osVersion: '10.0',
+    //   mccmnc: '999',
+    //   deviceModel: 'SM-A235N',
+    //   appVersion: '3.4.2.3187',
+    //   version: '9.5.6',
+    //   deviceType: 2,
+    //   netType: 0,
+    //   subDevice: true,
+    // };
     this.config = {
-      //agent: 'android',
-      agent: 'win32',
-      osVersion: '10.0',
-      mccmnc: '999',
-      deviceModel: 'SM-A235N',
-      appVersion: '3.4.2.3187',
-      version: '9.5.6',
+      agent: 'android',
+      version: '9.9.3',
+      appVersion: '9.9.3',
       deviceType: 2,
       netType: 0,
+      mccmnc: '999',
+      countryIso: 'KR',
+      language: 'ko',
       subDevice: true,
+      deviceModel: 'SM-T870',
+      loginTokenSeedList: ['PITT', 'INORAN'],
     };
     this.client = new TalkClient(this.config);
     this.adminEnable = true;
@@ -82,6 +95,7 @@ export class PoroKakaoService {
       this.config,
       api.xvc.AndroidSubXVCProvider,
     );
+
     let login = await this.api.login(loginForm);
     if (!login.success) {
       if (login.status === -100) {
