@@ -1,10 +1,15 @@
 import { Inject, Injectable } from '@nestjs/common';
 import { PORO_KAKAO_CONFIG_OPTIONS } from '../common/constants';
 import { PoroKakaoModuleOptions } from './poro-kakao.module';
-import { util, api, AuthApiClient, TalkClient } from 'node-kakao';
+import {
+  util,
+  api,
+  AuthApiClient,
+  TalkClient,
+} from '@numeralpharic/node-kakao';
 import * as readline from 'readline';
-import { TalkChatData } from 'node-kakao/dist/talk/chat';
-import { TalkChannel } from 'node-kakao/dist/talk/channel';
+import { TalkChatData } from '@numeralpharic/node-kakao/dist/talk/chat';
+import { TalkChannel } from '@numeralpharic/node-kakao/dist/talk/channel';
 import { CommandManagerService } from '../command-manager/command-manager.service';
 import { UserCustomCommandService } from '../user-custom-command/services/user-custom-command.service';
 import { AllowAdminRepository } from './repositories/allow-admin.repository';

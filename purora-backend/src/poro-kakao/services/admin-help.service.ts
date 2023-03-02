@@ -1,24 +1,13 @@
-import {Injectable} from "@nestjs/common";
-import {ChatBotInput, ChatBotOutput} from "../../common/dtos/chatBot.dto";
-import {TalkChatData} from "node-kakao/dist/talk/chat";
-import {TalkChannel} from "node-kakao/dist/talk/channel";
-import {
-  ADMIN_HELP,
-  KAKAO_ADD_USER_ID, KAKAO_ALL_MENTION,
-  KAKAO_DELETE_USER_ID,
-  KAKAO_USER_GET_ID
-} from "../../command-manager/command-manager.constants";
-import {ChatBuilder, KnownChatType, MentionContent, ReplyAttachment, ReplyContent} from "node-kakao";
-import {AllowAdminRepository} from "../repositories/allow-admin.repository";
+import { Injectable } from '@nestjs/common';
+import { ChatBotInput, ChatBotOutput } from '../../common/dtos/chatBot.dto';
+import { ADMIN_HELP } from '../../command-manager/command-manager.constants';
 
 @Injectable()
 export class AdminHelpService {
-  constructor(
-  ) {
-  }
+  constructor() {}
 
   async mainService(
-    chatBotInput :ChatBotInput,
+    chatBotInput: ChatBotInput,
     name: string,
   ): Promise<ChatBotOutput> {
     switch (name) {
@@ -27,14 +16,12 @@ export class AdminHelpService {
       default:
         return {
           success: false,
-          message: `${name}은 잘못 되었습니다.`
-        }
+          message: `${name}은 잘못 되었습니다.`,
+        };
     }
   }
 
-  async adminHelp (
-    chatBotInput: ChatBotInput,
-  ): Promise<ChatBotOutput> {
+  async adminHelp(chatBotInput: ChatBotInput): Promise<ChatBotOutput> {
     let message = '';
     message += '🌌 포로라 관리자 명령어 모음\n\n';
     message += '[!] 를 통해 실행 가능\n\n';
@@ -53,7 +40,6 @@ export class AdminHelpService {
     return {
       message,
       success: true,
-    }
+    };
   }
-
 }

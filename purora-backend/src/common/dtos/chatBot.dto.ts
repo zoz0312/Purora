@@ -1,6 +1,6 @@
 import { CoreOutput } from './output.dto';
-import {TalkChatData} from "node-kakao/dist/talk/chat";
-import {TalkChannel} from "node-kakao/dist/talk/channel";
+import { TalkChatData } from '@numeralpharic/node-kakao/dist/talk/chat';
+import { TalkChannel } from '@numeralpharic/node-kakao/dist/talk/channel';
 
 /*
   @author AJu (zoz0312)
@@ -29,6 +29,4 @@ class roomInfo {
   channelId: number;
 }
 
-export class ChatBotOutput extends CoreOutput {
-
-}
+export class ChatBotOutput extends CoreOutput {}

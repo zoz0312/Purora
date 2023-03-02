@@ -1,4 +1,4 @@
-import { Controller, Post, Get, Param, Body } from '@nestjs/common';
+import { Controller, Post, Body } from '@nestjs/common';
 import { ChatBotInput, ChatBotOutput } from '../common/dtos/chatBot.dto';
 import {
   party,
@@ -25,8 +25,11 @@ import { WorkingListManager } from './services/working-list.service';
 import { PARTY_USER_MANAGER_SERVICE } from 'src/command-manager/command-manager.constants';
 import { CUSTOM_USER_COMMAND_SERVICE } from 'src/command-manager/command-manager.constants';
 import { deepCopy } from 'deep-copy-ts';
-import { ChatBuilder, KnownChatType, MentionContent } from 'node-kakao';
-import axios from 'axios';
+import {
+  ChatBuilder,
+  KnownChatType,
+  MentionContent,
+} from '@numeralpharic/node-kakao';
 
 /*
   @author AJu (zoz0312)

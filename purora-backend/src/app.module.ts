@@ -78,12 +78,12 @@ import { AllowAdmin } from './poro-kakao/entities/allow-admin.entity';
     PoroModule.forRoot({
       seleniumServer: process.env.SELENIUM_SERVER,
     }),
-    PoroKakaoModule.forRoot({
-      desktopName: process.env.DESKTOP_NAME,
-      deviceUUID: process.env.DEVICE_UUID,
-      kakaoID: process.env.KAKAO_ID,
-      kakaoPW: process.env.KAKAO_PW,
-    }),
+    // PoroKakaoModule.forRoot({
+    //   desktopName: process.env.DESKTOP_NAME,
+    //   deviceUUID: process.env.DEVICE_UUID,
+    //   kakaoID: process.env.KAKAO_ID,
+    //   kakaoPW: process.env.KAKAO_PW,
+    // }),
   ],
   controllers: [],
   providers: [],
